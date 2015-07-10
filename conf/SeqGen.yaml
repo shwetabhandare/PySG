@@ -1,2 +1,7 @@
-seqLenMin:50
-seqLenMax:300
+sequence:
+   - minLen: 
+      - 50
+   - maxLen: 
+      - 300
+   - numSeq: 
+      - 10
