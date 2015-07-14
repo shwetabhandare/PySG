@@ -10,10 +10,13 @@ seqGen.GenerateRandomSequences("negative");
 seqGen.GenerateRandomSequences("positive");
 
 motif = seqGen.GenerateMotif()
-print "Motif: ", motif;
 
 seqGen.embedMotifInSequence();
 
+print "Positive Set: "
 for seq in seqGen.GetPositiveSet():
 	print seq;
 
+print "Negative Set: "
+for seq in seqGen.GetNegativeSet():
+	print seq;

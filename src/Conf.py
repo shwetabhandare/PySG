@@ -42,7 +42,6 @@ class Conf():
 
 	def GetMotifLocation(self):
 		val =  self.confMap['motif'][4]['location'][0]
-		print "Location: ", val;
 		if val == 'end':
 			return self.confMap['motif'][4]['location'][0]['end'][0]
 		elif val == 'start':

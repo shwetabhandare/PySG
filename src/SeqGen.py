@@ -26,6 +26,9 @@ class SeqGen():
 		self.negativeSet = []
 		self.positiveSet = []
 
+		print "Generating ", self.numSeqs, " sequences, Motif Type: ", self.motifType, ", Motif Length: ", self.motifLength, ", Number of Motifs: ", self.numMotifs;
+
+
 	def GetRandomSequence(self, seqLen):
 		seq=""
 		for count in range(seqLen):
@@ -60,10 +63,9 @@ class SeqGen():
 	def embedMotifInSequence(self):
 		motif = self.GenerateMotif();
 		motifLocation = self.motifLocation;
+		print "Motif to embed: ", motif, ", at location: ", motifLocation;
 		for idx, seq in enumerate(self.positiveSet):
 			if motifLocation == 'random':
 				location = numpy.random.randint(0, len(seq));
-				print "Location: ", location;
 				new_seq = seq[:location] + motif + seq[location:]
-				print "seq: ", new_seq;
 				self.positiveSet[idx] = new_seq;
