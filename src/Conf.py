@@ -19,7 +19,14 @@ class Conf():
 	def GetNumSeq(self):
 		return self.confMap['sequence'][2]['numSeq'][0]
 
-
+	def GetAPercent(self):
+		return self.confMap['sequence'][3]['A'][0]
+	def GetTPercent(self):
+		return self.confMap['sequence'][4]['T'][0]
+	def GetGPercent(self):
+		return self.confMap['sequence'][5]['G'][0]
+	def GetCPercent(self):
+		return self.confMap['sequence'][6]['C'][0]
 
 
 

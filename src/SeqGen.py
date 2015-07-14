@@ -12,13 +12,23 @@ class SeqGen():
 		self.numSeqs = conf.GetNumSeq();
 		self.minLen = conf.GetMinSeqLen();
 		self.maxLen = conf.GetMaxSeqLen();
+		self.aPercent = conf.GetAPercent();
+		self.tPercent = conf.GetTPercent();
+		self.gPercent = conf.GetGPercent();
+		self.cPercent = conf.GetCPercent();
 
 
+	def GetRandomSequence(self, seqLen):
+		seq=""
+		for count in range(seqLen):
+			seq+=SeqGenUtils.weightedchoice([("C", self.cPercent), ("G", self.gPercent), ("A",
+				self.aPercent), ("T", self.tPercent)]);
+		return seq;
 
 	def GenerateRandomSequences(self):
 		print "Generating ", self.numSeqs, self.numSeqs, self.minLen, self.maxLen;
 		for num in range(0, self.numSeqs): 
 			randomLength = numpy.random.randint(self.minLen, self.maxLen); 
-			randomSeq = SeqGenUtils.GetRandomSequence(randomLength); 
-			print "Random Sequence: " , num, randomSeq;
+			randomSeq = self.GetRandomSequence(randomLength); 
+			print "Random Sequence " , num, ": ", randomSeq;
 
