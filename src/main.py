@@ -2,9 +2,14 @@ import Conf;
 import SeqGen;
 from Conf import *;
 from SeqGen import *;
+import generateYaml;
+from generateYaml import *;
 
 
-conf = Conf("../conf/SeqGen.yaml");
+#conf = Conf("../conf/SeqGen.yaml");
+
+generateYaml("/tmp");
+conf = Conf("/tmp/seq.yml");
 seqGen = SeqGen(conf);
 seqGen.GenerateRandomSequences("negative");
 seqGen.GenerateRandomSequences("positive");

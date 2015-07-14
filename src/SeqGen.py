@@ -6,7 +6,8 @@ import random;
 import numpy;
 from random import *;
 
-conf = Conf("../conf/SeqGen.yaml");
+#conf = Conf("../conf/SeqGen.yaml");
+conf = Conf("/tmp/seq.yml")
 class SeqGen():
 	def __init__(self, conf):
 		self.numSeqs = conf.GetNumSeq();
@@ -66,6 +67,6 @@ class SeqGen():
 		print "Motif to embed: ", motif, ", at location: ", motifLocation;
 		for idx, seq in enumerate(self.positiveSet):
 			if motifLocation == 'random':
-				location = numpy.random.randint(0, len(seq));
+				location = numpy.random.randint(0, len(seq) - len(motif));
 				new_seq = seq[:location] + motif + seq[location:]
 				self.positiveSet[idx] = new_seq;
