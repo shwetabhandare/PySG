@@ -28,10 +28,25 @@ class Conf():
 	def GetCPercent(self):
 		return self.confMap['sequence'][6]['C'][0]
 
+	def GetMotifType(self):
+		return self.confMap['motif'][0]['type'][0];
 
+	def GetMotifLength(self):
+		return self.confMap['motif'][1]['length'][0]
 
+	def GetNumMotifs(self):
+		return self.confMap['motif'][2]['numMotifs'][0]
 
+	def GetDistanceBetweenMotifs(self):
+		return self.confMap['motif'][3]['distance'][0]
 
-
-
+	def GetMotifLocation(self):
+		val =  self.confMap['motif'][4]['location'][0]
+		print "Location: ", val;
+		if val == 'end':
+			return self.confMap['motif'][4]['location'][0]['end'][0]
+		elif val == 'start':
+			return self.confMap['motif'][4]['location'][0]['start'][0]
+		else:
+			return val;
 
