@@ -1,8 +1,8 @@
 sequence:
    - minLen: 
-      - 10
+      - 25
    - maxLen: 
-      - 30
+      - 75
    - numSeq: 
       - 10
    - A:
@@ -13,3 +13,14 @@ sequence:
       - 20
    - C:
       - 20
+motif:
+   - type:
+      - "HuR"
+   - length:
+      - 9
+   - numMotifs:
+      - 1
+   - distance:
+      - 0
+   - location:
+      - 'random'
