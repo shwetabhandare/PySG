@@ -7,7 +7,7 @@ aPercent = [10, 20, 30, 40]
 tPercent = [10, 20, 30, 40]
 gPercent = [10, 20, 30, 40]
 cPercent = [10, 20, 30, 40]
-MotifType = ['HuR', 'TTP', 'random']
+MotifType = ['HuR', 'TTP', 'Generated']
 HuRMotif = ['ATTTA', 'CTTTTTC']
 TtpMotif = ['TTATTTATT']
 NumMotifs = [1, 2]
@@ -22,7 +22,6 @@ gPercent = 20;
 cPercent = 20;
 
 def generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent, gPercent, cPercent, motifType, actualMotif):
-
 	data = dict(
 		 sequence = dict (
 			  minLen = minVal,
@@ -62,9 +61,9 @@ def CreateConfFiles(location):
 						generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
 										 gPercent, cPercent, motifType, ttpMotif);
 				else:
-					motifType = 'random'
+					motifType = 'Generated'
 					idx = str(minVal) + "_" + str(maxVal);
 					generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
-										 gPercent, cPercent, motifType, "");
+										 gPercent, cPercent, motifType, "AAATTTGGGCCC");
 
 #CreateConfFiles("/tmp");

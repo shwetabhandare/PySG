@@ -51,3 +51,5 @@ class Conf():
 		else:
 			return val;
 
+	def GetMotif(self):
+		return self.confMap['motif']['motif'];

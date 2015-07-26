@@ -29,6 +29,7 @@ class SeqGen():
 
 		self.posFileName = "";
 		self.negFileName = "";
+		self.motif = conf.GetMotif();
 
 		print "Generating ", self.numSeqs, " sequences, Motif Type: ", self.motifType, ", Motif Length: ", self.motifLength, ", Number of Motifs: ", self.numMotifs;
 
@@ -71,7 +72,6 @@ class SeqGen():
 
 	def GenerateRandomSequences(self, setType):
 		for num in range(0, self.numSeqs): 
-			print "Min: " + str(self.minLen) + ", Max: " + str(self.maxLen)
 			randomLength = numpy.random.randint(self.minLen, self.maxLen); 
 			randomSeq = self.GetRandomSequence(randomLength); 
 			if (setType == "positive"):
@@ -79,19 +79,10 @@ class SeqGen():
 			else:
 				self.negativeSet.insert(num, randomSeq);
 
-	def GenerateMotif(self):
-		if self.motifType == 'random':
-			motif = self.GetRandomSequence(self.motifLength);
-		elif self.motifType == 'HuR':
-			motif = "ATTTA";
-		elif self.motifType == "TTP":
-			motif = "TTATTTATT"
-		return motif;
-
 	def embedMotifInSequence(self):
-		motif = self.GenerateMotif();
+		motif = self.motif;
 		motifLocation = self.motifLocation;
-		print "Motif to embed: ", motif, ", at location: ", motifLocation;
+		print "Motif to embed: ", self.motif, ", at location: ", motifLocation;
 		for idx, seq in enumerate(self.positiveSet):
 			if motifLocation == 'random':
 				location = numpy.random.randint(0, len(seq) - len(motif));

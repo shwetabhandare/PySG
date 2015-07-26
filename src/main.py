@@ -4,8 +4,9 @@ from Conf import *;
 from SeqGen import *;
 import generateYaml;
 from generateYaml import *;
+import sys;
 
-directory = "/tmp"
+directory = sys.argv[1]
 CreateConfFiles(directory);
 
 import os, fnmatch
@@ -15,7 +16,7 @@ def findFiles (path, filter):
       for file in fnmatch.filter(files, filter):
          yield os.path.join(root, file)
 
-for confFile in findFiles(r'/tmp', '*.yml'):
+for confFile in findFiles(directory, '*.yml'):
 
 	conf = Conf(confFile);
 
@@ -30,18 +31,15 @@ for confFile in findFiles(r'/tmp', '*.yml'):
 
 	seqGen.GenerateRandomSequences("negative");
 	seqGen.GenerateRandomSequences("positive");
-
-	motif = seqGen.GenerateMotif()
-
 	seqGen.embedMotifInSequence();
 
-	print "Positive Set: "
-	for seq in seqGen.GetPositiveSet():
-		print seq;
+	# print "Positive Set: "
+	# for seq in seqGen.GetPositiveSet():
+	# 	print seq;
 
-	print "Negative Set: "
-	for seq in seqGen.GetNegativeSet():
-		print seq;
+	# print "Negative Set: "
+	# for seq in seqGen.GetNegativeSet():
+	# 	print seq;
 
 	seqGen.writePositiveFile();
 	seqGen.writeNegativeFile();
