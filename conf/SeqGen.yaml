@@ -1,8 +1,8 @@
 sequence:
    - minLen: 
-      - 30
+      - 25
    - maxLen: 
-      - 70
+      - 75
    - numSeq: 
       - 10
    - A:
