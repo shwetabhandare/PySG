@@ -2,7 +2,7 @@ import yaml
 
 
 seqMinLen = [25, 50]
-seqMaxLen = [50, 75]
+seqMaxLen = [55, 100]
 aPercent = [10, 20, 30, 40]
 tPercent = [10, 20, 30, 40]
 gPercent = [10, 20, 30, 40]
@@ -67,4 +67,4 @@ def CreateConfFiles(location):
 					generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
 										 gPercent, cPercent, motifType, "");
 
-CreateConfFiles("/tmp");
+#CreateConfFiles("/tmp");

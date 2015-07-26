@@ -7,7 +7,7 @@ import numpy;
 from random import *;
 
 #conf = Conf("../conf/SeqGen.yaml");
-conf = Conf("/tmp/seq.yml")
+#conf = Conf("/tmp/seq.yml")
 class SeqGen():
 	def __init__(self, conf):
 		self.numSeqs = conf.GetNumSeq();
@@ -27,8 +27,34 @@ class SeqGen():
 		self.negativeSet = []
 		self.positiveSet = []
 
+		self.posFileName = "";
+		self.negFileName = "";
+
 		print "Generating ", self.numSeqs, " sequences, Motif Type: ", self.motifType, ", Motif Length: ", self.motifLength, ", Number of Motifs: ", self.numMotifs;
 
+	def SetPosFileName(self, posFileName):
+		self.posFileName = posFileName;
+
+	def SetNegFileName(self, negFileName):
+		self.negFileName = negFileName;
+
+	def writePositiveFile(self):
+		target = open(self.posFileName, 'w')
+		for idx, seq in enumerate(self.positiveSet):
+			header = ">PySeq_Pos_" + str(idx);
+			target.write(header)
+			target.write("\n");
+			target.write(seq);
+			target.write("\n")
+
+	def writeNegativeFile(self):
+		target = open(self.negFileName, 'w')
+		for idx, seq in enumerate(self.negativeSet):
+			header = ">PySeq_Neg_" + str(idx);
+			target.write(header)
+			target.write("\n");
+			target.write(seq);
+			target.write("\n")
 
 	def GetRandomSequence(self, seqLen):
 		seq=""
@@ -45,6 +71,7 @@ class SeqGen():
 
 	def GenerateRandomSequences(self, setType):
 		for num in range(0, self.numSeqs): 
+			print "Min: " + str(self.minLen) + ", Max: " + str(self.maxLen)
 			randomLength = numpy.random.randint(self.minLen, self.maxLen); 
 			randomSeq = self.GetRandomSequence(randomLength); 
 			if (setType == "positive"):

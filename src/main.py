@@ -5,23 +5,43 @@ from SeqGen import *;
 import generateYaml;
 from generateYaml import *;
 
+directory = "/tmp"
+CreateConfFiles(directory);
 
-#conf = Conf("../conf/SeqGen.yaml");
+import os, fnmatch
 
-generateYaml("/tmp");
-conf = Conf("/tmp/seq.yml");
-seqGen = SeqGen(conf);
-seqGen.GenerateRandomSequences("negative");
-seqGen.GenerateRandomSequences("positive");
+def findFiles (path, filter):
+   for root, dirs, files in os.walk(path):
+      for file in fnmatch.filter(files, filter):
+         yield os.path.join(root, file)
 
-motif = seqGen.GenerateMotif()
+for confFile in findFiles(r'/tmp', '*.yml'):
 
-seqGen.embedMotifInSequence();
+	conf = Conf(confFile);
 
-print "Positive Set: "
-for seq in seqGen.GetPositiveSet():
-	print seq;
+	seqGen = SeqGen(conf);
+	filename = os.path.splitext(os.path.basename(confFile))[0]
+	posFastaFile = directory + "/" + filename + "_pos.fa";
+	seqGen.SetPosFileName(posFastaFile);
 
-print "Negative Set: "
-for seq in seqGen.GetNegativeSet():
-	print seq;
+	negFastaFile = directory + "/" + filename + "_neg.fa";
+
+	seqGen.SetNegFileName(negFastaFile)
+
+	seqGen.GenerateRandomSequences("negative");
+	seqGen.GenerateRandomSequences("positive");
+
+	motif = seqGen.GenerateMotif()
+
+	seqGen.embedMotifInSequence();
+
+	print "Positive Set: "
+	for seq in seqGen.GetPositiveSet():
+		print seq;
+
+	print "Negative Set: "
+	for seq in seqGen.GetNegativeSet():
+		print seq;
+
+	seqGen.writePositiveFile();
+	seqGen.writeNegativeFile();
