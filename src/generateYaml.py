@@ -21,7 +21,10 @@ tPercent = 30;
 gPercent = 20;
 cPercent = 20;
 
-def generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent, gPercent, cPercent, motifType, actualMotif, numMotifs):
+def generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent, gPercent, cPercent, motifType, actualMotif, numMotifs, distance):
+	if numMotifs == 1:
+		distance = 0;
+
 	data = dict(
 		 sequence = dict (
 			  minLen = minVal,
@@ -36,7 +39,7 @@ def generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent, g
 			type = motifType,
 			length = len(actualMotif),
 			numMotifs = numMotifs,
-			distance = 0,
+			distance = distance,
 			location = 'random',
 			motif = actualMotif
 		  )
@@ -50,21 +53,22 @@ def CreateConfFiles(location):
 	for idx, minVal in enumerate(seqMinLen):
 		for maxVal in seqMaxLen:
 			for numMotifs in NumMotifs:
-				for motifType in MotifType:
-					if motifType == 'HuR':
-						for hurMotif in HuRMotif:
-							idx = str(minVal) + "_" + str(maxVal) + "_" + hurMotif;
+				for distance in DistanceMotifs:
+					for motifType in MotifType:
+						if motifType == 'HuR':
+							for hurMotif in HuRMotif:
+								idx = str(minVal) + "_" + str(maxVal) + "_" + hurMotif;
+								generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
+												 gPercent, cPercent, motifType, hurMotif, numMotifs, distance);
+						elif motifType == 'TTP':
+							for ttpMotif in TtpMotif:
+								idx = str(minVal) + "_" + str(maxVal) + "_" + ttpMotif;
+								generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
+												 gPercent, cPercent, motifType, ttpMotif, numMotifs, distance);
+						else:
+							motifType = 'Generated'
+							idx = str(minVal) + "_" + str(maxVal);
 							generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
-											 gPercent, cPercent, motifType, hurMotif, numMotifs);
-					elif motifType == 'TTP':
-						for ttpMotif in TtpMotif:
-							idx = str(minVal) + "_" + str(maxVal) + "_" + ttpMotif;
-							generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
-											 gPercent, cPercent, motifType, ttpMotif, numMotifs);
-					else:
-						motifType = 'Generated'
-						idx = str(minVal) + "_" + str(maxVal);
-						generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
-											 gPercent, cPercent, motifType, "AAATTTGGGCCC", numMotifs);
+												 gPercent, cPercent, motifType, "AAATTTGGGCCC", numMotifs, distance);
 
 #CreateConfFiles("/tmp");
