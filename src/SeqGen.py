@@ -6,6 +6,11 @@ import random;
 import numpy;
 from random import *;
 
+import TAMO.seq;
+from TAMO import *;
+from TAMO.seq import *;
+from TAMO.seq.FakeFasta import *
+
 #conf = Conf("../conf/SeqGen.yaml");
 #conf = Conf("/tmp/seq.yml")
 class SeqGen():
@@ -70,14 +75,16 @@ class SeqGen():
 	def GetNegativeSet(self):
 		return self.negativeSet;
 
-	def GenerateRandomSequences(self, setType):
+	def GenerateRandomSequences(self, setType, fidelity):
 		for num in range(0, self.numSeqs): 
+			seqList = [];
 			randomLength = numpy.random.randint(self.minLen, self.maxLen); 
-			randomSeq = self.GetRandomSequence(randomLength); 
+			seqList = Fake_seqs(1, randomLength);
+			updatedSeqList = seed(seqList, self.motif, fidelity, fidelity);
 			if (setType == "positive"):
-				self.positiveSet.insert(num, randomSeq);
+				self.positiveSet.insert(num, updatedSeqList[0]);
 			else:
-				self.negativeSet.insert(num, randomSeq);
+				self.negativeSet.insert(num, updatedSeqList[0]);
 
 	def embedMotifInSequence(self):
 		motif = self.motif;

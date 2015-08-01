@@ -29,9 +29,9 @@ for confFile in findFiles(directory, '*.yml'):
 
 	seqGen.SetNegFileName(negFastaFile)
 
-	seqGen.GenerateRandomSequences("negative");
-	seqGen.GenerateRandomSequences("positive");
-	seqGen.embedMotifInSequence();
+	seqGen.GenerateRandomSequences("negative", 0);
+	seqGen.GenerateRandomSequences("positive", 1);
+	#seqGen.embedMotifInSequence();
 
 	# print "Positive Set: "
 	# for seq in seqGen.GetPositiveSet():
