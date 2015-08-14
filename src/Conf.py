@@ -31,25 +31,42 @@ class Conf():
 		return self.confMap['sequence']['C']
 
 	def GetMotifType(self):
-		return self.confMap['motif']['type'];
+		if 'motif' in self.confMap.keys():
+			return self.confMap['motif']['type'];
+		else:
+			return "";
 
 	def GetMotifLength(self):
-		return self.confMap['motif']['length']
+		if 'motif' in self.confMap.keys():
+			return self.confMap['motif']['length']
+		else:
+			return 0;
 
 	def GetNumMotifs(self):
-		return self.confMap['motif']['numMotifs']
+		if 'motif' in self.confMap.keys():
+			return self.confMap['motif']['numMotifs']
+		else:
+			return 0;
 
 	def GetDistanceBetweenMotifs(self):
-		return self.confMap['motif']['distance']
+		if 'motif' in self.confMap.keys():
+			return self.confMap['motif']['distance']
+		else:
+			return 0
 
 	def GetMotifLocation(self):
-		val =  self.confMap['motif']['location']
-		if val == 'end':
-			return self.confMap['motif'][4]['location'][0]['end'][0]
-		elif val == 'start':
-			return self.confMap['motif'][4]['location'][0]['start'][0]
+		if 'motif' in self.confMap.keys():
+			val =  self.confMap['motif']['location']
+			if val == 'end':
+				return self.confMap['motif'][4]['location'][0]['end'][0]
+			elif val == 'start':
+				return self.confMap['motif'][4]['location'][0]['start'][0]
+			else:
+				return val;
 		else:
-			return val;
-
+			return 0;
 	def GetMotif(self):
-		return self.confMap['motif']['motif'];
+		if 'motif' in self.confMap.keys():
+			return self.confMap['motif']['motif'];
+		else:
+			return ""
