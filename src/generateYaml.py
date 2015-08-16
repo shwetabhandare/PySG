@@ -1,13 +1,13 @@
 import yaml
 
 
-seqMinLen = [19]
-seqMaxLen = [343]
-aPercent = [35]
-tPercent = [35]
-gPercent = [15]
-cPercent = [15]
-MotifType = ['']
+#seqMinLen = [19]
+#seqMaxLen = [343]
+#aPercent = [35]
+#tPercent = [35]
+#gPercent = [15]
+#cPercent = [15]
+#MotifType = ['']
 #MotifType = ['HuR']
 #aPercent = [10, 20, 30, 40]
 #tPercent = [10, 20, 30, 40]
@@ -18,6 +18,34 @@ MotifType = ['']
 #gPercent = [10, 20, 30, 40]
 #cPercent = [10, 20, 30, 40]
 #MotifType = ['HuR', 'TTP', 'Generated']
+seqMinLen = [50, 100]
+seqMaxLen = [105, 150]
+aPercent = [10, 20, 30, 40]
+tPercent = [10, 20, 30, 40]
+gPercent = [10, 20, 30, 40]
+cPercent = [10, 20, 30, 40]
+# generate A, T, G, C using s = np.random.dirichlet((0.1,0.1,0.1,0.1),1)
+# expect sparse distribution, there is no apriori information.
+# tp = np.random.dirichlet((0.1,0.1,0.1,0.1),1)[0]
+# tp
+#array([  4.61012266e-01,   5.37356121e-01,   1.59085119e-03,
+#         4.07617397e-05])
+# hur_tp = np.random.dirichlet(tp,1)[0]
+# hur_tp
+#array([ 0.06761885,  0.93238115,  0.        ,  0.        ])
+# hur_tp = np.random.dirichlet(tp*100,1)[0]
+# hur_tp
+#array([  4.13762328e-01,   5.85305180e-01,   9.32492390e-04,
+#         1.97868086e-59])
+# ttp_tp = np.random.dirichlet(tp*100,1)[0]
+# ttp_tp
+#array([  5.14829673e-01,   4.85166046e-01,   4.28061017e-06,
+#         1.59080129e-58])
+# Feed hur_tp, ttp_tp to the sequence generator for A, T, G, C percents.
+# when gamma is large, the ATGC percentages will be similar, and when its smaller they will differ more.
+# here gammma = 100.
+
+MotifType = ['HuR', 'TTP', 'Generated']
 HuRMotif = ['ATTTA', 'CTTTTTC']
 TtpMotif = ['TTATTTATT']
 NumMotifs = [1]
