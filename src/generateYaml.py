@@ -1,6 +1,23 @@
 import yaml
 
 
+#seqMinLen = [19]
+#seqMaxLen = [343]
+#aPercent = [35]
+#tPercent = [35]
+#gPercent = [15]
+#cPercent = [15]
+#MotifType = ['']
+#MotifType = ['HuR']
+#aPercent = [10, 20, 30, 40]
+#tPercent = [10, 20, 30, 40]
+#gPercent = [10, 20, 30, 40]
+#cPercent = [10, 20,s 30, 40]
+#aPercent = [10, 20, 30, 40]
+#tPercent = [10, 20, 30, 40]
+#gPercent = [10, 20, 30, 40]
+#cPercent = [10, 20, 30, 40]
+#MotifType = ['HuR', 'TTP', 'Generated']
 seqMinLen = [50, 100]
 seqMaxLen = [105, 150]
 aPercent = [10, 20, 30, 40]
@@ -9,19 +26,19 @@ gPercent = [10, 20, 30, 40]
 cPercent = [10, 20, 30, 40]
 # generate A, T, G, C using s = np.random.dirichlet((0.1,0.1,0.1,0.1),1)
 # expect sparse distribution, there is no apriori information.
-# >>> tp = np.random.dirichlet((0.1,0.1,0.1,0.1),1)[0]
-#>>> tp
+# tp = np.random.dirichlet((0.1,0.1,0.1,0.1),1)[0]
+# tp
 #array([  4.61012266e-01,   5.37356121e-01,   1.59085119e-03,
 #         4.07617397e-05])
-#>>> hur_tp = np.random.dirichlet(tp,1)[0]
-#>>> hur_tp
+# hur_tp = np.random.dirichlet(tp,1)[0]
+# hur_tp
 #array([ 0.06761885,  0.93238115,  0.        ,  0.        ])
-#>>> hur_tp = np.random.dirichlet(tp*100,1)[0]
-#>>> hur_tp
+# hur_tp = np.random.dirichlet(tp*100,1)[0]
+# hur_tp
 #array([  4.13762328e-01,   5.85305180e-01,   9.32492390e-04,
 #         1.97868086e-59])
-#>>> ttp_tp = np.random.dirichlet(tp*100,1)[0]
-#>>> ttp_tp
+# ttp_tp = np.random.dirichlet(tp*100,1)[0]
+# ttp_tp
 #array([  5.14829673e-01,   4.85166046e-01,   4.28061017e-06,
 #         1.59080129e-58])
 # Feed hur_tp, ttp_tp to the sequence generator for A, T, G, C percents.
@@ -35,7 +52,7 @@ NumMotifs = [1]
 DistanceMotifs = [20, 70, 100]
 MotifLocation = ['random', -5, 10]
 
-numberSeq = 10;
+numberSeq = 3642;
 
 aPercent = 30;
 tPercent = 30;
@@ -46,7 +63,9 @@ def generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent, g
 	if numMotifs == 1:
 		distance = 0;
 
-	data = dict(
+	if motifType != "":
+
+		data = dict(
 		 sequence = dict (
 			  minLen = minVal,
 			  maxLen = maxVal,
@@ -56,16 +75,29 @@ def generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent, g
 			  G = gPercent,
 			  C = cPercent,
 		  ),
-		  motif = dict (
+		motif = dict (
 			type = motifType,
 			length = len(actualMotif),
 			numMotifs = numMotifs,
 			distance = distance,
 			location = 'random',
-			motif = actualMotif
-		  )
+			motif = actualMotif,
 		 )
-	yamlFileName = location + "/seq_" + idx + ".yml";
+		)
+	else:
+		data = dict(
+		 sequence = dict (
+			  minLen = minVal,
+			  maxLen = maxVal,
+			  numSeq = numberSeq,
+			  A = aPercent,
+			  T = tPercent,
+			  G = gPercent,
+			  C = cPercent,
+		  )
+		)		
+	yamlFileName = location + "/seq_" + str(idx) + ".yml";
+	print "Data: ", data
 	with open(yamlFileName, 'w') as outfile:
 		 outfile.write( yaml.dump(data, default_flow_style=True) )
 
@@ -76,6 +108,7 @@ def CreateConfFiles(location):
 			for numMotifs in NumMotifs:
 				for distance in DistanceMotifs:
 					for motifType in MotifType:
+						print "MotifType: ", motifType
 						if motifType == 'HuR':
 							for hurMotif in HuRMotif:
 								idx = str(minVal) + "_" + str(maxVal) + "_" + hurMotif;
@@ -86,10 +119,12 @@ def CreateConfFiles(location):
 								idx = str(minVal) + "_" + str(maxVal) + "_" + ttpMotif;
 								generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
 												 gPercent, cPercent, motifType, ttpMotif, numMotifs, distance);
-						else:
-							motifType = 'Generated'
+						elif motifType == 'Generated':
 							idx = str(minVal) + "_" + str(maxVal);
 							generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
 												 gPercent, cPercent, motifType, "AAATTTGGGCCC", numMotifs, distance);
 
+						else: 
+							generateYaml(idx, location, minVal, maxVal, numberSeq, aPercent, tPercent,
+										 gPercent, cPercent, "", "", 0, 0);
 #CreateConfFiles("/tmp");

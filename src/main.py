@@ -4,17 +4,15 @@ from Conf import *;
 from SeqGen import *;
 import generateYaml;
 from generateYaml import *;
+from SeqGenUtils import *;
 import sys;
 
 directory = sys.argv[1]
 CreateConfFiles(directory);
 
-import os, fnmatch
 
-def findFiles (path, filter):
-   for root, dirs, files in os.walk(path):
-      for file in fnmatch.filter(files, filter):
-         yield os.path.join(root, file)
+
+
 
 for confFile in findFiles(directory, '*.yml'):
 
