@@ -1,0 +1,2 @@
+{data: {dataFile: "to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_3642_3642_CompleteSet.txt", posLen: 3642, negLen: 3642}, kspectrum: {k1: 7, k2: 9, C: 1000, folds: 10}, output: {featureFile: "HuR_Conservative_Features.dat", resultsFile: "HuR_Conservative_Results.txt"}}
+ 
