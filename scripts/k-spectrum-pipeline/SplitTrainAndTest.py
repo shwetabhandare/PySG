@@ -68,12 +68,16 @@ def writeDataToFile(data, outputFile):
 	outFile.close();
 
 def SplitTrainAndTest(posDataFile, negDataFile, trainPercent, posTrainFileName, negTrainFileName, posTestFileName, negTestFileName):
-	allData = getAllData(dataFile);
-	trainData, testData = getTrainAndTestData(allData, trainPercent, testPercent);
+	posData = getAllData(posDataFile);
+	negData = getAllData(negDataFile);
+	testPercent = 100 - trainPercent;
+	posTrainData, posTestData = getTrainAndTestData(posData, trainPercent, testPercent);
+	negTrainData, negTestData = getTrainAndTestData(negData, trainPercent, testPercent);
 	print len(trainData), len(testData)
-	writeDataToFile(trainData, trainFileName);
-	writeDataToFile(testData, testFileName);
-
+	writeDataToFile(posTrainData, posTrainFileName);
+	writeDataToFile(negTrainData, negTrainFileName);
+	writeDataToFile(posTestData, posTestFileName);
+	writeDataToFile(negTestData, negTestFileName);
 
 # main starts here
 
