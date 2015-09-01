@@ -2,6 +2,8 @@ import sys
 import yaml
 import SplitTrainAndTest;
 from SplitTrainAndTest import *
+import seq_counter
+from seq_counter import *
 
 confFile = sys.argv[1]; # yaml file.
 
@@ -24,5 +26,5 @@ negTestFileName = confMap["testNegFile"]
 
 SplitTrainAndTest(posDataFile, negDataFile, trainPercent, posTrainFileName, negTrainFileName, posTestFileName, negTestFileName);
 
-#CreateCombinedFile(posTrainFileName, negTrainFileName)
-#CreateCombinedFile(posTestFileName, negTestFileName);
+CreateCombinedFile(posTrainFileName, negTrainFileName)
+CreateCombinedFile(posTestFileName, negTestFileName);

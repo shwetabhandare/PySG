@@ -8,7 +8,7 @@ import os
 
 
 
-def CreateCombinedFile(posFile, negFile)
+def CreateCombinedFile(posFile, negFile):
 ## This needs to be completed.
 
 	filename_plus = posFile;
