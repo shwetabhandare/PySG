@@ -68,12 +68,24 @@ def writeDataToFile(data, outputFile):
 	outFile.close();
 
 # main starts here
+
 #Prepare and open files
-dataFile = sys.argv[1]
-trainPercent = int(sys.argv[2]);
+confFile = sys.argv[1]; // yaml file.
+confMap = yaml.load(confFile);
+
+posDataFile = confMap["input"]["posFile"]
+negDataFile = confMap["input"]["negFile"]
+
+trainPercent = int(confMap["input"]["trainPercent"]);
 testPercent = 100 - trainPercent;
-trainFileName = sys.argv[3]
-testFileName = sys.argv[4]
+
+posTrainFileName = confMap["output"]["trainPosFile"]
+negTrainFileName = confMap["output"]["trainNegFile"]
+
+posTestFileName = confMap["output"]["testPosFile"]
+negTestFileName = confMap["output"]["testNegFile"]
+
+
 
 allData = getAllData(dataFile);
 trainData, testData = getTrainAndTestData(allData, trainPercent, testPercent);
