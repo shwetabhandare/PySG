@@ -1,0 +1,1 @@
+{input: {pos: "HuR.fa", negFile: "NonHuR.fa", trainPercent:90}, output: {trainPosFile: "HuR_Train.fa", trainNegFile: "NonHuR_Train.fa", testPosFile: "HuR_Test.fa", testNegFile: "NonHuRTest.fa"}}
