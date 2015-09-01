@@ -4,7 +4,10 @@ import SplitTrainAndTest;
 from SplitTrainAndTest import *
 
 confFile = sys.argv[1]; # yaml file.
-confMap = yaml.load(confFile);
+
+f = open(confFile)
+confMap = yaml.load(f);
+f.close()
 print confMap
 
 posDataFile = confMap["posFile"]
