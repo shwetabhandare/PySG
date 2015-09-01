@@ -73,7 +73,8 @@ def SplitTrainAndTest(posDataFile, negDataFile, trainPercent, posTrainFileName, 
 	testPercent = 100 - trainPercent;
 	posTrainData, posTestData = getTrainAndTestData(posData, trainPercent, testPercent);
 	negTrainData, negTestData = getTrainAndTestData(negData, trainPercent, testPercent);
-	print len(trainData), len(testData)
+	print len(posTrainData), len(posTestData)
+	print len(negTrainData), len(negTestData)
 	writeDataToFile(posTrainData, posTrainFileName);
 	writeDataToFile(negTrainData, negTrainFileName);
 	writeDataToFile(posTestData, posTestFileName);
