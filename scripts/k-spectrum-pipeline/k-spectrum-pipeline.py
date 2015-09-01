@@ -5,6 +5,7 @@ from SplitTrainAndTest import *
 
 confFile = sys.argv[1]; # yaml file.
 confMap = yaml.load(confFile);
+print confMap
 
 posDataFile = confMap["posFile"]
 negDataFile = confMap["negFile"]
