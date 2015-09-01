@@ -28,3 +28,13 @@ SplitTrainAndTest(posDataFile, negDataFile, trainPercent, posTrainFileName, negT
 
 CreateCombinedFile(posTrainFileName, negTrainFileName)
 CreateCombinedFile(posTestFileName, negTestFileName);
+
+## Return the name of the file that was created by CreateCombinedFile()
+## Get the number of training examples from the filename : HuR_Train_NonHuR_Train_3277_3277_CompleteSet.txt
+
+#trainCombinedFile, numTrain = CreateCombinedFile(posTrainFileName, negTrainFileName)
+#testCombinedFile, numTest = CreateCombinedFile(posTrainFileName, negTrainFileName)
+
+
+## Use the training file, and number of training examples to create a model.
+## Use the model generated, and the test file
