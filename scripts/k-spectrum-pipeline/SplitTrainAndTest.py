@@ -67,7 +67,7 @@ def writeDataToFile(data, outputFile):
 		outFile.write("\n")
 	outFile.close();
 
-def SplitTrainAndTest():
+def SplitTrainAndTest(posDataFile, negDataFile, trainPercent, posTrainFileName, negTrainFileName, posTestFileName, negTestFileName):
 	allData = getAllData(dataFile);
 	trainData, testData = getTrainAndTestData(allData, trainPercent, testPercent);
 	print len(trainData), len(testData)
@@ -80,6 +80,6 @@ def SplitTrainAndTest():
 #Prepare and open files
 
 if __name__ == "__main__":
-	SplitTrainAndTest()
+	SplitTrainAndTest(posDataFile, negDataFile, trainPercent, posTrainFileName, negTrainFileName, posTestFileName, negTestFileName)
 
 
