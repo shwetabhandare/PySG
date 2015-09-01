@@ -67,28 +67,19 @@ def writeDataToFile(data, outputFile):
 		outFile.write("\n")
 	outFile.close();
 
+def SplitTrainAndTest():
+	allData = getAllData(dataFile);
+	trainData, testData = getTrainAndTestData(allData, trainPercent, testPercent);
+	print len(trainData), len(testData)
+	writeDataToFile(trainData, trainFileName);
+	writeDataToFile(testData, testFileName);
+
+
 # main starts here
 
 #Prepare and open files
-confFile = sys.argv[1]; // yaml file.
-confMap = yaml.load(confFile);
 
-posDataFile = confMap["input"]["posFile"]
-negDataFile = confMap["input"]["negFile"]
-
-trainPercent = int(confMap["input"]["trainPercent"]);
-testPercent = 100 - trainPercent;
-
-posTrainFileName = confMap["output"]["trainPosFile"]
-negTrainFileName = confMap["output"]["trainNegFile"]
-
-posTestFileName = confMap["output"]["testPosFile"]
-negTestFileName = confMap["output"]["testNegFile"]
+if __name__ == "__main__":
+	SplitTrainAndTest()
 
 
-
-allData = getAllData(dataFile);
-trainData, testData = getTrainAndTestData(allData, trainPercent, testPercent);
-print len(trainData), len(testData)
-writeDataToFile(trainData, trainFileName);
-writeDataToFile(testData, testFileName);
