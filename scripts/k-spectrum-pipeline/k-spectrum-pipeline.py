@@ -20,5 +20,5 @@ negTestFileName = confMap["testNegFile"]
 
 SplitTrainAndTest(posDataFile, negDataFile, trainPercent, posTrainFileName, negTrainFileName, posTestFileName, negTestFileName);
 
-CreateCombinedFile(posTrainFileName, negTrainFileName)
-CreateCombinedFile(posTestFileName, negTestFileName);
+#CreateCombinedFile(posTrainFileName, negTrainFileName)
+#CreateCombinedFile(posTestFileName, negTestFileName);
