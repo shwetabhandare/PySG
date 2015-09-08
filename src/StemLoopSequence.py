@@ -4,18 +4,25 @@ import sys
 
 def StemLoopSequence(seq, annotation):
 	stems = []
+	loops = []
 	loopSeq = "";
 	for i, j in zip(seq, annotation):	
 		if j == '(':
 			stems.append(i)
+			if  loopSeq:
+				print loopSeq;
+				loops.append(loopSeq);
+				loopSeq = ""
 		elif j == ')':
-			print stems[-1], "-", loopSeq, "-", i;
+			loops.append(loopSeq);
+			loopSeq = "";
+			print stems[-1], "-", loops[-1], "-", i;
 			del stems[-1]
-		else:
+			del loops[-1]
+		else:	
 			loopSeq = loopSeq + i;
 
-
-
+	print ''.join(loops)
 
 if __name__ == "__main__":
 	import sys
