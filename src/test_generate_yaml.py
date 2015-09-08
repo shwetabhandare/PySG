@@ -33,4 +33,4 @@ class TestGenerateYaml:
 		content = ""
 		with open('/tmp/seq_300.yml', 'r') as content_file:
 			content = " ".join(line.strip() for line in content_file);
-    		assert expectedContent.strip() == content.strip();   	
+    		assert expectedContent.strip() == content.strip();   	s
