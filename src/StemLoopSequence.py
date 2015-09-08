@@ -1,6 +1,3 @@
-import sys
-
-
 
 def StemLoopSequence(seq, annotation):
 	stems = []
