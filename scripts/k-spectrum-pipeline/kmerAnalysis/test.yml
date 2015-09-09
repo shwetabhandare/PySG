@@ -1,0 +1,1 @@
+{input: {dataFile: "to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative.fa", featureKmers: "HuR_Conservative_Features.dat"}, output: {flankingRegionFile: "flankingRegions.csv", topKmersFile: "topKmers.txt"}}
