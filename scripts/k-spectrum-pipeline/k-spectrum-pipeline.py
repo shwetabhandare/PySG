@@ -2,7 +2,7 @@ import sys
 import yaml
 import SplitTrainAndTest;
 from SplitTrainAndTest import *
-import seq_counter
+import seq_counter;
 from seq_counter import *
 
 confFile = sys.argv[1]; # yaml file.
@@ -26,8 +26,10 @@ negTestFileName = confMap["testNegFile"]
 
 SplitTrainAndTest(posDataFile, negDataFile, trainPercent, posTrainFileName, negTrainFileName, posTestFileName, negTestFileName);
 
-CreateCombinedFile(posTrainFileName, negTrainFileName)
-CreateCombinedFile(posTestFileName, negTestFileName);
+
+trainFileData = CreateCombinedFile(posTrainFileName, negTrainFileName) # returns output file name, numPos,numNeg
+testFileData = CreateCombinedFile(posTestFileName, negTestFileName)
+
 
 ## Return the name of the file that was created by CreateCombinedFile()
 ## Get the number of training examples from the filename : HuR_Train_NonHuR_Train_3277_3277_CompleteSet.txt

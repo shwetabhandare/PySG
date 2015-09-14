@@ -56,8 +56,8 @@ def CreateCombinedFile(posFile, negFile):
 	file_plus.close()
 	file_minus.close()
 	outputfile.close()
-	#would return here but I am just printing
-	print(filename_output, plus_count, minus_count)
+
+	return (filename_output, plus_count, minus_count)
 
 if __name__ == "__main__":
 	CreateCombinedFile(posFile, negFile);
