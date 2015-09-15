@@ -1,2 +1,0 @@
-{data: {dataFile: "TTP_PARCLIP_ConversionSpecificity_1_to_2p7_all_NONTTP_PARCLIP_ConversionSpecificity_1_to_2p7_all_505_505_CompleteSet.txt", posLen: 505, negLen: 505}, kspectrum: {k1: 9, k2: 11, C: 1000, folds: 5}, output: {featureFile: "TTP_1_to_2p7_Features.dat", resultsFile: "TTP_1_to_2p7_Results.yml"}}
- 
