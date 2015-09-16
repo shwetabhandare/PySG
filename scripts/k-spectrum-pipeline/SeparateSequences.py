@@ -31,7 +31,7 @@ top10kmers = [] # will house the top ten lines from the
 headerList = [] # will house the headers containing top ten kmers
 
 for i in range(10):  #reads first 10 lines of topKmersfile
-    line = TopKmerReaders.next().strip()
+    line = TopKmersReader.next().strip()
     line = line.split(",")  # since the file topKmersFile is a csv
     kmer = line[1]
     top10kmers.append(kmer)
@@ -41,13 +41,13 @@ for i in range(10):  #reads first 10 lines of topKmersfile
 for header, seq in seqDict.iteritems(): #for each header check:
     kmercount = 0
     faRows = ">" + header + "\n" + seq + "\n"    # to be written to the .fa file
-        
+
     for kmer in top10kmers:             #each kmer
-        if seq.count(kmer) > 0:         #if kmer is in seq, then add header to list
-            kmercount += kmercount
+        kmerIndex = seq.find(kmer);
+        if kmerIndex > 0:         #if kmer is in seq, then add header to list
+           kmercount += 1;
     if kmercount > 0:  # i.e. top10 kmer is in sequence
         SeqWithTop10kmersFileWriter.write(faRows) #write to Top10Kmer File
-    
     else:
         SeqNoTop10kmersFileWriter.write(faRows)
 

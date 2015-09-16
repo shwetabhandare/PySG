@@ -75,6 +75,7 @@ def CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKme
 
 	for header, seq in seqDict.iteritems():
 		for kmer, value in kmerDict.iteritems():
+			print "Looking for kmer: ",kmer, " in sequence: ", seq
 			kmerCount = seq.count(kmer);
 			kmerInSeqDict[(header, kmer)] = kmerCount;
 			if kmer in kmerCountDict.keys():
@@ -96,6 +97,7 @@ def CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKme
 	for key, value in sorted_kmerCountDict:
 		row = list()
 		row = [key, value];
+		print row
 		topKmersCsvWriter.writerow(row);
 
 
