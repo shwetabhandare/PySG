@@ -60,5 +60,8 @@ def CreateCombinedFile(posFile, negFile):
 	return (filename_output, plus_count, minus_count)
 
 if __name__ == "__main__":
+	import sys
+	posFile = sys.argv[1]
+	negFile = sys.argv[2]
 	CreateCombinedFile(posFile, negFile);
 
