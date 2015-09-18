@@ -14,12 +14,14 @@ BASIC_KSPECTRUM_SCRIPT=$(PROJECTS_DIR)/workspace/kernels/k-spectrum/scripts/basi
 TOP_KMERS_SCRIPT=$(PROJECTS_DIR)/workspace/scripts/extractTopFeatures.py
 
 ONLY_HUR_YML=$(DATA_DIR)/HuR_TTP/OnlyTTPvsCommonAndOnlyHuR.yml
+RESULTS_DIR="18-Sep-2015"
 
 $(FEATURE_FILE): $(COMBINED_FILE) $(BASIC_KSPECTRUM_SCRIPT) $(ONLY_HUR_YML)
 	python $(BASIC_KSPECTRUM_SCRIPT) $(ONLY_HUR_YML)
 	python $(TOP_KMERS_SCRIPT) $(FEATURE_FILE) 25 $(DATA_DIR)/HuR_TTP/$(FEATURE_FILE).topfeatures.txt
-	git add $(FEATURE_FILE)
-	git add $(DATA_DIR)/HuR_TTP/$(FEATURE_FILE).topfeatures.txt
+	mv $(RESULTS_DIR) $(DATA_DIR)/HuR_TTP/
+	mv *Results.yml $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
+	mv *.dat $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
 
 
 $(COMBINED_FILE): $(POS_FILE) $(NEG_FILE) seq_counter.py 
