@@ -3,8 +3,8 @@ PROJECTS_DIR=/projects/bhandare
 KSPECTRUM_PIPELINE_DIR=$(PROJECTS_DIR)/k-spectrum-pipeline
 RESULTS_DIR=`mkdate`
 
-POS_FILE=$(DATA_DIR)/HuR_TTP/OnlyELAV1_OnlyZFP36.fa
-NEG_FILE=$(DATA_DIR)/HuR_TTP/to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_GSM1286117_ZFP36_clusters_common_clusters.fa
+NEG_FILE=$(DATA_DIR)/HuR_TTP/OnlyELAV1_OnlyZFP36.fa
+POS_FILE=$(DATA_DIR)/HuR_TTP/to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_GSM1286117_ZFP36_clusters_common_clusters.fa
 
 COMBINED_FILE=OnlyELAV1_OnlyZFP36_to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_GSM1286117_ZFP36_clusters_common_clusters_7367_467_CompleteSet.txt
 
