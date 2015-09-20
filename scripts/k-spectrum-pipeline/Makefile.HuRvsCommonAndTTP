@@ -3,10 +3,11 @@ PROJECTS_DIR=/projects/bhandare
 KSPECTRUM_PIPELINE_DIR=$(PROJECTS_DIR)/k-spectrum-pipeline
 RESULTS_DIR=`mkdate`
 
-POS_FILE=$(DATA_DIR)/HuR_TTP/Only_to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative.fa
+POS_FILE=$(DATA_DIR)/HuR_TTP/Only_ELAV1_Conservative.fa
 NEG_FILE=$(DATA_DIR)/HuR_TTP/ELAV1_ZFP36_Common_OnlyZFP36.fa
 
-COMBINED_FILE=$(DATA_DIR)/HuR_TTP/Only_to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_ELAV1_ZFP36_Common_OnlyZFP36_3206_5667_CompleteSet.txt
+COMBINED_FILE_NAME=Only_ELAV1_Conservative_ELAV1_ZFP36_Common_OnlyZFP36_3206_5667_CompleteSet.txt
+COMBINED_FILE=$(DATA_DIR)/HuR_TTP/$(COMBINED_FILE_NAME)
 
 FEATURE_FILE=$(DATA_DIR)/HuR_TTP/OnlyHuRvsCommonAndOnlyTTP.dat
 
@@ -25,5 +26,5 @@ $(FEATURE_FILE): $(COMBINED_FILE) $(BASIC_KSPECTRUM_SCRIPT) $(ONLY_HUR_YML)
 
 $(COMBINED_FILE): $(POS_FILE) $(NEG_FILE) seq_counter.py 
 	python seq_counter.py $(POS_FILE) $(NEG_FILE)
-	mv $(COMBINED_FILE) $(DATA_DIR)/HuR_TTP/
+	mv $(COMBINED_FILE_NAME) $(DATA_DIR)/HuR_TTP/
 

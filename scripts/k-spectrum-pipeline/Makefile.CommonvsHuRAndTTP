@@ -1,29 +1,38 @@
 DATA_DIR=../../data
 PROJECTS_DIR=/projects/bhandare
 KSPECTRUM_PIPELINE_DIR=$(PROJECTS_DIR)/k-spectrum-pipeline
-RESULTS_DIR=`mkdate`
 
+
+POS_FILE=$(DATA_DIR)/HuR_TTP/ELAV1_ZFP36_Common.fa
 NEG_FILE=$(DATA_DIR)/HuR_TTP/OnlyELAV1_OnlyZFP36.fa
-POS_FILE=$(DATA_DIR)/HuR_TTP/to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_GSM1286117_ZFP36_clusters_common_clusters.fa
 
-COMBINED_FILE=OnlyELAV1_OnlyZFP36_to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_GSM1286117_ZFP36_clusters_common_clusters_7367_467_CompleteSet.txt
+COMBINED_FILE_NAME=ELAV1_ZFP36_Common_OnlyELAV1_OnlyZFP36_1506_7367_CompleteSet.txt
+COMBINED_FILE=$(DATA_DIR)/HuR_TTP/$(COMBINED_FILE_NAME)
 
 FEATURE_FILE=$(DATA_DIR)/HuR_TTP/CommonvsOnlyHuRAndOnlyTTP_Features.dat
 
 BASIC_KSPECTRUM_SCRIPT=$(PROJECTS_DIR)/workspace/kernels/k-spectrum/scripts/basic_kspectrum.py
 TOP_KMERS_SCRIPT=$(PROJECTS_DIR)/workspace/scripts/extractTopFeatures.py
 
-ONLY_HUR_YML=$(DATA_DIR)/HuR_TTP/CommonvsOnlyHuRAndOnlyTTP.yml
-RESULTS_DIR=$(date +%d-%b-%Y)
+CONF_YML=$(DATA_DIR)/HuR_TTP/CommonvsOnlyHuRAndOnlyTTP.yml
+RESULTS_DIR=$(shell date +%d-%b-%Y)
 
-$(FEATURE_FILE): $(COMBINED_FILE) $(BASIC_KSPECTRUM_SCRIPT) $(ONLY_HUR_YML)
-	python $(BASIC_KSPECTRUM_SCRIPT) $(ONLY_HUR_YML)
+all: $(COMBINED_FILE) $(FEATURE_FILE)
+.PHONY: all
+
+$(COMBINED_FILE): $(POS_FILE) $(NEG_FILE) seq_counter.py 
+	python seq_counter.py $(POS_FILE) $(NEG_FILE)
+	mv $(COMBINED_FILE_NAME) $(DATA_DIR)/HuR_TTP/
+
+$(FEATURE_FILE): $(COMBINED_FILE) $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
+	echo $(COMBINED_FILE)
+	python $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
 	python $(TOP_KMERS_SCRIPT) $(FEATURE_FILE) 25 $(DATA_DIR)/HuR_TTP/$(FEATURE_FILE).topfeatures.txt
+	RESULTS_DIR=$(shell date +%d-%b-%Y)
+	mkdir $$RESULTS_DIR
 	mv $(RESULTS_DIR) $(DATA_DIR)/HuR_TTP/
 	mv *Results.yml $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
 	mv *.dat $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
 
 
-$(COMBINED_FILE): $(POS_FILE) $(NEG_FILE) seq_counter.py 
-	python seq_counter.py $(POS_FILE) $(NEG_FILE)
-	mv $(COMBINED_FILE) $(DATA_DIR)/HuR_TTP/
+
