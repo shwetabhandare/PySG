@@ -4,6 +4,7 @@ import csv
 import fasta
 from fasta import *
 import operator
+from itertools import *
 
 def ReadConfigFile():
 	confMap = {}
@@ -29,7 +30,7 @@ def CreateKmerDict(kmerFile):
 		numFeatures = 0;
 		kmerDict = dict()
 		for row in reader:
-			if numFeatures <= 50:
+			if numFeatures <= 20:
 				featureScore = float(row[0])
 				featureKmer = row[1]
 				kmerDict[featureKmer] = featureScore;
@@ -64,9 +65,40 @@ def GetFlankingData(kmer, seq, kmerIndex):
 			return CreateFlankingRegion(seq, kmer, flankStart, kmerIndex, flankEnd)
 
 
+def GetKmerCounts(kmerDict, seqDict):
+	kmerCountDict = dict()
+
+	for header, seq in seqDict.iteritems():
+		for kmer, value in kmerDict.iteritems():
+			#print "Looking for kmer: ",kmer, " in sequence: ", seq
+			# Return the number of (non-overlapping) occurrences of substring sub in string s[start:end].
+			kmerCount = seq.count(kmer);
+			if kmer in kmerCountDict.keys():
+				kmerCountDict[kmer] = kmerCountDict[kmer] + kmerCount;
+			else:
+				kmerCountDict[kmer] = kmerCount;	
+
+	return kmerCountDict;
+
+	
+def GetSortedKmerDict(kmerCountDict):
+
+	sorted_kmerCountDict = [ (v,k) for k,v in kmerCountDict.iteritems() ]
+	sorted_kmerCountDict.sort(reverse=True)
+
+	return sorted_kmerCountDict;
+
+def WriteTopKmersToFile(sorted_kmerCountDict, topKmersFile):
+	topKmersCsvWriter = csv.writer(open(topKmersFile, 'w'));
+	for key, value in sorted_kmerCountDict:
+		row = list()
+		row = [key, value];
+		print row
+		topKmersCsvWriter.writerow(row);
+
+	return sorted_kmerCountDict;
 
 def CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKmersFile):
-	kmerInSeqDict = dict()
 	kmerCountDict = dict()
 	kmerFlankingDict = dict()
 
@@ -77,11 +109,10 @@ def CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKme
 		for kmer, value in kmerDict.iteritems():
 			print "Looking for kmer: ",kmer, " in sequence: ", seq
 			kmerCount = seq.count(kmer);
-			kmerInSeqDict[(header, kmer)] = kmerCount;
 			if kmer in kmerCountDict.keys():
 				kmerCountDict[kmer] = kmerCountDict[kmer] + kmerCount;
 			else:
-				kmerCountDict[kmer] = kmerCount;
+				kmerCountDkict[kmer] = kmerCount;
 
 			kmerIndex = seq.find(kmer)
 			if kmerIndex > 0:
@@ -103,14 +134,38 @@ def CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKme
 
 def CreateFlankingRegions():
 	confMap = ReadConfigFile();
-	seqFile = confMap['input']['dataFile']
+	posSeq = confMap['input']['posSeq']
+	negSeq = confMap['input']['negSeq']
+
 	kmerFile = confMap['input']['featureKmers']
 	flankingRegionFile = confMap['output']['flankingRegionFile']
 	topKmersFile = confMap['output']['topKmersFile']
-	kmerDict = CreateKmerDict(kmerFile)
-	seqDict = fasta_read(seqFile)
-	CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKmersFile);
 
+	kmerDict = CreateKmerDict(kmerFile)
+	
+	posSeqDict = fasta_read(posSeq)
+	negSeqDict = fasta_read(negSeq)
+
+	#CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKmersFile);
+	posKmerCountDict = GetKmerCounts(kmerDict, posSeqDict);
+	negKmerCountDict = GetKmerCounts(kmerDict, negSeqDict);
+
+	for k, v in negKmerCountDict.iteritems():
+		print k, v;
+
+	sortedPosKmerCountList = GetSortedKmerDict(posKmerCountDict)
+	sortedNegKmerCountList = GetSortedKmerDict(negKmerCountDict)
+
+	LogLikeHood = dict();
+
+	for pos_item in sortedPosKmerCountList:
+		for neg_item in sortedNegKmerCountList:
+			kmer = pos_item[1]
+			if kmer == neg_item[1]:
+				positiveCount = pos_item[0]
+				negativeCount = neg_item[0]
+				LogLikeHood[kmer] = (float) (positiveCount/negativeCount)
+				print "kmer: ", kmer, ", Pos Count: ", positiveCount, ", Neg Count: ", negativeCount, "LogLikeHood: ", LogLikeHood[kmer];
 
 
 if __name__ == '__main__':
