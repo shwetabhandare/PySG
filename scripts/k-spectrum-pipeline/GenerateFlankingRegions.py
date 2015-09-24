@@ -88,15 +88,14 @@ def GetSortedKmerDict(kmerCountDict):
 
 	return sorted_kmerCountDict;
 
-def WriteTopKmersToFile(sorted_kmerCountDict, topKmersFile):
+def WriteTopLogLikelihoodKmers(topLikelyKmers, topKmersFile):
 	topKmersCsvWriter = csv.writer(open(topKmersFile, 'w'));
-	for key, value in sorted_kmerCountDict:
+	for item in topLikelyKmers:
 		row = list()
-		row = [key, value];
+		row = [item[0], item[1]];
 		print row
 		topKmersCsvWriter.writerow(row);
 
-	return sorted_kmerCountDict;
 
 def CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKmersFile):
 	kmerCountDict = dict()
@@ -132,14 +131,7 @@ def CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKme
 		topKmersCsvWriter.writerow(row);
 
 
-def CreateFlankingRegions():
-	confMap = ReadConfigFile();
-	posSeq = confMap['input']['posSeq']
-	negSeq = confMap['input']['negSeq']
-
-	kmerFile = confMap['input']['featureKmers']
-	flankingRegionFile = confMap['output']['flankingRegionFile']
-	topKmersFile = confMap['output']['topKmersFile']
+def CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile):
 
 	kmerDict = CreateKmerDict(kmerFile)
 	
@@ -164,9 +156,20 @@ def CreateFlankingRegions():
 			if kmer == neg_item[1]:
 				positiveCount = pos_item[0]
 				negativeCount = neg_item[0]
-				LogLikeHood[kmer] = (float) (positiveCount/negativeCount)
-				print "kmer: ", kmer, ", Pos Count: ", positiveCount, ", Neg Count: ", negativeCount, "LogLikeHood: ", LogLikeHood[kmer];
+				if negativeCount > 0:
+					LogLikeHood[kmer] = (float) (positiveCount/negativeCount)
+				else:
+					LogLikeHood[kmer] = positiveCount;
 
+	sortedLogLikeHood =  [ (v,k) for k,v in LogLikeHood.iteritems() ]
+	sortedLogLikeHood.sort(reverse=True)
+
+	WriteTopLogLikelihoodKmers(sortedLogLikeHood, topKmersFile);
 
 if __name__ == '__main__':
-	CreateFlankingRegions();
+	import sys;
+	posSeq = sys.argv[1]
+	negSeq = sys.argv[2]
+	kmerFile = sys.argv[3]
+	topKmersFile = sys.argv[4]
+	CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile);
