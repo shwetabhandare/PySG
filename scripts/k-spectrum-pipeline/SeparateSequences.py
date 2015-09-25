@@ -35,10 +35,10 @@ def SeparateSequences(SeqsWithKmers, SeqWithoutKmers, topKmersFile, seqFile):
 			kmerIndex = seq.find(kmer);
 			if kmerIndex > 0:         #if kmer is in seq, then add header to list
 				kmercount += 1;
-			if kmercount > 0:  # i.e. top10 kmer is in sequence
-				SeqWithTop10kmersFileWriter.write(faRows) #write to Top10Kmer File
-			else:
-				SeqNoTop10kmersFileWriter.write(faRows)
+		if kmercount > 0:  # i.e. top10 kmer is in sequence
+			SeqWithTop10kmersFileWriter.write(faRows) #write to Top10Kmer File
+		else:
+			SeqNoTop10kmersFileWriter.write(faRows)
 
 	SeqWithTop10kmersFileWriter.close()
 	SeqNoTop10kmersFileWriter.close()
