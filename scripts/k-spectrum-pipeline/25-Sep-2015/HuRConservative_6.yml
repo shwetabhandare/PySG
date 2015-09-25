@@ -1,0 +1,5 @@
+{data: {dataFile: HuR_Without_Kmers_5_NONHuR_Without_Kmers_5_612_612_CompleteSet.txt,
+    negLen: 612, posLen: 612}, kspectrum: {C: 1.0e-05, folds: 5, k1: 7, k2: 13}, output: {
+    featureFile: HuR_Conservative_6_Features.dat, modelFile: HuR_Conservative_6_Model.dat,
+    paramsFile: HuR_Conservative_6_params.dat, resultsFile: HuR_Conservative_6_Results.yml,
+    trainDataFile: HuR_Conservative_6_kspectrum.dat}}
