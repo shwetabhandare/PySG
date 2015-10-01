@@ -5,6 +5,7 @@ import fasta
 from fasta import *
 import operator
 from itertools import *
+import math
 
 def ReadConfigFile():
 	confMap = {}
@@ -31,6 +32,7 @@ def CreateKmerDict(kmerFile):
 		kmerDict = dict()
 		for row in reader:
 			if numFeatures <= 20:
+				print row[0]
 				featureScore = float(row[0])
 				featureKmer = row[1]
 				kmerDict[featureKmer] = featureScore;
@@ -157,9 +159,9 @@ def CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile):
 				positiveCount = pos_item[0]
 				negativeCount = neg_item[0]
 				if negativeCount > 0:
-					LogLikeHood[kmer] = (float) (positiveCount/negativeCount)
+					LogLikeHood[kmer] = math.log10((float)(positiveCount/negativeCount))
 				else:
-					LogLikeHood[kmer] = positiveCount;
+					LogLikeHood[kmer] = math.log10(positiveCount);
 
 	sortedLogLikeHood =  [ (v,k) for k,v in LogLikeHood.iteritems() ]
 	sortedLogLikeHood.sort(reverse=True)

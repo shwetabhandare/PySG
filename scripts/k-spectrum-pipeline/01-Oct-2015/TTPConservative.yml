@@ -1,0 +1,5 @@
+{data: {dataFile: GSM1286117_ZFP36_clusters_NONGSM1286117_ZFP36_clusters_4626_4626_CompleteSet.txt,
+    negLen: 4626, posLen: 4626}, kspectrum: {C: 1.0e-05, folds: 5, k1: 7, k2: 13},
+  output: {featureFile: TTP_Conservative_Features.dat, modelFile: TTP_Conservative_Model.dat,
+    paramsFile: TTP_Conservative_params.dat, resultsFile: TTP_Conservative_Results.yml,
+    trainDataFile: TTP_Conservative_kspectrum.dat}}
