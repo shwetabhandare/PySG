@@ -158,10 +158,14 @@ def CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile):
 			if kmer == neg_item[1]:
 				positiveCount = pos_item[0]
 				negativeCount = neg_item[0]
-				if negativeCount > 0:
-					LogLikeHood[kmer] = math.log10((float)(positiveCount/negativeCount))
-				else:
+				print positiveCount, negativeCount
+
+				if positiveCount == 0:
+					LogLikeHood[kmer] = 0;
+				elif negativeCount == 0:
 					LogLikeHood[kmer] = math.log10(positiveCount);
+				else:
+					LogLikeHood[kmer] = math.log10( float(positiveCount)/ float(negativeCount))
 
 	sortedLogLikeHood =  [ (v,k) for k,v in LogLikeHood.iteritems() ]
 	sortedLogLikeHood.sort(reverse=True)
