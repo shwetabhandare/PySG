@@ -2,37 +2,60 @@ DATA_DIR=../../data
 PROJECTS_DIR=/projects/bhandare
 KSPECTRUM_PIPELINE_DIR=$(PROJECTS_DIR)/k-spectrum-pipeline
 
+POS_FILE_NAME=ELAV1_ZFP36_Common_Clusters.fa
+NEG_FILE_NAME=NON$(POS_FILE_NAME)
 
-POS_FILE=$(DATA_DIR)/HuR_TTP/ELAV1_ZFP36_Common.fa
-NEG_FILE=$(DATA_DIR)/HuR_TTP/OnlyELAV1_OnlyZFP36.fa
+POS_FILE=$(DATA_DIR)/HuR_TTP/$(POS_FILE_NAME)
+NEG_FILE=$(DATA_DIR)/HuR_TTP/$(NEG_FILE_NAME)
 
-COMBINED_FILE_NAME=ELAV1_ZFP36_Common_OnlyELAV1_OnlyZFP36_1506_7367_CompleteSet.txt
+NON_HUR_TTP=/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt
+
+COMBINED_FILE_NAME=$(wildcard *.txt)
+
 COMBINED_FILE=$(DATA_DIR)/HuR_TTP/$(COMBINED_FILE_NAME)
+FEATURES_FILE="Elav1_ZFP36_Common_Features.dat"
+TOP_KMERS_FILE="Elav1_ZFP36_Common_Features_TopKmers.dat"
+
+
+CONF_YML="Elav1_ZFP36_Common.yml"
+CONF_PREFIX="Elav1_ZFP36_Common"
 
 FEATURE_FILE=$(DATA_DIR)/HuR_TTP/CommonvsOnlyHuRAndOnlyTTP_Features.dat
 
 BASIC_KSPECTRUM_SCRIPT=$(PROJECTS_DIR)/workspace/kernels/k-spectrum/scripts/basic_kspectrum.py
 TOP_KMERS_SCRIPT=$(PROJECTS_DIR)/workspace/scripts/extractTopFeatures.py
 
-CONF_YML=$(DATA_DIR)/HuR_TTP/CommonvsOnlyHuRAndOnlyTTP.yml
-RESULTS_DIR=$(shell date +%d-%b-%Y)
+RESULT_DIR=`date +'%d-%b-%Y'`
 
-all: $(COMBINED_FILE) $(FEATURE_FILE)
+all: step0 step1 step2 step3 step4 step5
 .PHONY: all
 
-$(COMBINED_FILE): $(POS_FILE) $(NEG_FILE) seq_counter.py 
+
+step0: $(POS_FILE) LenMatchNegatives.py
+	python LenMatchNegatives.py $(POS_FILE) $(NON_HUR_TTP)
+	mv $(NEG_FILE_NAME) $(DATA_DIR)/HuR_TTP/
+
+step1: $(POS_FILE) $(NEG_FILE) seq_counter.py 
 	python seq_counter.py $(POS_FILE) $(NEG_FILE)
-	mv $(COMBINED_FILE_NAME) $(DATA_DIR)/HuR_TTP/
 
-$(FEATURE_FILE): $(COMBINED_FILE) $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
-	echo $(COMBINED_FILE)
+step2:
+	@echo $(COMBINED_FILE_NAME)
+	@echo $(RESULT_DIR)
+	python CreateConfFile.py $(COMBINED_FILE_NAME) $(CONF_PREFIX) $(CONF_YML)
+
+step3:
 	python $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
-	python $(TOP_KMERS_SCRIPT) $(FEATURE_FILE) 25 $(DATA_DIR)/HuR_TTP/$(FEATURE_FILE).topfeatures.txt
-	RESULTS_DIR=$(shell date +%d-%b-%Y)
-	mkdir $$RESULTS_DIR
-	mv $(RESULTS_DIR) $(DATA_DIR)/HuR_TTP/
-	mv *Results.yml $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
-	mv *.dat $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
 
+step4:
+	python GenerateFlankingRegions.py $(POS_FILE) $(NEG_FILE) $(FEATURES_FILE) $(TOP_KMERS_FILE)
+
+step5:
+	mkdir -p $(RESULT_DIR)
+	mv $(COMBINED_FILE_NAME) $(RESULT_DIR)
+	mv $(FEATURES_FILE) $(TOP_KMERS_FILE) $(RESULT_DIR)
+	git add $(RESULT_DIR)
+	git add $(RESULT_DIR)/*
+	git commit -av
+	git push origin
 
 
