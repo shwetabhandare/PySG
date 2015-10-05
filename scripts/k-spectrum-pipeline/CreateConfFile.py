@@ -6,8 +6,8 @@ def CreateConf(filename, output_prefix, confFile):
 	filename_list = string.split(filename, "_")
 	list_len = len(filename_list)
 
-	posLen = filename_list[list_len - 2]
-	negLen = filename_list[list_len - 3]
+	posLen = filename_list[list_len - 3]
+	negLen = filename_list[list_len - 2]
 	featureFileName =  output_prefix + "_Features.dat"
 	resultsFileName = output_prefix + "_Results.yml"
 	modelFileName = output_prefix + "_Model.dat"

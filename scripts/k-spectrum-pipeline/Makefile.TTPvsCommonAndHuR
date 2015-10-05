@@ -1,30 +1,54 @@
-DATA_DIR=../../data/
+DATA_DIR=../../data
 PROJECTS_DIR=/projects/bhandare
 KSPECTRUM_PIPELINE_DIR=$(PROJECTS_DIR)/k-spectrum-pipeline
-RESULTS_DIR=`mkdate`
 
-POS_FILE=$(DATA_DIR)/HuR_TTP/OnlyZFP36.fa
-NEG_FILE=$(DATA_DIR)/HuR_TTP/ELAV1_ZFP36_Common_OnlyELAV1.fa
+POS_FILE_NAME=OnlyZFP36_clusters.fa
+NEG_FILE_NAME=ELAV1_TTP_Common_And_ELAV1.fa
 
-COMBINED_FILE_NAME=OnlyZFP36_ELAV1_ZFP36_Common_OnlyELAV1_4161_4712_CompleteSet.txt
+POS_FILE=$(DATA_DIR)/HuR_TTP/$(POS_FILE_NAME)
+NEG_FILE=$(DATA_DIR)/HuR_TTP/$(NEG_FILE_NAME)
+
+NON_HUR_TTP=/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt
+
+COMBINED_FILE_NAME=$(wildcard *.txt)
 COMBINED_FILE=$(DATA_DIR)/HuR_TTP/$(COMBINED_FILE_NAME)
 
-FEATURE_FILE=$(DATA_DIR)/HuR_TTP/OnlyTTPvsCommonAndOnlyHuR_Features.dat
+
+CONF_YML="TTPVsCommonAndHuR.yml"
+CONF_PREFIX="TTPVsCommonAndHuR"
+
+FEATURES_FILE=$(DATA_DIR)/HuR_TTP/TTPVsCommonAndHuR_Features.dat
+TOP_KMERS_FILE="TTPVsCommonAndHuR_Features_TopKmers.dat"
+
 
 BASIC_KSPECTRUM_SCRIPT=$(PROJECTS_DIR)/workspace/kernels/k-spectrum/scripts/basic_kspectrum.py
-TOP_KMERS_SCRIPT=$(PROJECTS_DIR)/workspace/scripts/extractTopFeatures.py
 
-ONLY_HUR_YML=$(DATA_DIR)/HuR_TTP/OnlyTTPvsCommonAndOnlyHuR.yml
-RESULTS_DIR="20-Sep-2015"
+RESULT_DIR=`date +'%d-%b-%Y'`
 
-$(FEATURE_FILE): $(COMBINED_FILE) $(BASIC_KSPECTRUM_SCRIPT) $(ONLY_HUR_YML)
-	python $(BASIC_KSPECTRUM_SCRIPT) $(ONLY_HUR_YML)
-	python $(TOP_KMERS_SCRIPT) $(FEATURE_FILE) 25 $(DATA_DIR)/HuR_TTP/$(FEATURE_FILE).topfeatures.txt
-	mv $(RESULTS_DIR) $(DATA_DIR)/HuR_TTP/
-	mv *Results.yml $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
-	mv *.dat $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
+all: step1 step2 step3 step4 step5
+.PHONY: all
 
 
-$(COMBINED_FILE): $(POS_FILE) $(NEG_FILE) seq_counter.py 
+step1: $(POS_FILE) $(NEG_FILE) seq_counter.py 
 	python seq_counter.py $(POS_FILE) $(NEG_FILE)
-	mv $(COMBINED_FILE_NAME) $(DATA_DIR)/HuR_TTP/
+
+step2:
+	@echo $(COMBINED_FILE_NAME)
+	@echo $(RESULT_DIR)
+	python CreateConfFile.py $(COMBINED_FILE_NAME) $(CONF_PREFIX) $(CONF_YML)
+
+step3:
+	python $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
+
+step4:
+	python GenerateFlankingRegions.py $(POS_FILE) $(NEG_FILE) $(FEATURES_FILE) $(TOP_KMERS_FILE)
+
+step5:
+	mkdir -p $(RESULT_DIR)
+	mv $(COMBINED_FILE_NAME) $(RESULT_DIR)
+	mv $(FEATURES_FILE) $(TOP_KMERS_FILE) $(RESULT_DIR)
+	git add $(RESULT_DIR)
+	git add $(RESULT_DIR)/*
+	git commit -av
+	git push origin
+
