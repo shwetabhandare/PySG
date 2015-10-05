@@ -1,0 +1,5 @@
+{data: {dataFile: OnlyZFP36_clusters_ELAV1_TTP_Common_And_ELAV1_4161_3673_CompleteSet.txt,
+    negLen: 3673, posLen: 4161}, kspectrum: {C: 1.0e-05, folds: 5, k1: 7, k2: 13},
+  output: {featureFile: TTPVsCommonAndHuR_Features.dat, modelFile: TTPVsCommonAndHuR_Model.dat,
+    paramsFile: TTPVsCommonAndHuR_params.dat, resultsFile: TTPVsCommonAndHuR_Results.yml,
+    trainDataFile: TTPVsCommonAndHuR_kspectrum.dat}}

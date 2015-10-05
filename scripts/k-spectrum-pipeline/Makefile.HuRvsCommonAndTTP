@@ -19,6 +19,7 @@ TOP_KMERS_FILE="Elav1_ZFP36_Common_Features_TopKmers.dat"
 
 CONF_YML="HuRVsCommonAndTTP.yml"
 CONF_PREFIX="HuRVsCommonAndTTP"
+RESULT_YML=$(CONF_YML)_Results.yml
 
 FEATURE_FILE=$(DATA_DIR)/HuR_TTP/HuRVsCommonAndTTP_Features.dat
 
@@ -49,6 +50,8 @@ step5:
 	mkdir -p $(RESULT_DIR)
 	mv $(COMBINED_FILE_NAME) $(RESULT_DIR)
 	mv $(FEATURES_FILE) $(TOP_KMERS_FILE) $(RESULT_DIR)
+	mv $(CONF_YML) $(RESULT_DIR)
+	mv $(RESULT_YML) $(RESULT_DIR)
 	git add $(RESULT_DIR)
 	git add $(RESULT_DIR)/*
 	git commit -av
