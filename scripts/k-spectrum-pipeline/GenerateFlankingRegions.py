@@ -163,6 +163,7 @@ def CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile):
 				if positiveCount == 0:
 					LogLikeHood[kmer] = 0;
 				elif negativeCount == 0:
+					print "Could not find ", kmer, " in negative set."
 					LogLikeHood[kmer] = math.log10(positiveCount);
 				else:
 					LogLikeHood[kmer] = math.log10( float(positiveCount)/ float(negativeCount))

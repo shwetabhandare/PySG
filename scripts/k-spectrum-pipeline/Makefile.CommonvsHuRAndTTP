@@ -13,12 +13,12 @@ NON_HUR_TTP=/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts
 COMBINED_FILE_NAME=$(wildcard *.txt)
 COMBINED_FILE=$(DATA_DIR)/HuR_TTP/$(COMBINED_FILE_NAME)
 
-CONF_PREFIX="TTPVsCommonAndHuR"
+CONF_PREFIX=CommonVsHuRAndTTP
 CONF_YML=$(CONF_PREFIX).yml
 RESULT_YML=$(CONF_PREFIX)_Results.yml
 
-FEATURES_FILE=T$(CONF_PREFIX)_Features.dat
-TOP_KMERS_FILE=$(CONF_PREFIX)_Features_TopKmers.dat"
+FEATURES_FILE=$(CONF_PREFIX)_Features.dat
+TOP_KMERS_FILE=$(CONF_PREFIX)_Features_TopKmers.dat
 
 
 BASIC_KSPECTRUM_SCRIPT=$(PROJECTS_DIR)/workspace/kernels/k-spectrum/scripts/basic_kspectrum.py
