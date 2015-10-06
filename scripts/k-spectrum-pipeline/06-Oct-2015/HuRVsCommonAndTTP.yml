@@ -1,0 +1,5 @@
+{data: {dataFile: ELAV1_Conservative_ELAV1_TTP_Common_And_ZFP36_3206_4628_CompleteSet.txt,
+    negLen: 4628, posLen: 3206}, kspectrum: {C: 1.0e-05, folds: 5, k1: 7, k2: 13},
+  output: {featureFile: HuRVsCommonAndTTP_Features.dat, modelFile: HuRVsCommonAndTTP_Model.dat,
+    paramsFile: HuRVsCommonAndTTP_params.dat, resultsFile: HuRVsCommonAndTTP_Results.yml,
+    trainDataFile: HuRVsCommonAndTTP_kspectrum.dat}}
