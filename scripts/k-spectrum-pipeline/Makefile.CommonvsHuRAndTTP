@@ -51,7 +51,7 @@ step5:
 	mv $(RESULT_YML) $(RESULT_DIR)
 	git add $(RESULT_DIR)
 	git add $(RESULT_DIR)/*
-	git commit -av
-	git push origin
+	#git commit -av
+	#git push origin
 
 

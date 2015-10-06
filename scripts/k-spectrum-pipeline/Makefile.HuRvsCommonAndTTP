@@ -17,7 +17,7 @@ FEATURES_FILE="Elav1_ZFP36_Common_Features.dat"
 TOP_KMERS_FILE="Elav1_ZFP36_Common_Features_TopKmers.dat"
 
 
-CONF_PREFIX=HuRVsTTP
+CONF_PREFIX=HuRVsCommonAndTTP
 CONF_YML=$(CONF_PREFIX).yml
 RESULT_YML=$(CONF_PREFIX)_Results.yml
 
@@ -55,7 +55,7 @@ step5:
 	mv $(RESULT_YML) $(RESULT_DIR)
 	git add $(RESULT_DIR)
 	git add $(RESULT_DIR)/*
-	git commit -av
-	git push origin
+	#git commit -av
+	#git push origin
 
 
