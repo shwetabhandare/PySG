@@ -133,6 +133,13 @@ def CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKme
 		topKmersCsvWriter.writerow(row);
 
 
+def LaplaceSmoothing(totalCount, classTotal, currentCount):
+	alpha = 1;
+	p = float(classTotal + alpha) / float(classTotal + alpha * currentCount)
+	return p;
+
+
+
 def CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile):
 
 	kmerDict = CreateKmerDict(kmerFile)
@@ -150,7 +157,15 @@ def CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile):
 	sortedPosKmerCountList = GetSortedKmerDict(posKmerCountDict)
 	sortedNegKmerCountList = GetSortedKmerDict(negKmerCountDict)
 
+	
+
 	LogLikeHood = dict();
+
+	posTotalLen = len(posSeqDict)
+	negTotalLen = len(negSeqDict)
+
+	posKmerLen = len(sortedPosKmerCountList)
+	negKmerLen = len(sortedNegKmerCountList)
 
 	for pos_item in sortedPosKmerCountList:
 		for neg_item in sortedNegKmerCountList:
@@ -159,6 +174,11 @@ def CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile):
 				positiveCount = pos_item[0]
 				negativeCount = neg_item[0]
 				print positiveCount, negativeCount
+				posParam = LaplaceSmoothing(posTotalLen, posKmerLen, positiveCount)
+				negParam = LaplaceSmoothing(negTotalLen, negKmerLen, negativeCount)
+
+				print "Positive Param: ", posParam, ", Neg Param: ", negParam
+
 
 				if positiveCount == 0:
 					LogLikeHood[kmer] = 0;
