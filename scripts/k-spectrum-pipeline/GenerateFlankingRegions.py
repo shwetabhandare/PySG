@@ -133,9 +133,9 @@ def CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKme
 		topKmersCsvWriter.writerow(row);
 
 
-def LaplaceSmoothing(totalCount, classTotal, currentCount):
+def LaplaceSmoothing(totalDataCount, classTotal, currentValue):
 	alpha = 1;
-	p = float(classTotal + alpha) / float(classTotal + alpha * currentCount)
+	p = float(currentValue + alpha) / float(totalDataCount + alpha * classTotal)
 	return p;
 
 

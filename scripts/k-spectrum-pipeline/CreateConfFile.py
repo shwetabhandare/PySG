@@ -6,6 +6,9 @@ def CreateConf(filename, output_prefix, confFile):
 	filename_list = string.split(filename, "_")
 	list_len = len(filename_list)
 
+	print "FileName: ", filename
+	print filename_list
+
 	posLen = filename_list[list_len - 3]
 	negLen = filename_list[list_len - 2]
 	featureFileName =  output_prefix + "_Features.dat"
@@ -24,9 +27,9 @@ def CreateConf(filename, output_prefix, confFile):
 			),
 			kspectrum = dict(
 				k1 = 7,
-				k2 = 13,
+				k2 = 14,
 				C = 0.00001,
-				folds = 5,
+				folds = 10,
 			),
 			output = dict( 
 				featureFile = featureFileName,
@@ -43,6 +46,7 @@ def CreateConf(filename, output_prefix, confFile):
 if __name__ == '__main__':
 	import sys
 	combinedFile = sys.argv[1]
+	print "Combined File: ", combinedFile;
 	prefix = sys.argv[2]
 	confFile = sys.argv[3]
 	CreateConf(combinedFile, prefix, confFile)
