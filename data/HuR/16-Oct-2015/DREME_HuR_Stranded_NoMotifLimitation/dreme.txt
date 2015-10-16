@@ -1,0 +1,83 @@
+# DREME 4.10.2
+# command:   dreme -p to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand.fa -n NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand.fa -oc HuR_Stranded_NoMotifLimitation
+# host:      usmac1651sbhan.schq.secious.com
+# when:      Fri Oct 16 15:01:15 MDT 2015
+# positives: 3642
+#      from: to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand.fa (Fri Oct 09 15:06:42 MDT 2015)
+# negatives: 3642
+#      from: NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand.fa (Sun Oct 04 15:20:43 MDT 2015)
+
+
+MEME version 4.10.2
+
+ALPHABET= ACGT
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.278 C 0.203 G 0.207 T 0.313
+
+MOTIF DWAAAA DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST      DWAAAA     TTTTWH       2871       1250   8.2e-334   3.1e-329
+#           AAAAAA     TTTTTT       1585        432   1.2e-209   4.6e-205
+#           TAAAAA     TTTTTA       1466        486   2.1e-153   8.0e-149
+#           GAAAAA     TTTTTC       1101        353   9.2e-111   3.5e-106
+#           ATAAAA     TTTTAT       1169        431   7.9e-100   3.0e-095
+#           TTAAAA     TTTTAA       1167        475   5.4e-086   2.1e-081
+#           GTAAAA     TTTTAC        472        177   4.8e-035   1.8e-030
+
+letter-probability matrix: alength= 4 w= 6 nsites= 5371 E= 3.1e-329
+0.523925 0.000000 0.167008 0.309067
+0.646062 0.000000 0.000000 0.353938
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+
+
+MOTIF TTWW DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST        TTWW       WWAA       3224       2437   1.8e-112   6.0e-108
+#             TTTA       TAAA       2158       1420   1.3e-067   4.5e-063
+#             TTAT       ATAA       2010       1284   4.6e-066   1.6e-061
+#             TTAA       TTAA       1310        775   3.1e-044   1.1e-039
+#             TTTT       AAAA       1976       1412   2.2e-040   7.5e-036
+
+letter-probability matrix: alength= 4 w= 4 nsites= 9033 E= 6.0e-108
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 0.000000 1.000000
+0.378833 0.000000 0.000000 0.621167
+0.425219 0.000000 0.000000 0.574781
+
+
+MOTIF TAW DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST         TAW        WTA       2738       2301   7.0e-029   1.9e-024
+#              TAA        TTA       1795       1417   2.7e-019   7.3e-015
+#              TAT        ATA       2017       1659   2.8e-017   7.7e-013
+
+letter-probability matrix: alength= 4 w= 3 nsites= 5768 E= 1.9e-024
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.434639 0.000000 0.000000 0.565361
+
+
+MOTIF GAAA DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST        GAAA       TTTC       1513       1264   1.1e-009   2.2e-005
+#             GAAA       TTTC       1513       1264   1.1e-009   2.2e-005
+
+letter-probability matrix: alength= 4 w= 4 nsites= 2125 E= 2.2e-005
+0.000000 0.000000 1.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+
+
+
+Time 51.21 secs.
