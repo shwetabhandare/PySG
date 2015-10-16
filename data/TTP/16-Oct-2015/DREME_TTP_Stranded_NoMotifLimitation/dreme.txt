@@ -1,0 +1,78 @@
+# DREME 4.10.2
+# command:   dreme -p GSM1286117_ZFP36_clusters_stranded.fa -n NONGSM1286117_ZFP36_clusters_stranded.fa -oc TTP_Stranded_NoMotifLimitation
+# host:      usmac1651sbhan.schq.secious.com
+# when:      Fri Oct 16 15:02:25 MDT 2015
+# positives: 4626
+#      from: GSM1286117_ZFP36_clusters_stranded.fa (Mon Oct 05 05:53:57 MDT 2015)
+# negatives: 4626
+#      from: NONGSM1286117_ZFP36_clusters_stranded.fa (Fri Oct 09 15:06:42 MDT 2015)
+
+
+MEME version 4.10.2
+
+ALPHABET= ACGT
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.268 C 0.226 G 0.216 T 0.290
+
+MOTIF TAWTW DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST       TAWTW      WAWTA       4037        973   4.6e-974   1.1e-969
+#            TATTT      AAATA       3127        563   3.6e-695   8.6e-691
+#            TAATA      TATTA       1773        306   1.9e-316   4.7e-312
+#            TAATT      AATTA       1504        275   3.8e-249   9.1e-245
+
+letter-probability matrix: alength= 4 w= 5 nsites= 6991 E= 1.1e-969
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.319125 0.000000 0.000000 0.680875
+0.000000 0.000000 0.000000 1.000000
+0.264769 0.000000 0.000000 0.735231
+
+
+MOTIF TAWW DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST        TAWW       WWTA       3032       1569   9.2e-207   1.9e-202
+#             TAAA       TTTA       1963       1027   1.9e-097   3.9e-093
+#             TATA       TATA        965        294   3.3e-096   6.6e-092
+#             TATT       AATA        917        431   1.7e-047   3.4e-043
+#             TAAT       ATTA        662        339   8.7e-028   1.8e-023
+
+letter-probability matrix: alength= 4 w= 4 nsites= 4425 E= 1.9e-202
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.654463 0.000000 0.000000 0.345537
+0.700565 0.000000 0.000000 0.299435
+
+
+MOTIF TAW DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST         TAW        WTA       1867       1310   1.6e-034   2.5e-030
+#              TAT        ATA       1104        746   6.8e-021   1.1e-016
+#              TAA        TTA       1127        788   1.8e-018   2.8e-014
+
+letter-probability matrix: alength= 4 w= 3 nsites= 2318 E= 2.5e-030
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.522002 0.000000 0.000000 0.477998
+
+
+MOTIF AAT DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST         AAT        ATT       1830       1560   3.2e-009   3.9e-005
+#              AAT        ATT       1830       1560   3.2e-009   3.9e-005
+
+letter-probability matrix: alength= 4 w= 3 nsites= 2182 E= 3.9e-005
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+
+
+
+Time 24.42 secs.

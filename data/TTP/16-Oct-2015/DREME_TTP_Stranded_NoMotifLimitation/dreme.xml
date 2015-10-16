@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<!DOCTYPE dreme[
+<!ELEMENT dreme (model, motifs, run_time)>
+<!ATTLIST dreme version CDATA #REQUIRED release CDATA #REQUIRED>
+<!ELEMENT model 
+  (command_line, positives, negatives, background, stop, norc, ngen, add_pv_thresh, 
+  seed, host, when, description?)>
+<!ELEMENT command_line (#PCDATA)>
+<!ELEMENT positives EMPTY>
+<!ATTLIST positives 
+  name CDATA #REQUIRED count CDATA #REQUIRED file CDATA #REQUIRED 
+  last_mod_date CDATA #REQUIRED>
+<!--  
+  negatives must have a file and last_mod_date specified when the from
+  attribute is file.
+-->
+<!ELEMENT negatives EMPTY>
+<!ATTLIST negatives 
+  name CDATA #REQUIRED count CDATA #REQUIRED from (shuffled|file) #REQUIRED
+  file CDATA #IMPLIED last_mod_date CDATA #IMPLIED>
+<!-- 
+  background allows DNA and RNA (AA is not going to be supported with DREME) 
+  however currently only DNA is implemented. Note that when type is dna the
+  value for T must be supplied and when the type is rna the value for U must
+  be supplied. The sum of the frequencies must be 1 (with a small error).
+-->
+<!ELEMENT background EMPTY>
+<!ATTLIST background 
+  type (dna|rna) #REQUIRED
+  A CDATA #REQUIRED C CDATA #REQUIRED G CDATA #REQUIRED 
+  T CDATA #IMPLIED U CDATA #IMPLIED 
+  from (dataset|file) #REQUIRED 
+  file CDATA #IMPLIED last_mod_date CDATA #IMPLIED>
+<!ELEMENT stop EMPTY>
+<!ATTLIST stop 
+  evalue CDATA #IMPLIED count CDATA #IMPLIED time CDATA #IMPLIED>
+<!ELEMENT norc (#PCDATA)>
+<!ELEMENT ngen (#PCDATA)>
+<!ELEMENT seed (#PCDATA)>
+<!ELEMENT add_pv_thresh (#PCDATA)>
+<!ELEMENT host (#PCDATA)>
+<!ELEMENT when (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT motifs (motif*)>
+<!ELEMENT motif (pos*, match*)>
+<!ATTLIST motif
+  id CDATA #REQUIRED seq CDATA #REQUIRED length CDATA #REQUIRED 
+  nsites CDATA #REQUIRED p CDATA #REQUIRED n CDATA #REQUIRED
+  pvalue CDATA #REQUIRED evalue CDATA #REQUIRED unerased_evalue CDATA #REQUIRED>
+<!--
+  pos allows DNA and RNA (AA is not going to be supported with DREME)
+  however current only DNA is implemented. When the type in the background
+  is 'dna' pos must have a T attribute and when it is 'rna' pos must have a
+  U attribute
+-->
+<!ELEMENT pos EMPTY>
+<!ATTLIST pos
+  i CDATA #REQUIRED A CDATA #REQUIRED C CDATA #REQUIRED G CDATA #REQUIRED 
+  T CDATA #IMPLIED U CDATA #IMPLIED>
+<!ELEMENT match EMPTY>
+<!ATTLIST match
+  seq CDATA #REQUIRED p CDATA #REQUIRED n CDATA #REQUIRED 
+  pvalue CDATA #REQUIRED evalue CDATA #REQUIRED>
+<!ELEMENT run_time EMPTY>
+<!ATTLIST run_time
+  cpu CDATA #REQUIRED real CDATA #REQUIRED stop (evalue|count|time) #REQUIRED>
+]>
+<dreme version="4.10.2" release="Thu Sep 03 15:00:54 2015 -0700">
+  <model>
+    <command_line>dreme -p GSM1286117_ZFP36_clusters_stranded.fa -n NONGSM1286117_ZFP36_clusters_stranded.fa -oc TTP_Stranded_NoMotifLimitation</command_line>
+    <positives name="GSM1286117 ZFP36 clusters stranded" count="4626" file="GSM1286117_ZFP36_clusters_stranded.fa" last_mod_date="Mon Oct 05 05:53:57 MDT 2015" />
+    <negatives name="NONGSM1286117 ZFP36 clusters stranded" count="4626" from="file" file="NONGSM1286117_ZFP36_clusters_stranded.fa" last_mod_date="Fri Oct 09 15:06:42 MDT 2015" />
+    <background type="dna" A="0.268" C="0.226" G="0.216" T="0.290" from="dataset"/>
+    <stop evalue="0.05"/>
+    <norc>FALSE</norc>
+    <ngen>100</ngen>
+    <add_pv_thresh>0.01</add_pv_thresh>
+    <seed>1</seed>
+    <host>usmac1651sbhan.schq.secious.com</host>
+    <when>Fri Oct 16 15:02:25 MDT 2015</when>
+  </model>
+  <motifs>
+    <motif id="m01" seq="TAWTW" length="5" nsites="6991" p="4037" n="973" pvalue="4.6e-974" evalue="1.1e-969" unerased_evalue="1.1e-969">
+      <pos i="1" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos i="2" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="3" A="0.319125" C="0.000000" G="0.000000" T="0.680875"/>
+      <pos i="4" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos i="5" A="0.264769" C="0.000000" G="0.000000" T="0.735231"/>
+      <match seq="TATTT" p="3127" n="563" pvalue="3.6e-695" evalue="8.6e-691"/>
+      <match seq="TAATA" p="1773" n="306" pvalue="1.9e-316" evalue="4.7e-312"/>
+      <match seq="TAATT" p="1504" n="275" pvalue="3.8e-249" evalue="9.1e-245"/>
+    </motif>
+    <motif id="m02" seq="TAWW" length="4" nsites="4425" p="3032" n="1569" pvalue="9.2e-207" evalue="1.9e-202" unerased_evalue="6.2e-744">
+      <pos i="1" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos i="2" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="3" A="0.654463" C="0.000000" G="0.000000" T="0.345537"/>
+      <pos i="4" A="0.700565" C="0.000000" G="0.000000" T="0.299435"/>
+      <match seq="TAAA" p="1963" n="1027" pvalue="1.9e-097" evalue="3.9e-093"/>
+      <match seq="TATA" p="965" n="294" pvalue="3.3e-096" evalue="6.6e-092"/>
+      <match seq="TATT" p="917" n="431" pvalue="1.7e-047" evalue="3.4e-043"/>
+      <match seq="TAAT" p="662" n="339" pvalue="8.7e-028" evalue="1.8e-023"/>
+    </motif>
+    <motif id="m03" seq="TAW" length="3" nsites="2318" p="1867" n="1310" pvalue="1.6e-034" evalue="2.5e-030" unerased_evalue="9.8e-548">
+      <pos i="1" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos i="2" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="3" A="0.522002" C="0.000000" G="0.000000" T="0.477998"/>
+      <match seq="TAT" p="1104" n="746" pvalue="6.8e-021" evalue="1.1e-016"/>
+      <match seq="TAA" p="1127" n="788" pvalue="1.8e-018" evalue="2.8e-014"/>
+    </motif>
+    <motif id="m04" seq="AAT" length="3" nsites="2182" p="1830" n="1560" pvalue="3.2e-009" evalue="3.9e-005" unerased_evalue="3.1e-532">
+      <pos i="1" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="2" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="3" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <match seq="AAT" p="1830" n="1560" pvalue="3.2e-009" evalue="3.9e-005"/>
+    </motif>
+  </motifs>
+  <run_time cpu="24.40" real="24.42" stop="evalue"/>
+</dreme>
