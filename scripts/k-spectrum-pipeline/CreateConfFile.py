@@ -29,7 +29,7 @@ def CreateConf(filename, output_prefix, confFile):
 				k1 = 7,
 				k2 = 14,
 				C = 0.00001,
-				folds = 10,
+				folds = 5,
 			),
 			output = dict( 
 				featureFile = featureFileName,

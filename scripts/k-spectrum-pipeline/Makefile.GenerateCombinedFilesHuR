@@ -1,0 +1,36 @@
+DATA_DIR=/projects/bhandare/workspace/PySG/data
+PROJECTS_DIR=/projects/bhandare
+
+
+POS_FILE=$(DATA_DIR)/HuR/to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand.fa
+NEG_FILE=$(DATA_DIR)/HuR/NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand.fa
+
+POS_TRAIN_FILENAME=to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train.fa
+POS_TEST_FILENAME=to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_test.fa
+
+NEG_TRAIN_FILENAME=NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train.fa
+NEG_TEST_FILENAME=NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_test.fa
+
+SPLIT_SCRIPT=/projects/bhandare/workspace/scripts/SplitTrain/SplitTrainAndTest.py
+
+all: step0 step1 step2 step3
+
+.PHONY: all
+
+step0: $(POS_FILE) $(NEG_FILE)
+	@echo "**** STEP 0: CONVERT TO UPPER ****"
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(POS_FILE)
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
+
+step1: $(POS_FILE) $(NEG_FILE)
+	@echo "**** STEP 1: SPLIT TRAIN/TEST ****"
+	python $(SPLIT_SCRIPT) $(POS_FILE) 90 $(POS_TRAIN_FILENAME) $(POS_TEST_FILENAME)
+	python $(SPLIT_SCRIPT) $(NEG_FILE) 90 $(NEG_TRAIN_FILENAME) $(NEG_TEST_FILENAME)
+
+step2: $(POS_TRAIN_FILENAME) $(NEG_TEST_FILENAME) seq_counter.py 
+	@echo "**** STEP 2: COMBINE POS/NEG TRAIN ****"
+	python seq_counter.py $(POS_TRAIN_FILENAME) $(NEG_TRAIN_FILENAME)
+
+step3: $(POS_TEST_FILENAME) $(NEG_TEST_FILENAME) seq_counter.py 
+	@echo "**** STEP 3: COMBINE POS/NEG TEST ****"
+	python seq_counter.py $(POS_TEST_FILENAME) $(NEG_TEST_FILENAME)

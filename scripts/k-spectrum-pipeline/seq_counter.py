@@ -40,7 +40,6 @@ def CreateCombinedFile(posFile, negFile):
 	#Creating output file and writing other files to it
 	just_plus_basename = os.path.basename(filename_plus)
 	just_minus_basename = os.path.basename(filename_minus)
-	print just_plus_basename
 	just_plus = os.path.splitext(just_plus_basename)[0]		#splitting the filename from extension and only taking the filename
 	just_minus = os.path.splitext(just_minus_basename)[0]		#splitting the filename from extension and only taking the filename
 	#just_plus = os.path.splitext(filename_plus)[0]		#splitting the filename from extension and only taking the filename
@@ -51,7 +50,8 @@ def CreateCombinedFile(posFile, negFile):
 	outputfile = open(filename_output, "w")	
 	outputfile.write(plus_text)
 	outputfile.write(minus_text)
-	
+
+	print "Combined Filename:", filename_output
 	#Closing files
 	file_plus.close()
 	file_minus.close()
@@ -63,5 +63,6 @@ if __name__ == "__main__":
 	import sys
 	posFile = sys.argv[1]
 	negFile = sys.argv[2]
+	print posFile, negFile
 	CreateCombinedFile(posFile, negFile);
 
