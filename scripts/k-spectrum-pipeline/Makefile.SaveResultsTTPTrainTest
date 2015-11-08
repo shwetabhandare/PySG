@@ -1,0 +1,54 @@
+DATA_DIR=/projects/bhandare/workspace/PySG/data
+PROJECTS_DIR=/projects/bhandare
+
+POS_FILE=$(DATA_DIR)/TTP/GSM1286117_ZFP36_clusters_stranded.fa
+NEG_FILE=$(DATA_DIR)/TTP/NONGSM1286117_ZFP36_clusters_stranded.fa
+
+POS_TRAIN_FILENAME=GSM1286117_ZFP36_clusters_stranded_train.fa
+POS_TEST_FILENAME=GSM1286117_ZFP36_clusters_stranded_test.fa
+
+NEG_TRAIN_FILENAME=NONGSM1286117_ZFP36_clusters_stranded_train.fa
+NEG_TEST_FILENAME=NONGSM1286117_ZFP36_clusters_stranded_test.fa
+
+COMBINED_TRAIN_FILE_NAME=$(wildcard *elav*_train*CompleteSet.txt)
+COMBINED_TEST_FILE_NAME=$(wildcard *elav*_test*.txt)
+
+
+CONF_TRAIN_PREFIX=HuR_InDomain_Train
+CONF_TRAIN_YML=$(CONF_TRAIN_PREFIX).yml
+
+CONF_TEST_PREFIX=HuR_InDomain_Test
+CONF_TEST_YML=$(CONF_TEST_PREFIX).yml
+
+MODEL_FILE_NAME=$(wildcard *Model.dat)
+TRAIN_KSPECTRUM_FILE=$(wildcard *kspectrum.dat)
+TRAIN_PARAMS_FILE=$(wildcard *params.dat)
+TRAIN_RESULTS_YML=$(CONF_TRAIN_PREFIX)_Results.yml
+TRAIN_FEATURES_FILE=$(wildcard *Train_Features*.dat)
+
+TEST_RESULTS_FILE=$(CONF_TEST_PREFIX)_Results.yml
+TEST_FEATURES_FILE=$(CONF_TEST_PREFIX)_Features.txt
+
+RESULT_DIR=`date +'%d-%b-%Y'`
+
+
+all: step1
+
+step1:
+	@echo "*** STEP 1: SAVING TO RESULT DIR, UPDATING GIT: $(RESULT_DIR)."
+	mkdir -p $(RESULT_DIR)
+	mv $(POS_TRAIN_FILENAME) $(POS_TEST_FILENAME) $(RESULT_DIR)
+	mv $(NEG_TRAIN_FILENAME) $(NEG_TEST_FILENAME) $(RESULT_DIR)
+	mv $(COMBINED_TRAIN_FILE_NAME) $(RESULT_DIR)	
+	mv $(COMBINED_TEST_FILE_NAME) $(RESULT_DIR)
+	mv $(TRAIN_RESULTS_YML) $(RESULT_DIR)
+	mv $(TEST_RESULTS_FILE) $(RESULT_DIR)
+	mv $(TEST_FEATURES_FILE) $(RESULT_DIR)
+	mv $(CONF_TRAIN_YML) $(RESULT_DIR)
+	mv $(MODEL_FILE_NAME) $(RESULT_DIR)
+	mv $(TRAIN_KSPECTRUM_FILE) $(RESULT_DIR)
+	mv $(TRAIN_PARAMS_FILE) $(RESULT_DIR)
+	mv $(TRAIN_FEATURES_FILE) $(RESULT_DIR)
+
+	git add $(RESULT_DIR)
+	git add $(RESULT_DIR)/*
