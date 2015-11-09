@@ -1,23 +1,16 @@
-DATA_DIR=/projects/bhandare/workspace/PySG/data
-PROJECTS_DIR=/projects/bhandare
-
-POS_FILE=$(DATA_DIR)/TTP/GSM1286117_ZFP36_clusters_stranded.fa
-NEG_FILE=$(DATA_DIR)/TTP/NONGSM1286117_ZFP36_clusters_stranded.fa
-
 POS_TRAIN_FILENAME=GSM1286117_ZFP36_clusters_stranded_train.fa
 POS_TEST_FILENAME=GSM1286117_ZFP36_clusters_stranded_test.fa
 
 NEG_TRAIN_FILENAME=NONGSM1286117_ZFP36_clusters_stranded_train.fa
 NEG_TEST_FILENAME=NONGSM1286117_ZFP36_clusters_stranded_test.fa
 
-COMBINED_TRAIN_FILE_NAME=$(wildcard *elav*_train*CompleteSet.txt)
-COMBINED_TEST_FILE_NAME=$(wildcard *elav*_test*.txt)
+COMBINED_TRAIN_FILE_NAME=$(wildcard *GSM*_train*CompleteSet.txt)
+COMBINED_TEST_FILE_NAME=$(wildcard *GSM*_test*.txt)
 
-
-CONF_TRAIN_PREFIX=HuR_InDomain_Train
+CONF_TRAIN_PREFIX=TTP_InDomain_Train
 CONF_TRAIN_YML=$(CONF_TRAIN_PREFIX).yml
 
-CONF_TEST_PREFIX=HuR_InDomain_Test
+CONF_TEST_PREFIX=TTP_InDomain_Test
 CONF_TEST_YML=$(CONF_TEST_PREFIX).yml
 
 MODEL_FILE_NAME=$(wildcard *Model.dat)
