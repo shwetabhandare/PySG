@@ -26,7 +26,7 @@ def CreateConf(filename, output_prefix, confFile):
 			negLen = int(negLen),
 			),
 			kspectrum = dict(
-				k1 = 7,
+				k1 = 9,
 				k2 = 14,
 				C = 0.00001,
 				folds = 5,
