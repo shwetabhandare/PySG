@@ -17,21 +17,21 @@ TOP_KMERS_SCRIPT=$(PROJECTS_DIR)/workspace/scripts/extractTopFeatures.py
 CONF_YML=$(DATA_DIR)/HuR_TTP/CommonvsOnlyHuRConservativeAndOnlyTTP.yml
 RESULTS_DIR=$(date +%d-%b-%Y)
 
-all: $(COMBINED_FILE) $(FEATURE_FILE)
+all: step1 step2
 .PHONY: all
 
-$(COMBINED_FILE): $(POS_FILE) $(NEG_FILE) seq_counter.py 
+step1: $(POS_FILE) $(NEG_FILE) seq_counter.py 
 	python seq_counter.py $(POS_FILE) $(NEG_FILE)
-	mv $(COMBINED_FILE_NAME) $(DATA_DIR)/HuR_TTP/
+	#mv $(COMBINED_FILE_NAME) $(DATA_DIR)/HuR_TTP/
 
-$(FEATURE_FILE): $(COMBINED_FILE) $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
+step2: $(COMBINED_FILE) $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
 	echo $(COMBINED_FILE)
 	python $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
 	python $(TOP_KMERS_SCRIPT) $(FEATURE_FILE) 25 $(DATA_DIR)/HuR_TTP/$(FEATURE_FILE).topfeatures.txt
-	mkdir -p $(RESULTS_DIR)
-	mv $(RESULTS_DIR) $(DATA_DIR)/HuR_TTP/
-	mv *Results.yml $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
-	mv *.dat $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
+	#mkdir -p $(RESULTS_DIR)
+	#mv $(RESULTS_DIR) $(DATA_DIR)/HuR_TTP/
+	#mv *Results.yml $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
+	#mv *.dat $(DATA_DIR)/HuR_TTP/$(RESULTS_DIR)/
 
 
 
