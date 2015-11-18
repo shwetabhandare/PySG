@@ -1,5 +1,5 @@
-{data: {dataFile: ELAV1_Conservative_ZFP36_OnlyELAV1_OnlyZFP36_467_7367_CompleteSet.txt,
-    negLen: 7367, posLen: 467}, kspectrum: {C: 1.0e-05, folds: 5, k1: 9, k2: 14},
-  output: {featureFile: CommonVsHuRAndTTP_Features.dat, modelFile: CommonVsHuRAndTTP_Model.dat,
+{data: {dataFile: ELAV1_ZFP36_Common_Clusters_ELAV1_ConservativeAndZFP36_467_7367_CompleteSet.txt,
+    negLen: 7367, posLen: 467}, kspectrum: {C: 10, folds: 5, k1: 9, k2: 12}, output: {
+    featureFile: CommonVsHuRAndTTP_Features.dat, modelFile: CommonVsHuRAndTTP_Model.dat,
     paramsFile: CommonVsHuRAndTTP_params.dat, resultsFile: CommonVsHuRAndTTP_Results.yml,
     trainDataFile: CommonVsHuRAndTTP_kspectrum.dat}}

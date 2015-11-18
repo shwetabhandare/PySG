@@ -27,8 +27,8 @@ def CreateConf(filename, output_prefix, confFile):
 			),
 			kspectrum = dict(
 				k1 = 9,
-				k2 = 14,
-				C = 0.00001,
+				k2 = 12,
+				C = 10,
 				folds = 5,
 			),
 			output = dict( 
