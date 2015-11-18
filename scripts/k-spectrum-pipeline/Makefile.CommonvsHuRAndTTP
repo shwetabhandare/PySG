@@ -2,13 +2,12 @@ DATA_DIR=../../data
 PROJECTS_DIR=/projects/bhandare
 KSPECTRUM_PIPELINE_DIR=$(PROJECTS_DIR)/k-spectrum-pipeline
 
+#Files are stranded
 POS_FILE_NAME=ELAV1_ZFP36_Common_Clusters.fa
 NEG_FILE_NAME=ELAV1_ConservativeAndZFP36.fa
 
 POS_FILE=$(DATA_DIR)/HuR_TTP/$(POS_FILE_NAME)
 NEG_FILE=$(DATA_DIR)/HuR_TTP/$(NEG_FILE_NAME)
-
-NON_HUR_TTP=/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt
 
 COMBINED_FILE_NAME=$(wildcard *.txt)
 COMBINED_FILE=$(DATA_DIR)/HuR_TTP/$(COMBINED_FILE_NAME)
@@ -27,6 +26,11 @@ RESULT_DIR=`date +'%d-%b-%Y'`
 
 all: step1 step2 step3 step4 step5
 .PHONY: all
+
+step0:
+	@echo "**** STEP 0: CONVERT TO UPPER ****"
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(POS_FILE)
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
 
 
 step1: $(POS_FILE) $(NEG_FILE) seq_counter.py 

@@ -10,7 +10,7 @@ MODEL_FILE_NAME=$(wildcard *Model.dat)
 TRAIN_KSPECTRUM_FILE=$(wildcard *kspectrum.dat)
 TRAIN_PARAMS_FILE=$(wildcard *params.dat)
 
-
+w
 CONF_TRAIN_PREFIX=HuR_InDomain_Train
 CONF_TRAIN_YML=$(CONF_TRAIN_PREFIX).yml
 
