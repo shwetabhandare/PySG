@@ -31,7 +31,7 @@ def CreateKmerDict(kmerFile):
 		numFeatures = 0;
 		kmerDict = dict()
 		for row in reader:
-			if numFeatures <= 20:
+			if numFeatures <= 30:
 				print row[0]
 				featureScore = float(row[0])
 				featureKmer = row[1]
@@ -140,24 +140,20 @@ def LaplaceSmoothing(totalDataCount, classTotal, currentValue):
 
 
 
-def CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile):
+def ComputeLogLikelihood(posSeq, negSeq, kmerFile, topKmersFile):
 
 	kmerDict = CreateKmerDict(kmerFile)
 	
 	posSeqDict = fasta_read(posSeq)
 	negSeqDict = fasta_read(negSeq)
 
-	#CreateKmerCountAndFlankingDict(kmerDict, seqDict, flankingRegionFile, topKmersFile);
+	# Get Kmer counts of the top k-mers in the positive, negative sequence set. 
 	posKmerCountDict = GetKmerCounts(kmerDict, posSeqDict);
 	negKmerCountDict = GetKmerCounts(kmerDict, negSeqDict);
-
-	for k, v in negKmerCountDict.iteritems():
-		print k, v;
 
 	sortedPosKmerCountList = GetSortedKmerDict(posKmerCountDict)
 	sortedNegKmerCountList = GetSortedKmerDict(negKmerCountDict)
 
-	
 
 	LogLikeHood = dict();
 
@@ -179,7 +175,6 @@ def CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile):
 
 				print "Positive Param: ", posParam, ", Neg Param: ", negParam
 
-
 				if positiveCount == 0:
 					LogLikeHood[kmer] = 0;
 				elif negativeCount == 0:
@@ -199,4 +194,4 @@ if __name__ == '__main__':
 	negSeq = sys.argv[2]
 	kmerFile = sys.argv[3]
 	topKmersFile = sys.argv[4]
-	CreateFlankingRegions(posSeq, negSeq, kmerFile, topKmersFile);
+	ComputeLogLikelihood(posSeq, negSeq, kmerFile, topKmersFile);

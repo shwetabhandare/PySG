@@ -4,8 +4,8 @@ POS_TEST_FILENAME=GSM1286117_ZFP36_clusters_stranded_test.fa
 NEG_TRAIN_FILENAME=NONGSM1286117_ZFP36_clusters_stranded_train.fa
 NEG_TEST_FILENAME=NONGSM1286117_ZFP36_clusters_stranded_test.fa
 
-COMBINED_TRAIN_FILE_NAME=$(wildcard *GSM*_train*CompleteSet.txt)
-COMBINED_TEST_FILE_NAME=$(wildcard *GSM*_test*.txt)
+COMBINED_TRAIN_FILE_NAME=$(wildcard GSM*train*CompleteSet.txt)
+COMBINED_TEST_FILE_NAME=$(wildcard GSM*test*CompleteSet.txt)
 
 CONF_TRAIN_PREFIX=TTP_InDomain_Train
 CONF_TRAIN_YML=$(CONF_TRAIN_PREFIX).yml
@@ -13,9 +13,9 @@ CONF_TRAIN_YML=$(CONF_TRAIN_PREFIX).yml
 CONF_TEST_PREFIX=TTP_InDomain_Test
 CONF_TEST_YML=$(CONF_TEST_PREFIX).yml
 
-MODEL_FILE_NAME=$(wildcard *Model.dat)
-TRAIN_KSPECTRUM_FILE=$(wildcard *kspectrum.dat)
-TRAIN_PARAMS_FILE=$(wildcard *params.dat)
+MODEL_FILE_NAME=$(wildcard TTP*Model.dat)
+TRAIN_KSPECTRUM_FILE=$(wildcard TTP*kspectrum.dat)
+TRAIN_PARAMS_FILE=$(wildcard TTP*params.dat)
 TRAIN_RESULTS_YML=$(CONF_TRAIN_PREFIX)_Results.yml
 TRAIN_FEATURES_FILE=$(wildcard *Train_Features*.dat)
 

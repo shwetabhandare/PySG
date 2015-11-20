@@ -4,8 +4,8 @@ POS_TEST_FILENAME=to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_test.
 NEG_TRAIN_FILENAME=NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train.fa
 NEG_TEST_FILENAME=NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_test.fa
 
-COMBINED_TRAIN_FILE_NAME=$(wildcard *elav*_train*CompleteSet.txt)
-COMBINED_TEST_FILE_NAME=$(wildcard *elav*_test*.txt)
+COMBINED_TRAIN_FILE_NAME=$(wildcard to_ucsc*_train*CompleteSet.txt)
+COMBINED_TEST_FILE_NAME=$(wildcard to_ucsc*_test*.txt)
 
 
 CONF_TRAIN_PREFIX=HuR_InDomain_Train
@@ -14,9 +14,9 @@ CONF_TRAIN_YML=$(CONF_TRAIN_PREFIX).yml
 CONF_TEST_PREFIX=HuR_InDomain_Test
 CONF_TEST_YML=$(CONF_TEST_PREFIX).yml
 
-MODEL_FILE_NAME=$(wildcard *Model.dat)
-TRAIN_KSPECTRUM_FILE=$(wildcard *kspectrum.dat)
-TRAIN_PARAMS_FILE=$(wildcard *params.dat)
+MODEL_FILE_NAME=$(wildcard HuR*Model.dat)
+TRAIN_KSPECTRUM_FILE=$(wildcard HuR*kspectrum.dat)
+TRAIN_PARAMS_FILE=$(wildcard HuR*params.dat)
 TRAIN_RESULTS_YML=$(CONF_TRAIN_PREFIX)_Results.yml
 TRAIN_FEATURES_FILE=$(wildcard *Train_Features*.dat)
 
