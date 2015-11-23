@@ -1,0 +1,5 @@
+{data: {dataFile: to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_2913_2913_CompleteSet.txt,
+    negLen: 2913, posLen: 2913}, kspectrum: {C: 10, folds: 5, k1: 9, k2: 12}, output: {
+    featureFile: HuR_InDomain_Train_Features.dat, modelFile: HuR_InDomain_Train_Model.dat,
+    paramsFile: HuR_InDomain_Train_params.dat, resultsFile: HuR_InDomain_Train_Results.yml,
+    trainDataFile: HuR_InDomain_Train_kspectrum.dat}}
