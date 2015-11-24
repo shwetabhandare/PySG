@@ -1,0 +1,29 @@
+COMBINED_TRAIN_FILE_NAME=$(wildcard GSM*train*CompleteSet.txt)
+COMBINED_TEST_FILE_NAME=$(wildcard to_ucsc*test*CompleteSet.txt)
+
+CONF_TRAIN_HUR_PREFIX=HuR_InDomain_Train
+CONF_TRAIN_TTP_PREFIX=TTP_InDomain_Train
+CONF_TEST_PREFIX=HuR_InDomain_Test
+RESULTS_PREFIX=TTP_Train_HuR_Test
+
+
+#Arguments to the script
+
+# Need this file to get the k1, k2 size to get spectrum data.
+TRAIN_RESULTS_YML=$(CONF_TRAIN_HUR_PREFIX)_Results.yml
+MODEL_FILE_NAME=$(CONF_TRAIN_TTP_PREFIX)_Model.dat
+
+#Test output
+TEST_RESULTS_FILE=$(RESULTS_PREFIX)_Results.yml
+TEST_FEATURES_FILE=$(RESULTS_PREFIX)_Features.txt
+TEST_SPECTRUM_FILE=$(CONF_TEST_PREFIX)_kspectrum.dat
+
+
+TEST_MODEL_SCRIPT=/projects/bhandare/workspace/kernels/k-spectrum/scripts/InDomainTest.py
+
+all: step3
+.PHONY: all
+
+step3:
+	@echo "**** STEP 6: TEST MODEL ****: $(COMBINED_TEST_FILE_NAME)"	
+	python $(TEST_MODEL_SCRIPT) $(TRAIN_RESULTS_YML) $(COMBINED_TEST_FILE_NAME) $(MODEL_FILE_NAME) $(COMBINED_TRAIN_FILE_NAME) $(TEST_RESULTS_FILE) $(TEST_FEATURES_FILE) $(TEST_SPECTRUM_FILE)

@@ -157,11 +157,11 @@ def ComputeLogLikelihood(posSeq, negSeq, kmerFile, topKmersFile):
 
 	LogLikeHood = dict();
 
-	posTotalLen = len(posSeqDict)
-	negTotalLen = len(negSeqDict)
+	totalPosSeq = len(posSeqDict)
+	totalNegSeq = len(negSeqDict)
 
-	posKmerLen = len(sortedPosKmerCountList)
-	negKmerLen = len(sortedNegKmerCountList)
+	totalPosKmers = len(sortedPosKmerCountList)
+	totalNegKmers = len(sortedNegKmerCountList)
 
 	for pos_item in sortedPosKmerCountList:
 		for neg_item in sortedNegKmerCountList:
@@ -170,18 +170,16 @@ def ComputeLogLikelihood(posSeq, negSeq, kmerFile, topKmersFile):
 				positiveCount = pos_item[0]
 				negativeCount = neg_item[0]
 				print positiveCount, negativeCount
-				posParam = LaplaceSmoothing(posTotalLen, posKmerLen, positiveCount)
-				negParam = LaplaceSmoothing(negTotalLen, negKmerLen, negativeCount)
-
-				print "Positive Param: ", posParam, ", Neg Param: ", negParam
+				posParam = LaplaceSmoothing(totalPosSeq, totalPosKmers, positiveCount)
+				negParam = LaplaceSmoothing(totalNegSeq, totalNegKmers, negativeCount)
 
 				if positiveCount == 0:
 					LogLikeHood[kmer] = 0;
 				elif negativeCount == 0:
 					print "Could not find ", kmer, " in negative set."
-					LogLikeHood[kmer] = math.log10(positiveCount);
+					LogLikeHood[kmer] = 0;
 				else:
-					LogLikeHood[kmer] = math.log10( float(positiveCount)/ float(negativeCount))
+					LogLikeHood[kmer] = math.log10( float(posParam)/ float(negParam))
 
 	sortedLogLikeHood =  [ (v,k) for k,v in LogLikeHood.iteritems() ]
 	sortedLogLikeHood.sort(reverse=True)

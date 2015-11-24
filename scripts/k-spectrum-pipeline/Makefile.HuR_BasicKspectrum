@@ -1,0 +1,42 @@
+DATA_DIR=/projects/bhandare/workspace/PySG/data
+PROJECTS_DIR=/projects/bhandare
+
+POS_FILE=$(DATA_DIR)/HuR/to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand.fa
+NEG_FILE=$(DATA_DIR)/HuR/NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand.fa
+
+COMBINED_FILE_NAME=$(wildcard *.txt)
+FEATURES_FILE="HuR_Conservative_Features.dat"
+TOP_KMERS_FILE="HuR_TopKmers.dat"
+
+RESULT_DIR=`date +'%d-%b-%Y'`
+
+all: step0 step1 step2 step3 step4 step5
+
+.PHONY: all
+
+step0: $(POS_FILE) $(NEG_FILE)
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(POS_FILE)
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
+
+step1: $(POS_FILE) $(NEG_FILE) seq_counter.py 
+	python seq_counter.py $(POS_FILE) $(NEG_FILE)
+
+step2:
+	@echo $(COMBINED_FILE_NAME)
+	@echo $(result_dir)
+	python CreateConfFile.py $(COMBINED_FILE_NAME) "HuR_Conservative" HuRConservative.yml
+
+step3:
+	python /projects/bhandare/workspace/kernels/k-spectrum/scripts/basic_kspectrum.py HuRConservative.yml
+
+step4:
+	python GenerateFlankingRegions.py $(POS_FILE) $(NEG_FILE) $(FEATURES_FILE) $(TOP_KMERS_FILE)
+
+step5:
+	mkdir -p $(RESULT_DIR)
+	mv $(COMBINED_FILE_NAME) $(RESULT_DIR)
+	mv $(FEATURES_FILE) $(TOP_KMERS_FILE) $(RESULT_DIR)
+	git add $(RESULT_DIR)
+	git add $(RESULT_DIR)/*
+	git commit -av
+	git push origin

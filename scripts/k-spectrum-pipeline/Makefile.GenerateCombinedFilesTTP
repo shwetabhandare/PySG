@@ -1,0 +1,35 @@
+DATA_DIR=/projects/bhandare/workspace/PySG/data
+PROJECTS_DIR=/projects/bhandare
+
+POS_FILE=$(DATA_DIR)/TTP/GSM1286117_ZFP36_clusters_stranded.fa
+NEG_FILE=$(DATA_DIR)/TTP/NONGSM1286117_ZFP36_clusters_stranded.fa
+
+POS_TRAIN_FILENAME=GSM1286117_ZFP36_clusters_stranded_train.fa
+POS_TEST_FILENAME=GSM1286117_ZFP36_clusters_stranded_test.fa
+
+NEG_TRAIN_FILENAME=NONGSM1286117_ZFP36_clusters_stranded_train.fa
+NEG_TEST_FILENAME=NONGSM1286117_ZFP36_clusters_stranded_test.fa
+
+SPLIT_SCRIPT=/projects/bhandare/workspace/scripts/SplitTrain/SplitTrainAndTest.py
+
+all: step0 step1 step2 step3
+
+.PHONY: all
+
+step0: $(POS_FILE) $(NEG_FILE)
+	@echo "**** STEP 0: CONVERT TO UPPER ****"
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(POS_FILE)
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
+
+step1: $(POS_FILE) $(NEG_FILE)
+	@echo "**** STEP 1: SPLIT TRAIN/TEST ****"
+	python $(SPLIT_SCRIPT) $(POS_FILE) 80 $(POS_TRAIN_FILENAME) $(POS_TEST_FILENAME)
+	python $(SPLIT_SCRIPT) $(NEG_FILE) 80 $(NEG_TRAIN_FILENAME) $(NEG_TEST_FILENAME)
+
+step2: $(POS_TRAIN_FILENAME) $(NEG_TEST_FILENAME) seq_counter.py 
+	@echo "**** STEP 2: COMBINE POS/NEG TRAIN ****"
+	python seq_counter.py $(POS_TRAIN_FILENAME) $(NEG_TRAIN_FILENAME)
+
+step3: $(POS_TEST_FILENAME) $(NEG_TEST_FILENAME) seq_counter.py 
+	@echo "**** STEP 3: COMBINE POS/NEG TEST ****"
+	python seq_counter.py $(POS_TEST_FILENAME) $(NEG_TEST_FILENAME)

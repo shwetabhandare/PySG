@@ -1,0 +1,31 @@
+COMBINED_TRAIN_FILE_NAME=$(wildcard to_ucsc*_train*CompleteSet.txt)
+COMBINED_TEST_FILE_NAME=$(wildcard to_ucsc*_test*CompleteSet.txt)
+
+
+
+TEST_MODEL_SCRIPT=/projects/bhandare/workspace/kernels/k-spectrum/scripts/InDomainTest.py
+COMBINED_MODEL_SCRIPT=/projects/bhandare/workspace/scripts/WeightVector/createCombinedModel.py
+
+CONF_TRAIN_PREFIX=HuR_InDomain_Train
+CONF_TEST_PREFIX=HuR_InDomain_Test
+TRAIN_RESULTS_YML=$(CONF_TRAIN_PREFIX)_Results.yml
+MODEL_FILE_NAME=$(CONF_TRAIN_PREFIX)_Model.dat
+TEST_RESULTS_FILE=$(CONF_TEST_PREFIX)_Results.yml
+TEST_FEATURES_FILE=$(CONF_TEST_PREFIX)_Features.txt
+TEST_SPECTRUM_FILE=$(CONF_TEST_PREFIX)_spectrum.dat
+
+
+PREFIX=HuR
+DOMAIN_PRIME_FILE=$(PREFIX)_InDomain_Test_Prime_kspectrum.dat
+DOMAIN_OUTPUT_FILE=$(PREFIX)_WithDomain_Test_kspectrum.dat
+
+all: step3 step4
+.PHONY: all
+
+step3:
+	@echo "**** STEP 6: TEST MODEL ****: $(COMBINED_TEST_FILE_NAME)"	
+	python $(TEST_MODEL_SCRIPT) $(TRAIN_RESULTS_YML) $(COMBINED_TEST_FILE_NAME) $(MODEL_FILE_NAME) $(COMBINED_TRAIN_FILE_NAME) $(TEST_RESULTS_FILE) $(TEST_FEATURES_FILE) $(TEST_SPECTRUM_FILE)
+
+step4:
+	@echo "**** STEP 7: CREATING INDOMAIN VERSION"
+	python $(COMBINED_MODEL_SCRIPT) $(TEST_SPECTRUM_FILE) $(PREFIX) $(DOMAIN_PRIME_FILE) "" "" "" $(DOMAIN_OUTPUT_FILE)
