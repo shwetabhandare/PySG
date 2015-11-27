@@ -8,7 +8,7 @@ TRAIN_RESULTS_YML=$(CONF_TRAIN_PREFIX)_Results.yml
 TEST_RESULTS_FILE=$(CONF_TEST_PREFIX)_Results.yml
 TEST_FEATURES_FILE=$(CONF_TEST_PREFIX)_Features.txt
 MODEL_FILE_NAME=$(CONF_TRAIN_PREFIX)_Model.dat
-TEST_SPECTRUM_FILE=$(CONF_TEST_PREFIX)_spectrum.dat
+TEST_SPECTRUM_FILE=$(CONF_TEST_PREFIX)_kspectrum.dat
 
 
 TEST_MODEL_SCRIPT=/projects/bhandare/workspace/kernels/k-spectrum/scripts/InDomainTest.py
