@@ -1,2 +1,2 @@
-results: {BalancedSuccessRate: '0.620', C: 1, PPV: '0.605', ROC: '0.803', Sensitivity: '0.687',
-  SuccessRate: '0.620', k1: 1, k2: 1}
+results: {BalancedSuccessRate: '0.707', C: 1, PPV: '0.945', ROC: '0.925', Sensitivity: '0.440',
+  SuccessRate: '0.707', k1: 1, k2: 1}
