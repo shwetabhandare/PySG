@@ -8,11 +8,8 @@ NEG_FILE_NAME=OnlyZFP36_clusters.fa
 POS_FILE=$(DATA_DIR)/HuR_TTP/$(POS_FILE_NAME)
 NEG_FILE=$(DATA_DIR)/HuR_TTP/$(NEG_FILE_NAME)
 
-NON_HUR_TTP=/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt
-
 COMBINED_FILE_NAME=$(wildcard *.txt)
 COMBINED_FILE=$(DATA_DIR)/HuR_TTP/$(COMBINED_FILE_NAME)
-
 
 CONF_PREFIX=HuRVsTTP
 CONF_YML=$(CONF_PREFIX).yml
