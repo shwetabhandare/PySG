@@ -1,1 +1,0 @@
-{input: {dataFile: "HuR.fa", featureKmers: "HuR_Conservative_Features.dat"}, output: {flankingRegionFile: "HuR_FlankingRegions.txt", topKmersFile: "TopHuRKmers", TopKmerSeqFile: "HuRTopKmersSeq.fa", FilteredSeqFile: "HuRFilteredSeq.fa"}}
