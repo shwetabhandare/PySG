@@ -1,0 +1,62 @@
+# DREME 4.10.2
+# command:   dreme -p OnlyZFP36_clusters.fa -n ELAV1_ZFP36_Common_OnlyELAV1.fa -mink 7 -maxk 15 -oc TTPvsCommonAndHuR
+# host:      USMAC1651SBHAN.local
+# when:      Fri Dec 11 06:06:59 MST 2015
+# positives: 4161
+#      from: OnlyZFP36_clusters.fa (Fri Oct 09 14:46:12 MDT 2015)
+# negatives: 4712
+#      from: ELAV1_ZFP36_Common_OnlyELAV1.fa (Wed Sep 30 09:03:06 MDT 2015)
+
+
+MEME version 4.10.2
+
+ALPHABET= ACGT
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.361 C 0.134 G 0.135 T 0.369
+
+MOTIF TAWWTAW DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST     TAWWTAW    WTAWWTA       2194       1332   4.1e-123   1.2e-117
+#          TATTTAT    ATAAATA       1132        503   1.2e-090   3.8e-085
+#          TAAATAA    TTATTTA        869        487   1.5e-043   4.6e-038
+#          TAAATAT    ATATTTA        668        336   1.8e-040   5.5e-035
+#          TATTTAA    TTAAATA        532        327   9.4e-021   2.9e-015
+#          TATATAT    ATATATA        289        196   5.5e-009   1.7e-003
+#          TAATTAT    ATAATTA        279        194   4.0e-008   1.2e-002
+#          TATATAA    TTATATA        265        210   4.0e-005   1.2e+001
+#          TAATTAA    TTAATTA        219        171   1.1e-004   3.4e+001
+
+letter-probability matrix: alength= 4 w= 7 nsites= 2600 E= 1.2e-117
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.631538 0.000000 0.000000 0.368462
+0.640385 0.000000 0.000000 0.359615
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.554615 0.000000 0.000000 0.445385
+
+
+MOTIF ATATTAD DREME
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST     ATATTAD    HTAATAT        426        312   4.8e-010   1.0e-004
+#          ATATTAT    ATAATAT        166        101   2.5e-007   5.4e-002
+#          ATATTAA    TTAATAT        208        173   1.3e-003   2.7e+002
+#          ATATTAG    CTAATAT         86         59   1.7e-003   3.5e+002
+
+letter-probability matrix: alength= 4 w= 7 nsites= 439 E= 1.0e-004
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+0.469248 0.000000 0.195900 0.334852
+
+
+
+Time 39.67 secs.
