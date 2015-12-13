@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<!DOCTYPE dreme[
+<!ELEMENT dreme (model, motifs, run_time)>
+<!ATTLIST dreme version CDATA #REQUIRED release CDATA #REQUIRED>
+<!ELEMENT model 
+  (command_line, positives, negatives, background, stop, norc, ngen, add_pv_thresh, 
+  seed, host, when, description?)>
+<!ELEMENT command_line (#PCDATA)>
+<!ELEMENT positives EMPTY>
+<!ATTLIST positives 
+  name CDATA #REQUIRED count CDATA #REQUIRED file CDATA #REQUIRED 
+  last_mod_date CDATA #REQUIRED>
+<!--  
+  negatives must have a file and last_mod_date specified when the from
+  attribute is file.
+-->
+<!ELEMENT negatives EMPTY>
+<!ATTLIST negatives 
+  name CDATA #REQUIRED count CDATA #REQUIRED from (shuffled|file) #REQUIRED
+  file CDATA #IMPLIED last_mod_date CDATA #IMPLIED>
+<!-- 
+  background allows DNA and RNA (AA is not going to be supported with DREME) 
+  however currently only DNA is implemented. Note that when type is dna the
+  value for T must be supplied and when the type is rna the value for U must
+  be supplied. The sum of the frequencies must be 1 (with a small error).
+-->
+<!ELEMENT background EMPTY>
+<!ATTLIST background 
+  type (dna|rna) #REQUIRED
+  A CDATA #REQUIRED C CDATA #REQUIRED G CDATA #REQUIRED 
+  T CDATA #IMPLIED U CDATA #IMPLIED 
+  from (dataset|file) #REQUIRED 
+  file CDATA #IMPLIED last_mod_date CDATA #IMPLIED>
+<!ELEMENT stop EMPTY>
+<!ATTLIST stop 
+  evalue CDATA #IMPLIED count CDATA #IMPLIED time CDATA #IMPLIED>
+<!ELEMENT norc (#PCDATA)>
+<!ELEMENT ngen (#PCDATA)>
+<!ELEMENT seed (#PCDATA)>
+<!ELEMENT add_pv_thresh (#PCDATA)>
+<!ELEMENT host (#PCDATA)>
+<!ELEMENT when (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT motifs (motif*)>
+<!ELEMENT motif (pos*, match*)>
+<!ATTLIST motif
+  id CDATA #REQUIRED seq CDATA #REQUIRED length CDATA #REQUIRED 
+  nsites CDATA #REQUIRED p CDATA #REQUIRED n CDATA #REQUIRED
+  pvalue CDATA #REQUIRED evalue CDATA #REQUIRED unerased_evalue CDATA #REQUIRED>
+<!--
+  pos allows DNA and RNA (AA is not going to be supported with DREME)
+  however current only DNA is implemented. When the type in the background
+  is 'dna' pos must have a T attribute and when it is 'rna' pos must have a
+  U attribute
+-->
+<!ELEMENT pos EMPTY>
+<!ATTLIST pos
+  i CDATA #REQUIRED A CDATA #REQUIRED C CDATA #REQUIRED G CDATA #REQUIRED 
+  T CDATA #IMPLIED U CDATA #IMPLIED>
+<!ELEMENT match EMPTY>
+<!ATTLIST match
+  seq CDATA #REQUIRED p CDATA #REQUIRED n CDATA #REQUIRED 
+  pvalue CDATA #REQUIRED evalue CDATA #REQUIRED>
+<!ELEMENT run_time EMPTY>
+<!ATTLIST run_time
+  cpu CDATA #REQUIRED real CDATA #REQUIRED stop (evalue|count|time) #REQUIRED>
+]>
+<dreme version="4.10.2" release="Thu Sep 03 15:00:54 2015 -0700">
+  <model>
+    <command_line>dreme -p OnlyZFP36_clusters.fa -n ELAV1_ZFP36_Common_OnlyELAV1.fa -mink 7 -maxk 15 -oc TTPvsCommonAndHuR</command_line>
+    <positives name="OnlyZFP36 clusters" count="4161" file="OnlyZFP36_clusters.fa" last_mod_date="Fri Oct 09 14:46:12 MDT 2015" />
+    <negatives name="ELAV1 ZFP36 Common OnlyELAV1" count="4712" from="file" file="ELAV1_ZFP36_Common_OnlyELAV1.fa" last_mod_date="Wed Sep 30 09:03:06 MDT 2015" />
+    <background type="dna" A="0.361" C="0.134" G="0.135" T="0.369" from="dataset"/>
+    <stop evalue="0.05"/>
+    <norc>FALSE</norc>
+    <ngen>100</ngen>
+    <add_pv_thresh>0.01</add_pv_thresh>
+    <seed>1</seed>
+    <host>USMAC1651SBHAN.local</host>
+    <when>Fri Dec 11 06:06:59 MST 2015</when>
+  </model>
+  <motifs>
+    <motif id="m01" seq="TAWWTAW" length="7" nsites="2600" p="2194" n="1332" pvalue="4.1e-123" evalue="1.2e-117" unerased_evalue="1.2e-117">
+      <pos i="1" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos i="2" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="3" A="0.631538" C="0.000000" G="0.000000" T="0.368462"/>
+      <pos i="4" A="0.640385" C="0.000000" G="0.000000" T="0.359615"/>
+      <pos i="5" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos i="6" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="7" A="0.554615" C="0.000000" G="0.000000" T="0.445385"/>
+      <match seq="TATTTAT" p="1132" n="503" pvalue="1.2e-090" evalue="3.8e-085"/>
+      <match seq="TAAATAA" p="869" n="487" pvalue="1.5e-043" evalue="4.6e-038"/>
+      <match seq="TAAATAT" p="668" n="336" pvalue="1.8e-040" evalue="5.5e-035"/>
+      <match seq="TATTTAA" p="532" n="327" pvalue="9.4e-021" evalue="2.9e-015"/>
+      <match seq="TATATAT" p="289" n="196" pvalue="5.5e-009" evalue="1.7e-003"/>
+      <match seq="TAATTAT" p="279" n="194" pvalue="4.0e-008" evalue="1.2e-002"/>
+      <match seq="TATATAA" p="265" n="210" pvalue="4.0e-005" evalue="1.2e+001"/>
+      <match seq="TAATTAA" p="219" n="171" pvalue="1.1e-004" evalue="3.4e+001"/>
+    </motif>
+    <motif id="m02" seq="ATATTAD" length="7" nsites="439" p="426" n="312" pvalue="4.8e-010" evalue="1.0e-004" unerased_evalue="1.4e-025">
+      <pos i="1" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="2" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos i="3" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="4" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos i="5" A="0.000000" C="0.000000" G="0.000000" T="1.000000"/>
+      <pos i="6" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="7" A="0.469248" C="0.000000" G="0.195900" T="0.334852"/>
+      <match seq="ATATTAT" p="166" n="101" pvalue="2.5e-007" evalue="5.4e-002"/>
+      <match seq="ATATTAA" p="208" n="173" pvalue="1.3e-003" evalue="2.7e+002"/>
+      <match seq="ATATTAG" p="86" n="59" pvalue="1.7e-003" evalue="3.5e+002"/>
+    </motif>
+  </motifs>
+  <run_time cpu="39.65" real="39.67" stop="evalue"/>
+</dreme>
