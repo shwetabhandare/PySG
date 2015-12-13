@@ -1,21 +1,11 @@
-DATA_DIR=../../data
+DATA_DIR=../../data/HuR_TTP/faFromBed/
 PROJECTS_DIR=/projects/bhandare
-KSPECTRUM_PIPELINE_DIR=$(PROJECTS_DIR)/k-spectrum-pipeline
 
-POS_FILE_NAME=ELAV1_Conservative.fa
-NEG_FILE_NAME=ELAV1_TTP_Common_And_ZFP36.fa
+POS_FILE_NAME=Only_HuR_Clusters.fa
+NEG_FILE_NAME=Only_TTP_And_HuR_TTP_Common_Clusters.fa
 
-POS_FILE=$(DATA_DIR)/HuR_TTP/$(POS_FILE_NAME)
-NEG_FILE=$(DATA_DIR)/HuR_TTP/$(NEG_FILE_NAME)
-
-NON_HUR_TTP=/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt
-
-COMBINED_FILE_NAME=$(wildcard *.txt)
-
-COMBINED_FILE=$(DATA_DIR)/HuR_TTP/$(COMBINED_FILE_NAME)
-FEATURES_FILE="Elav1_ZFP36_Common_Features.dat"
-TOP_KMERS_FILE="Elav1_ZFP36_Common_Features_TopKmers.dat"
-
+POS_FILE=$(DATA_DIR)/$(POS_FILE_NAME)
+NEG_FILE=$(DATA_DIR)/$(NEG_FILE_NAME)
 
 CONF_PREFIX=HuRVsCommonAndTTP
 CONF_YML=$(CONF_PREFIX).yml
@@ -26,6 +16,7 @@ TOP_KMERS_FILE=$(CONF_PREFIX)_Features_TopKmers.dat
 
 
 BASIC_KSPECTRUM_SCRIPT=$(PROJECTS_DIR)/workspace/kernels/k-spectrum/scripts/basic_kspectrum.py
+CREATE_CONF_SCRIPT=/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline/CreateConfFile.py
 
 RESULT_DIR=`date +'%d-%b-%Y'`
 
@@ -37,9 +28,9 @@ step1: $(POS_FILE) $(NEG_FILE) seq_counter.py
 	python seq_counter.py $(POS_FILE) $(NEG_FILE)
 
 step2:
-	@echo $(COMBINED_FILE_NAME)
-	@echo $(RESULT_DIR)
-	python CreateConfFile.py $(COMBINED_FILE_NAME) $(CONF_PREFIX) $(CONF_YML)
+	$(eval COMBINED_FILE_NAME := $(shell ls *.txt))
+	@echo "*** COMBINED FILE: ***: $(COMBINED_FILE_NAME)"
+	python $(CREATE_CONF_SCRIPT) $(COMBINED_FILE_NAME) $(CONF_PREFIX) $(CONF_YML)
 
 step3:
 	python $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
