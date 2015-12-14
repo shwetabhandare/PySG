@@ -1,0 +1,4 @@
+{data: {dataFile: Only_HuR_Clusters_Only_TTP_Clusters_3206_4161_CompleteSet.txt, negLen: 4161,
+    posLen: 3206}, kspectrum: {C: 10, folds: 5, k1: 9, k2: 12}, output: {featureFile: OnlyHuRVsOnlyTTP_Features.dat,
+    modelFile: OnlyHuRVsOnlyTTP_Model.dat, paramsFile: OnlyHuRVsOnlyTTP_params.dat,
+    resultsFile: OnlyHuRVsOnlyTTP_Results.yml, trainDataFile: OnlyHuRVsOnlyTTP_kspectrum.dat}}
