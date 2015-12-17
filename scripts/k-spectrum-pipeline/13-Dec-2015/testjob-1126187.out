@@ -2713,3 +2713,4 @@ optimization finished, #iter = 11698
 obj = -822.663594, rho = 0.882287
 nSV = 7791, nBSV = 0
 python GenerateFlankingRegions.py ../../data/HuR_TTP/faFromBed//HuR_TTP_Common_Clusters.fa ../../data/HuR_TTP/faFromBed//Only_HuR_And_Only_TTP_Clusters.fa CommonVsHuRAndTTP_Features.dat CommonVsHuRAndTTP_Features_TopKmers.dat
+slurmstepd: error: *** JOB 1126187 ON node0374 CANCELLED AT 2015-12-14T17:11:03 DUE TO TIME LIMIT ***
