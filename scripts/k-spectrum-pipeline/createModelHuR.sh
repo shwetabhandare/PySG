@@ -9,7 +9,7 @@
 #
 # Set a walltime for the job. The time format is HH:MM:SS - In this case we run for 5 minutes.
 
-#SBATCH --time=48:00:00
+#SBATCH --time=23:59:00
 
 #
 # Select one node
@@ -22,9 +22,9 @@
 # Set output file name with job number
 #SBATCH -o testjob-%j.out
 # Use the janus-lon QOS
-#SBATCH --qos janus-long
+#SBATCH --qos janus
 
 # The following commands will be executed when this script is run.
 
 echo The job has begun
-make -f Makefile.GenerateCombinedFilesHuR && make -f Makefile.HuR_Train && make -f Makefile.HuR_Test && make -f Makefile.SaveResultsHuRTrainTest
+make -f Makefile.HuR_BasicKspectrum
