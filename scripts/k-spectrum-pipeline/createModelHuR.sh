@@ -28,4 +28,7 @@
 
 echo The job has begun
 make -f Makefile.HuR_BasicKspectrum
+<<<<<<< HEAD
 #make -f Makefile.HuRBest_BasicKspectrum
+=======
+>>>>>>> origin/master
