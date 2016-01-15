@@ -28,3 +28,4 @@
 
 echo The job has begun
 make -f Makefile.HuR_BasicKspectrum
+#make -f Makefile.HuRBest_BasicKspectrum

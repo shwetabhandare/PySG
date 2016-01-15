@@ -32,10 +32,10 @@ def CreateKmerDict(kmerFile):
 		reader = csv.reader(csvFile, delimiter=',');
 		kmerDict = dict()
 		for idx, row in enumerate(reader):
-			#if idx <=10000:
-			featureScore = float(row[0])
-			featureKmer = row[1]
-			kmerDict[featureKmer] = featureScore;
+			if idx <=100:
+				featureScore = float(row[0])
+				featureKmer = row[1]
+				kmerDict[featureKmer] = featureScore;
 	kmerDict = defaultdict(lambda: -1, kmerDict)
 	return kmerDict;
 

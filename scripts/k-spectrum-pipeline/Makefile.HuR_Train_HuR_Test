@@ -25,6 +25,7 @@ CREATE_MODEL_SCRIPT=/projects/bhandare/workspace/kernels/k-spectrum/scripts/crea
 
 TEST_RESULTS_FILE=$(CONF_TEST_PREFIX)_Results.yml
 TEST_FEATURES_FILE=$(CONF_TEST_PREFIX)_Features.txt
+COMBINED_MODEL=$(COMBINED_PREFIX)_Model.pyml
 
 TEST_MODEL_SCRIPT=/projects/bhandare/workspace/kernels/k-spectrum/scripts/InDomainTest.py
 SPLIT_SCRIPT=/projects/bhandare/workspace/scripts/SplitTrain/SplitTrainAndTest.py
