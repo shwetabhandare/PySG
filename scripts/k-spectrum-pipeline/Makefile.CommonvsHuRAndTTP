@@ -26,7 +26,7 @@ CREATE_CONF_SCRIPT=/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline
 
 RESULT_DIR=`date +'%d-%b-%Y'`
 
-all: step1 step2 step3 step4
+all: step0 step1 step2 step3 step4 step5
 .PHONY: all
 
 step0:
@@ -57,7 +57,7 @@ step5:
 	mv $(RESULT_YML) $(RESULT_DIR)
 	git add $(RESULT_DIR)
 	git add $(RESULT_DIR)/*
-	#git commit -av
+	git commit -av
 	#git push origin
 
 
