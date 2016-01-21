@@ -1,0 +1,6 @@
+sequence:
+   type: "NO_SIGNAL"
+   seqLen: 200
+   fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
+   outFastaFile: "NoSignal.fa"
+   numSeq: 100
