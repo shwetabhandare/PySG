@@ -34,3 +34,20 @@ for confFile in findFiles(directory, '*.yml'):
 	# 	print seq;
 
 	seqGen.writeNegativeFile();
+
+'''
+LenMatchNegatives.py
+
+Requires Python 2.7 and fasta.py in the same directory
+
+Step 1: Create dictionary of negative set of sequences.
+
+Step 2: Create a set of sequences for positive set.
+
+Creates length-matched negative sequences for each sequence in a list of positive transcripts
+
+Takes two command line arguments:
+Positive File Name (to match to, in fasta format)     Negative File Name (to draw sequences from, in fasta format)
+
+Outputs file called NON + Positive File Name
+'''

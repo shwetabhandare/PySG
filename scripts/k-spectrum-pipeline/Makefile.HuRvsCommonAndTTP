@@ -26,6 +26,7 @@ all: step1 step2 step3 step4 step5
 
 step1: $(POS_FILE) $(NEG_FILE) seq_counter.py 
 	python seq_counter.py $(POS_FILE) $(NEG_FILE)
+	
 
 step2:
 	$(eval COMBINED_FILE_NAME := $(shell ls *.txt))
