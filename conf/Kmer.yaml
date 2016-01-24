@@ -1,6 +1,8 @@
 sequence:
-   type: "NO_SIGNAL"
+   type: "KMER"
    seqLen: 200
+   kmer: "ATTATTA"
    fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
-   outFastaFile: "NoSignal.fa"
+   outFastaFile: "SeqWithKmer.fa"
    numSeq: 10
+   seqWithSignal: 8

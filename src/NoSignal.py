@@ -5,6 +5,7 @@ import re
 import os
 import yaml
 import atgcDistribution
+import SeqGenUtils
 
 indexArr = []
 
@@ -38,19 +39,21 @@ def GetSequenceToShuffle(NegSequences, targetSeqLength):
 
 	return allNucs, index;
 
-def WriteSeqToFile(OutputFile, NegHeaders, index, selectedNucs):
-	OutputFile.write(">")												#Write to output file
-	OutputFile.write(NegHeaders[index])
-	OutputFile.write("\n")
-	OutputFile.write(selectedNucs)
-	OutputFile.write("\n")
-
-def GenerateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, 
-	                           SeqLength, OutputFileName):
-
-	
-	NumNegSequences = len(NegSequences)
+def WriteSeqToFile(NegSeqDict, OutputFileName):
 	OutputFile = open(OutputFileName , "w")
+	for key, value in NegSeqDict.iteritems():
+		OutputFile.write(">")												#Write to output file
+		OutputFile.write(key)
+		OutputFile.write("\n")
+		OutputFile.write(value)
+		OutputFile.write("\n")
+	OutputFile.close()
+
+
+def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, 
+	                           SeqLength, OutputFileName):
+	NumNegSequences = len(NegSequences)
+	NegSeqDict = dict();
 
 	for i in range(0, NumSeqsToGenerate):
 		allNucs, index = GetSequenceToShuffle(NegSequences, SeqLength)
@@ -64,21 +67,25 @@ def GenerateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate,
 			startPoint = 0;
 			endPoint = startPoint + SeqLength;
 
-		selectedNucs = ''.join(random.sample(allNucs[startPoint:endPoint], (endPoint - startPoint)))
-		WriteSeqToFile(OutputFile, NegHeaders, index, selectedNucs)		
+		#selectedNucs = ''.join(random.sample(allNucs[startPoint:endPoint], (endPoint - startPoint)))
+		selectedNucs = allNucs[startPoint:endPoint];
+		NegSeqDict[NegHeaders[index]] = selectedNucs;
 
-	OutputFile.close()
+	print "Length : %d" % len (NegSeqDict)
+	print type(NegSeqDict)
+	return NegSeqDict;
 
-def GetConf(configFile):
-	f = open(configFile);
-	confMap = yaml.load(f)
-	f.close();
-	return confMap;
+
+
+def GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName):
+	NegSequences, NegHeaders = CreateNegDict(NegativeFileName);
+	return CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, SeqLength, OutFileName)
+
 
 if __name__ == "__main__":
 	import sys
 	configFile = sys.argv[1]
-	confMap = GetConf(configFile)
+	confMap = SeqGenUtils.GetConf(configFile)
 
 
 	NegativeFileName = confMap["sequence"]["fastaFile"]
@@ -86,10 +93,6 @@ if __name__ == "__main__":
 	SeqLength = int(confMap["sequence"]["seqLen"])
 	OutFileName = confMap["sequence"]["outFastaFile"]
 
-	print "ATGC Distribution for: ", NegativeFileName;
-	atgcDistribution.printATGCDistribution(NegativeFileName);
-	NegSequences, NegHeaders = CreateNegDict(NegativeFileName);
-	GenerateNoSignalSequences(NegSequences, NegHeaders, 
-		                       NumSeqsToGenerate, SeqLength, OutFileName)
-	print "ATGC Distribution for: ", OutFileName;
-	atgcDistribution.printATGCDistribution(OutFileName);
+	NegSeqDict = GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName);
+	print "Type: ", type(NegSeqDict)
+	WriteSeqToFile(NegSeqDict, OutFileName);

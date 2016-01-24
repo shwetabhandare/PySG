@@ -1,7 +1,16 @@
 from random import choice
+import yaml
 import os, fnmatch
 def weightedchoice(items): # this doesn't require the numbers to add up to 100
 	return choice("".join(x * y for x, y in items))
+
+
+def GetConf(configFile):
+	f = open(configFile);
+	confMap = yaml.load(f)
+	f.close();
+	return confMap;
+
 
 
 def findFiles (path, filter):
