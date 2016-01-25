@@ -6,4 +6,4 @@ sequence:
    numSeq: 10
    kmer: "XXXXXXX"
    seqWithSignal: 8
-   locationFromStart: 22
+   locationFromEnd: 22

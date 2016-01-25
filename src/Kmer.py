@@ -4,7 +4,7 @@ import yaml
 import random
 import SeqGenUtils
 
-def AddSignal(SeqDict, kmerToEmbed, numSeqsWithSignal, locationFromStart):
+def AddSignalFromStart(SeqDict, kmerToEmbed, numSeqsWithSignal, locationFromStart):
 	keysToReplace = random.sample(SeqDict, numSeqsWithSignal)
 	for key in keysToReplace:
 		value = SeqDict[key]
@@ -17,6 +17,11 @@ def AddSignal(SeqDict, kmerToEmbed, numSeqsWithSignal, locationFromStart):
 	return SeqDict;
 
 
+def PrintConfMap(confMap):
+	for doc in confMap:
+		for k,v in doc.items(): 
+			print k, "->", v 
+			print "\n",
 	
 if __name__ == "__main__":
 	import sys
@@ -27,12 +32,18 @@ if __name__ == "__main__":
 	NumSeqsToGenerate = int(confMap["sequence"]["numSeq"])
 	SeqLength = int(confMap["sequence"]["seqLen"])
 	OutFileName = confMap["sequence"]["outFastaFile"]
+	if confMap['sequence'].get('locationFromEnd'):
+		print "Found locationFromEnd"
+	else:
+		print "Did not find locationFromEnd"
 	kmerToEmbed = confMap["sequence"]["kmer"]
 	numSeqsWithSignal = int(confMap["sequence"]["seqWithSignal"])
-	locationFromStart = int(confMap["sequence"]["locationFromStart"])
+	#locationFromStart = int(confMap["sequence"]["locationFromStart"])
+	locationFromEnd = int(confMap["sequence"]["locationFromEnd"])
+	locationFromStart = SeqLength - locationFromEnd;
 
 	SeqDict = NoSignal.GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, 
 	          SeqLength, OutFileName);
 
-	SeqDict = AddSignal(SeqDict, kmerToEmbed, numSeqsWithSignal, locationFromStart)
+	SeqDict = AddSignalFromStart(SeqDict, kmerToEmbed, numSeqsWithSignal, locationFromStart)
 	SeqGenUtils.WriteSeqDictToFile(SeqDict, OutFileName);
