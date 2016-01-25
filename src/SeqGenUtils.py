@@ -12,6 +12,15 @@ def GetConf(configFile):
 	return confMap;
 
 
+def WriteSeqDictToFile(NegSeqDict, OutputFileName):
+	OutputFile = open(OutputFileName , "w")
+	for key, value in NegSeqDict.iteritems():
+		OutputFile.write(">")												#Write to output file
+		OutputFile.write(key)
+		OutputFile.write("\n")
+		OutputFile.write(value)
+		OutputFile.write("\n")
+	OutputFile.close()
 
 def findFiles (path, filter):
    for root, dirs, files in os.walk(path):

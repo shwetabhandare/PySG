@@ -1,8 +1,9 @@
 sequence:
    type: "KMER"
-   seqLen: 200
-   kmer: "ATTATTA"
+   seqLen: 25
    fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
    outFastaFile: "SeqWithKmer.fa"
    numSeq: 10
+   kmer: "XXXXXXX"
    seqWithSignal: 8
+   locationFromStart: 22
