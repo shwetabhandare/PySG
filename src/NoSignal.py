@@ -39,15 +39,6 @@ def GetSequenceToShuffle(NegSequences, targetSeqLength):
 
 	return allNucs, index;
 
-def WriteSeqToFile(NegSeqDict, OutputFileName):
-	OutputFile = open(OutputFileName , "w")
-	for key, value in NegSeqDict.iteritems():
-		OutputFile.write(">")												#Write to output file
-		OutputFile.write(key)
-		OutputFile.write("\n")
-		OutputFile.write(value)
-		OutputFile.write("\n")
-	OutputFile.close()
 
 
 def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, 
@@ -95,4 +86,4 @@ if __name__ == "__main__":
 
 	NegSeqDict = GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName);
 	print "Type: ", type(NegSeqDict)
-	WriteSeqToFile(NegSeqDict, OutFileName);
+	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, OutFileName);

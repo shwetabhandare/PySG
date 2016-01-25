@@ -4,9 +4,18 @@ import yaml
 import random
 import SeqGenUtils
 
-def EmbedKmer(SeqDict, kmerToEmbed):
-	for key, value in SeqDict.iteritems():
-		location = random.randint(0, len(value) - 1 - len(kmerToEmbed));
+def AddSignal(SeqDict, kmerToEmbed, numSeqsWithSignal, locationFromStart):
+	keysToReplace = random.sample(SeqDict, numSeqsWithSignal)
+	for key in keysToReplace:
+		value = SeqDict[key]
+		endIndex = locationFromStart + len(kmerToEmbed)
+		if (endIndex > len(value)):
+			shiftStart = endIndex - len(value);
+			locationFromStart = locationFromStart - shiftStart
+		newValue = value[:locationFromStart] + kmerToEmbed + value[endIndex:]
+		SeqDict[key] = newValue;
+	return SeqDict;
+
 
 	
 if __name__ == "__main__":
@@ -19,7 +28,11 @@ if __name__ == "__main__":
 	SeqLength = int(confMap["sequence"]["seqLen"])
 	OutFileName = confMap["sequence"]["outFastaFile"]
 	kmerToEmbed = confMap["sequence"]["kmer"]
+	numSeqsWithSignal = int(confMap["sequence"]["seqWithSignal"])
+	locationFromStart = int(confMap["sequence"]["locationFromStart"])
 
-	SeqDict = NoSignal.GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName);
+	SeqDict = NoSignal.GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, 
+	          SeqLength, OutFileName);
 
-	SeqDict = EmbedKmer(SeqDict, kmerToEmbed)
+	SeqDict = AddSignal(SeqDict, kmerToEmbed, numSeqsWithSignal, locationFromStart)
+	SeqGenUtils.WriteSeqDictToFile(SeqDict, OutFileName);
