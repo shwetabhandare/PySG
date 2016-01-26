@@ -45,5 +45,5 @@ step5:
 	mv $(FEATURES_FILE) $(RESULT_YML) $(TOP_KMERS_FILE) $(CONF_YML) $(RESULT_DIR)
 	git add $(RESULT_DIR)
 	git add $(RESULT_DIR)/*
-	git commit --amend -m "Basic TTP Model"
+	#git commit --amend -m "Basic TTP Model"
 	#git push origin
