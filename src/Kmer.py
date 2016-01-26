@@ -32,15 +32,17 @@ if __name__ == "__main__":
 	NumSeqsToGenerate = int(confMap["sequence"]["numSeq"])
 	SeqLength = int(confMap["sequence"]["seqLen"])
 	OutFileName = confMap["sequence"]["outFastaFile"]
-	if confMap['sequence'].get('locationFromEnd'):
-		print "Found locationFromEnd"
-	else:
-		print "Did not find locationFromEnd"
 	kmerToEmbed = confMap["sequence"]["kmer"]
+	if confMap['sequence'].get('locationFromEnd'):
+		locationFromEnd = int(confMap["sequence"]["locationFromEnd"])
+		locationFromStart = SeqLength - locationFromEnd;
+	elif confMap['sequence'].get('locationFromStart'):
+		locationFromStart = int(confMap["sequence"]["locationFromStart"])
+	else:
+		locationFromStart = random.randint(0, SeqLength - len(kmerToEmbed))
+
+	print "Location to embed signal : " , str(locationFromStart)
 	numSeqsWithSignal = int(confMap["sequence"]["seqWithSignal"])
-	#locationFromStart = int(confMap["sequence"]["locationFromStart"])
-	locationFromEnd = int(confMap["sequence"]["locationFromEnd"])
-	locationFromStart = SeqLength - locationFromEnd;
 
 	SeqDict = NoSignal.GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, 
 	          SeqLength, OutFileName);
