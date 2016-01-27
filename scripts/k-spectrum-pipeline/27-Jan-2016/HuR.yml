@@ -1,0 +1,4 @@
+{data: {dataFile: to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_3642_3642_CompleteSet.txt,
+    negLen: 3642, posLen: 3642}, kspectrum: {C: 10, folds: 5, k1: 9, k2: 12}, output: {
+    featureFile: HuR_Features.dat, modelFile: HuR_Model.dat, paramsFile: HuR_params.dat,
+    resultsFile: HuR_Results.yml, trainDataFile: HuR_kspectrum.dat}}
