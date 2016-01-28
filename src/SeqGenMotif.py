@@ -12,6 +12,8 @@ def ReadPWMFile(filename):
 	#name = fields[4]
 	name = "PSSM"
 	print "Name: ", name
+	#print "fields:", fields
+	name = fields[4]
 	
 	vals_A = lines[1].split('\t')
 	vals_C = lines[2].split('\t')
