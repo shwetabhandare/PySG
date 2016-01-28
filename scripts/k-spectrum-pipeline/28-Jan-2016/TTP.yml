@@ -1,0 +1,4 @@
+{data: {dataFile: GSM1286117_ZFP36_clusters_stranded_NONGSM1286117_ZFP36_clusters_stranded_4626_4626_CompleteSet.txt,
+    negLen: 4626, posLen: 4626}, kspectrum: {C: 10, folds: 5, k1: 9, k2: 12}, output: {
+    featureFile: TTP_Features.dat, modelFile: TTP_Model.dat, paramsFile: TTP_params.dat,
+    resultsFile: TTP_Results.yml, trainDataFile: TTP_kspectrum.dat}}
