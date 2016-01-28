@@ -3,13 +3,15 @@ import TAMO
 from   TAMO		import MotifTools
 from   TAMO.seq import Fasta
 
-def ReadPSSMFile(filename):
+def ReadPWMFile(filename):
 	pwm = []
 	f = open(filename)
 	lines = f.readlines()
 	fields = lines[0].split()
-	#print "fields:", fields
-	name = fields[4]
+	print "fields:", fields
+	#name = fields[4]
+	name = "PSSM"
+	print "Name: ", name
 	
 	vals_A = lines[1].split('\t')
 	vals_C = lines[2].split('\t')
@@ -28,11 +30,10 @@ def ReadPSSMFile(filename):
 		
 	return name, pwm
 
-def MakePSSMMotif(filename):
+def MakePWMMotif(filename):
 
 	print "# Reading PWM from: [%s]"%filename
-	name, pwm = ReadPSSMFile
-	(filename)
+	name, pwm = ReadPWMFile(filename)
 	
 	print "Building motif:", name
 	m = MotifTools.toDict(pwm)
@@ -45,3 +46,9 @@ def MakePSSMMotif(filename):
 	motif.printlogo(2.3,10)
 	
 	return motif
+
+if __name__ == "__main__":
+	import sys
+	motifFile = sys.argv[1]
+	print "Motif file: ", motifFile
+	name, pwm = MakePWMMotif(motifFile)
