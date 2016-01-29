@@ -1,0 +1,16 @@
+usmac1651sbhan:bedFiles shweta.bhandare$ /Users/shweta.bhandare/workspace/bedtools2/bin/bedtools intersect -a to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_3utrs.bed -b locs_1.txt
+chr6	114182052	114182065	CID_002936	129.0	+	114182024	114182025	255,35,35
+chrX	77382149	77382163	CID_003599	52.0	+	77382143	77382144	255,55,55
+chr10	70742822	70742834	CID_000500	17.0	+	70742813	70742814	255,75,75
+
+usmac1651sbhan:bedFiles shweta.bhandare$ /Users/shweta.bhandare/workspace/bedtools2/bin/bedtools intersect -a to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_3utrs.bed -b locs_2.txt
+chr5	148731794	148731809	CID_002789	54.0	+	148731860	148731861	255,55,55
+
+usmac1651sbhan:bedFiles shweta.bhandare$ /Users/shweta.bhandare/workspace/bedtools2/bin/bedtools intersect -a to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_3utrs.bed -b locs_3_1.txt
+chr4	159589957	159589972	CID_002483	7.0	-	159589973	159589974	115,115,255
+chr10	126524522	126524537	CID_000571	7.0	+	126524511	126524512	255,115,115
+
+mac1651sbhan:bedFiles shweta.bhandare$ /Users/shweta.bhandare/workspace/bedtools2/bin/bedtools intersect -a to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_3utrs.bed -b locs_5.txt
+chr6	149731519	149731531	CID_002975	13.0	+	149731540	149731541	255,75,75
+chr9	123579404	123579412	CID_003488	7.0	-	123579317	123579318	115,115,255
+chr18	21062978	21062992	CID_001571	6.0	+	21062968	21062969	255,115,115hr9	123579404	123579412	CID_003488	7.0	-	123579317	123579318	115,115,255
