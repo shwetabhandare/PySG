@@ -6,6 +6,7 @@ def printATGCDistribution(fastaFile):
 	file = open(fastaFile, "r")
 	gcCount = 0
 	atCount = 0
+	aCount = tCount = gCount = cCount = 0
 	totalBaseCount = 0
 	for line in file:
 		line = line.strip("\n")
@@ -34,6 +35,9 @@ def printATGCDistribution(fastaFile):
 	print "T Content: " + str(tFraction * 100);
 	print "G Content: " + str(gFraction * 100);
 	print "C Content: " + str(cFraction * 100);
+
+	total = aFraction + tFraction + gFraction + cFraction;
+	print "Total : " + str(total);
 
 
 if __name__ == '__main__':
