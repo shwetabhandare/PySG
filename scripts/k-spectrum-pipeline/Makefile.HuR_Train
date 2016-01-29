@@ -10,7 +10,6 @@ POS_TEST_FILENAME=to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_test.
 NEG_TRAIN_FILENAME=NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train.fa
 NEG_TEST_FILENAME=NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_test.fa
 
-
 CONF_TRAIN_PREFIX=HuR_InDomain_Train
 CONF_TRAIN_YML=$(CONF_TRAIN_PREFIX).yml
 
@@ -68,7 +67,9 @@ step5:
 	python $(CREATE_MODEL_SCRIPT) $(CONF_TRAIN_YML)
 
 step6:
-	@echo "**** STEP 6: TEST MODEL ****: $(COMBINED_TRAIN_FILE_NAME)"	
+	$(eval COMBINED_TRAIN_FILE_NAME := $(shell ls to_ucsc*_train*CompleteSet.txt))
+	$(eval COMBINED_TEST_FILE_NAME := $(shell ls to_ucsc*_test*CompleteSet.txt))
+	@echo "**** STEP 6: TEST MODEL ****: $(COMBINED_TEST_FILE_NAME)"	
 	python $(TEST_MODEL_SCRIPT) $(TRAIN_RESULTS_YML) $(COMBINED_TEST_FILE_NAME) $(MODEL_FILE_NAME) $(COMBINED_TRAIN_FILE_NAME) $(TEST_RESULTS_FILE) $(TEST_FEATURES_FILE) $(TEST_SPECTRUM_FILE)
 
 step7:
