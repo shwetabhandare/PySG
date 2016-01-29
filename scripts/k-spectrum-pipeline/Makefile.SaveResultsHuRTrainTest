@@ -46,3 +46,4 @@ step1:
 
 	git add $(RESULT_DIR)
 	git add $(RESULT_DIR)/*
+	git commit -m "Saving HuR results."
