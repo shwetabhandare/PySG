@@ -15,14 +15,18 @@ CONF_TRAIN_YML=$(CONF_TRAIN_PREFIX).yml
 
 CONF_TEST_PREFIX=HuR_InDomain_Test
 TRAIN_RESULTS_YML=$(CONF_TRAIN_PREFIX)_Results.yml
+TRAIN_SPECTRUM_FILE=$(CONF_TRAIN_PREFIX)_kspectrum.dat
 MODEL_FILE_NAME=$(CONF_TRAIN_PREFIX)_Model.dat
+
 TEST_RESULTS_FILE=$(CONF_TEST_PREFIX)_Results.yml
 TEST_FEATURES_FILE=$(CONF_TEST_PREFIX)_Features.txt
 TEST_SPECTRUM_FILE=$(CONF_TEST_PREFIX)_kspectrum.dat
 
 PREFIX=HuR
 DOMAIN_PRIME_FILE=$(PREFIX)_InDomain_Test_Prime_kspectrum.dat
+TRAIN_DOMAIN_PRIME_FILE=$(PREFIX)_InDomain_Train_Prime_kspectrum.dat
 DOMAIN_OUTPUT_FILE=$(PREFIX)_WithDomain_Test_kspectrum.dat
+TRAIN_DOMAIN_OUTPUT_FILE=$(PREFIX)_WithDomain_Train_kspectrum.dat
 
 SPLIT_SCRIPT=/projects/bhandare/workspace/scripts/SplitTrain/SplitTrainAndTest.py
 CREATE_MODEL_SCRIPT=/projects/bhandare/workspace/kernels/k-spectrum/scripts/createBestModel.py
@@ -75,3 +79,4 @@ step6:
 step7:
 	@echo "**** STEP 7: CREATING INDOMAIN VERSION"
 	python $(COMBINED_MODEL_SCRIPT) $(TEST_SPECTRUM_FILE) $(PREFIX) $(DOMAIN_PRIME_FILE) "" "" "" $(DOMAIN_OUTPUT_FILE)
+	python $(COMBINED_MODEL_SCRIPT) $(TRAIN_SPECTRUM_FILE) $(PREFIX) $(TRAIN_DOMAIN_PRIME_FILE) "" "" "" $(TRAIN_DOMAIN_OUTPUT_FILE)

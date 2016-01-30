@@ -28,4 +28,5 @@
 
 echo The job has begun
 #make -f Makefile.GenerateCombinedFilesTTP && make -f Makefile.TTP_Train && make -f Makefile.TTP_Test && make -f Makefile.SaveResultsTTPTrainTest
-make -f Makefile.TTP_BasicKspectrum
+#make -f Makefile.TTP_BasicKspectrum
+make -f Makefile.TTP_Train
