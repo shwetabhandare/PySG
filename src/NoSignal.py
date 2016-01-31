@@ -58,11 +58,12 @@ def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate,
 			startPoint = 0;
 			endPoint = startPoint + SeqLength;
 
-		#selectedNucs = ''.join(random.sample(allNucs[startPoint:endPoint], (endPoint - startPoint)))
 		selectedNucs = allNucs[startPoint:endPoint];
-		NegSeqDict[NegHeaders[index]] = selectedNucs;
+		l = list(str(selectedNucs))
+		random.shuffle(l)
+		shuffledNucs = ''.join(l);
+		NegSeqDict[NegHeaders[index]] = shuffledNucs
 
-	print "Length : %d" % len (NegSeqDict)
 	print type(NegSeqDict)
 	return NegSeqDict;
 
@@ -85,5 +86,4 @@ if __name__ == "__main__":
 	OutFileName = confMap["sequence"]["outFastaFile"]
 
 	NegSeqDict = GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName);
-	print "Type: ", type(NegSeqDict)
 	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, OutFileName);

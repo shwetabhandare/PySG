@@ -52,6 +52,9 @@ def Make_PWM_Motif(filename):
 
 ##########################################################################################
 
+def Make_Text_Motif(textMotif):
+	return MotifTools.Motif_from_text(textMotif)
+
 if __name__ == "__main__":
 	motiffile = sys.argv[1]
 	motif = Make_PWM_Motif(motiffile)

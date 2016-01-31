@@ -4,9 +4,8 @@ import yaml
 import random
 import SeqGenUtils
 import TAMO_Motif
-from TAMO import MotifTools
 
-def AddSignalFromStart(SeqDict, type, confMap, numSeqsWithSignal, locationFromStart):
+def EmbedMotif(SeqDict, type, confMap, numSeqsWithSignal, locationFromStart):
 	generateKmer = False;
 	if type == 'pwm':
 		motiffile = confMap["sequence"]["pwmFile"]
@@ -14,7 +13,7 @@ def AddSignalFromStart(SeqDict, type, confMap, numSeqsWithSignal, locationFromSt
 		generateKmer = True;
 	elif type == 'motif':
 		textMotif  = confMap["sequence"]["textMotif"]
-		motif = MotifTools.Motif_from_text(textMotif)
+		motif = TAMO_Motif.Make_Text_Motif(textMotif)
 		generateKmer = True;
 	else:
 		kmerToEmbed = confMap["sequence"]["kmer"]
@@ -70,11 +69,15 @@ if __name__ == "__main__":
 	else:
 		locationFromStart = random.randint(0, SeqLength - len(kmerToEmbed))
 
-	print "Location to embed signal : " , str(locationFromStart)
 	numSeqsWithSignal = int(confMap["sequence"]["seqWithSignal"])
 
+
+	# Generate sequences that contain no signal.
 	SeqDict = NoSignal.GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, 
 	          SeqLength, OutFileName);
 
-	SeqDict = AddSignalFromStart(SeqDict, type, confMap, numSeqsWithSignal, locationFromStart)
+	# Embed motif into the sequences.
+	SeqDict = EmbedMotif(SeqDict, type, confMap, numSeqsWithSignal, locationFromStart)
+
+	# Write sequences to file.
 	SeqGenUtils.WriteSeqDictToFile(SeqDict, OutFileName);
