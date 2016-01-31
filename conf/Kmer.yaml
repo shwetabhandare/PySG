@@ -5,5 +5,5 @@ sequence:
    fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
    outFastaFile: "SeqWithKmer.fa"
    numSeq: 10
-   pwmFile: "../data/Cgd2_3490.pwm"
+   textMotif: "DDSAAAA"
    seqWithSignal: 8
