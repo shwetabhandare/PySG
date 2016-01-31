@@ -7,7 +7,12 @@ import TAMO_Motif
 
 def AddSignalFromStart(SeqDict, type, confMap, numSeqsWithSignal, locationFromStart):
 	generateKmer = False;
-	if type == 'pwm' or type == 'motif':
+	if type == 'pwm':
+		motiffile = confMap["sequence"]["pwmFile"]
+		motif = TAMO_Motif.Make_PWM_Motif(motiffile)
+		generateKmer = True;
+	elif type == 'motif':
+		motiffile = confMap["sequence"]["pwmFile"]
 		motif = TAMO_Motif.Make_PWM_Motif(motiffile)
 		generateKmer = True;
 	else:

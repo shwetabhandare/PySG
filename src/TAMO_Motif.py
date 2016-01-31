@@ -9,8 +9,7 @@ def Read_PWM(filename):
 	lines = f.readlines()
 	fields = lines[0].split()
 	#print "fields:", fields
-	name = fields[4]
-	print "Motif Name: ", name;
+	name = fields[1]
 	
 	vals_A = lines[1].split('\t')
 	vals_C = lines[2].split('\t')
@@ -35,18 +34,18 @@ def Read_PWM(filename):
 
 def Make_PWM_Motif(filename):
 
-	print "# Reading PWM from: [%s]"%filename
+	#print "# Reading PWM from: [%s]"%filename
 	name, pwm = Read_PWM(filename)
 	
-	print "Building motif:", name
+	#print "Building motif:", name
 	m = MotifTools.toDict(pwm)
 	motif = MotifTools.Motif_from_counts(m)
 	motif.source = name
 	
-	print "Motif:", motif.source
-	print "Max Motif Score:", motif.maxscore
-	print "Motif Summary:", motif.summary()
-	motif.printlogo(2.3,10)
+	#print "Motif:", motif.source
+	#print "Max Motif Score:", motif.maxscore
+	#print "Motif Summary:", motif.summary()
+	#motif.printlogo(2.3,10)
 	
 	return motif
 #end Make_PWM_Motif
