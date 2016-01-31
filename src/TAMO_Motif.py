@@ -8,8 +8,9 @@ def Read_PWM(filename):
 	f = open(filename)
 	lines = f.readlines()
 	fields = lines[0].split()
-	print "fields:", fields
+	#print "fields:", fields
 	name = fields[4]
+	print "Motif Name: ", name;
 	
 	vals_A = lines[1].split('\t')
 	vals_C = lines[2].split('\t')
@@ -22,9 +23,9 @@ def Read_PWM(filename):
 	
 	f.close()
 	
-	print "PWM:"
-	for v in pwm:
-		print "\t",v
+	#print "PWM:"
+	#for v in pwm:
+		#print "\t",v
 		
 	return name, pwm
 #end Read_PWM
@@ -52,6 +53,7 @@ def Make_PWM_Motif(filename):
 
 ##########################################################################################
 
-motiffile = sys.argv[1]
-motif = Make_PWM_Motif(motiffile)
-print motif.random_kmer();
+if __name__ == "__main__":
+	motiffile = sys.argv[1]
+	motif = Make_PWM_Motif(motiffile)
+	print motif.random_kmer()
