@@ -4,6 +4,7 @@ import yaml
 import random
 import SeqGenUtils
 import TAMO_Motif
+from TAMO import MotifTools
 
 def AddSignalFromStart(SeqDict, type, confMap, numSeqsWithSignal, locationFromStart):
 	generateKmer = False;
@@ -12,8 +13,8 @@ def AddSignalFromStart(SeqDict, type, confMap, numSeqsWithSignal, locationFromSt
 		motif = TAMO_Motif.Make_PWM_Motif(motiffile)
 		generateKmer = True;
 	elif type == 'motif':
-		motiffile = confMap["sequence"]["pwmFile"]
-		motif = TAMO_Motif.Make_PWM_Motif(motiffile)
+		textMotif  = confMap["sequence"]["textMotif"]
+		motif = MotifTools.Motif_from_text(textMotif)
 		generateKmer = True;
 	else:
 		kmerToEmbed = confMap["sequence"]["kmer"]
@@ -22,7 +23,6 @@ def AddSignalFromStart(SeqDict, type, confMap, numSeqsWithSignal, locationFromSt
 	for key in keysToReplace:
 		if generateKmer:
 			kmerToEmbed = motif.random_kmer();
-			print "k-mer to embed ", kmerToEmbed;
 
 		value = SeqDict[key]
 		endIndex = locationFromStart + len(kmerToEmbed)
@@ -59,7 +59,7 @@ if __name__ == "__main__":
 		motifFile = confMap['sequence'].get('pwmFile');
 		type = "pwm"
 	elif confMap['sequence'].get('textMotif'):
-		textMotif = confMap['sequence'].get('kmer');
+		textMotif = confMap['sequence'].get('textMotif');
 		type = "motif"
 	
 	if confMap['sequence'].get('locationFromEnd'):
