@@ -1,6 +1,7 @@
 sequence:
    type: "KMER"
-   seqLen: 25
+   seqLen: 50
+   locationFromStart: 10
    fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
    outFastaFile: "SeqWithKmer.fa"
    numSeq: 10
