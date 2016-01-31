@@ -1,0 +1,5 @@
+{data: {dataFile: GSM1286117_ZFP36_clusters_stranded_train_NONGSM1286117_ZFP36_clusters_stranded_train_3700_3700_CompleteSet.txt,
+    negLen: 3700, posLen: 3700}, kspectrum: {C: 10, folds: 5, k1: 9, k2: 12}, output: {
+    featureFile: TTP_InDomain_Train_Features.dat, modelFile: TTP_InDomain_Train_Model.dat,
+    paramsFile: TTP_InDomain_Train_params.dat, resultsFile: TTP_InDomain_Train_Results.yml,
+    trainDataFile: TTP_InDomain_Train_kspectrum.dat}}
