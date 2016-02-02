@@ -7,9 +7,17 @@ import TAMO_Motif
 
 def EmbedMotif(SeqDict, type, confMap, numSeqsWithSignal, locationFromStart):
 	generateKmer = False;
+	motifBackGround = ""
+
+	if type == "pwm" or type == "motif":
+		#Check if background is provided.
+		if confMap['sequence'].get('motifBackGround'):
+			motifBackGround = confMap["sequence"]["motifBackGround"]
+			print motifBackGround;
+
 	if type == 'pwm':
 		motiffile = confMap["sequence"]["pwmFile"]
-		motif = TAMO_Motif.Make_PWM_Motif(motiffile)
+		motif = TAMO_Motif.Make_PWM_Motif(motiffile, motifBackGround)
 		generateKmer = True;
 	elif type == 'motif':
 		textMotif  = confMap["sequence"]["textMotif"]
@@ -17,6 +25,7 @@ def EmbedMotif(SeqDict, type, confMap, numSeqsWithSignal, locationFromStart):
 		generateKmer = True;
 	else:
 		kmerToEmbed = confMap["sequence"]["kmer"]
+
 
 	keysToReplace = random.sample(SeqDict, numSeqsWithSignal)
 	for key in keysToReplace:
@@ -70,6 +79,7 @@ if __name__ == "__main__":
 		locationFromStart = random.randint(0, SeqLength - len(kmerToEmbed))
 
 	numSeqsWithSignal = int(confMap["sequence"]["seqWithSignal"])
+
 
 
 	# Generate sequences that contain no signal.

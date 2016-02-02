@@ -5,5 +5,10 @@ sequence:
    fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
    outFastaFile: "SeqWithKmer.fa"
    numSeq: 10
-   textMotif: "DDSAAAA"
    seqWithSignal: 8
+   motifBackGround: 
+      A: 0.407
+      C: 0.041
+      G: 0.060
+      T: 0.493
+   pwmFile: "/projects/bhandare/workspace/PySG/data/Cgd2_3490.pwm"
