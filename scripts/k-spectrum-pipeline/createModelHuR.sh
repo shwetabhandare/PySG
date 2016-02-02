@@ -27,4 +27,6 @@
 # The following commands will be executed when this script is run.
 
 echo The job has begun
-make -f Makefile.HuR_Train && make -f Makefile.SaveResultsHuRTrainTest
+#make -f Makefile.HuR_Train && make -f Makefile.SaveResultsHuRTrainTest
+#make -f Makefile.HuRvsCommonAndTTP
+make -f Makefile.CommoncsHuRAndTTP

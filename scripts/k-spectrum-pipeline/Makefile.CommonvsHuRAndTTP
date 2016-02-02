@@ -3,17 +3,17 @@ DATA_DIR=/projects/bhandare/workspace/PySG/data/HuR_TTP/faFromBed/HuRBestFromNee
 PROJECTS_DIR=/projects/bhandare
 
 #Files are stranded
-#POS_FILE_NAME=HuR_TTP_Common_Clusters.fa
-#NEG_FILE_NAME=Only_HuR_And_Only_TTP_Clusters.fa
+POS_FILE_NAME=HuR_TTP_Common_Clusters.fa
+NEG_FILE_NAME=Only_HuR_And_Only_TTP_Clusters.fa
 
-POS_FILE_NAME=HuRBest_TTP_Common_Clusters.fa
-NEG_FILE_NAME=OnlyHuRBestAndOnlyTTPClusters.fa
+#POS_FILE_NAME=HuRBest_TTP_Common_Clusters.fa
+$NEG_FILE_NAME=OnlyHuRBestAndOnlyTTPClusters.fa
 
 POS_FILE=$(DATA_DIR)/$(POS_FILE_NAME)
 NEG_FILE=$(DATA_DIR)/$(NEG_FILE_NAME)
 
-#CONF_PREFIX=CommonVsHuRAndTTP
-CONF_PREFIX=CommonVsHuRBestAndTTP
+CONF_PREFIX=CommonVsHuRAndTTP
+#CONF_PREFIX=CommonVsHuRBestAndTTP
 CONF_YML=$(CONF_PREFIX).yml
 RESULT_YML=$(CONF_PREFIX)_Results.yml
 
@@ -57,7 +57,7 @@ step5:
 	mv $(RESULT_YML) $(RESULT_DIR)
 	git add $(RESULT_DIR)
 	git add $(RESULT_DIR)/*
-	git commit -av
-	#git push origin
+	git commit -m "Adding results for Common vs Only HuR and OnlyTTP"
+	git push origin
 
 

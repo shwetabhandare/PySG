@@ -32,14 +32,18 @@ def Read_PWM(filename):
 	
 ##########################################################################################
 
-def Make_PWM_Motif(filename):
+def Make_PWM_Motif(filename, motifBackGround=""):
 
 	#print "# Reading PWM from: [%s]"%filename
 	name, pwm = Read_PWM(filename)
 	
 	#print "Building motif:", name
 	m = MotifTools.toDict(pwm)
-	motif = MotifTools.Motif_from_counts(m)
+	print "Motif BackGround: ", motifBackGround
+	if motifBackGround != "":
+		motif = MotifTools.Motif_from_counts(m, bg=motifBackGround)
+	else:
+		motif = MotifTools.Motif_from_counts(m)
 	motif.source = name
 	
 	#print "Motif:", motif.source

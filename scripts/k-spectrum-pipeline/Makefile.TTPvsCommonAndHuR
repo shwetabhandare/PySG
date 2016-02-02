@@ -20,9 +20,13 @@ CREATE_CONF_SCRIPT=/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline
 
 RESULT_DIR=`date +'%d-%b-%Y'`
 
-all: step1 step2 step3 step4 step5
+all: step0 step1 step2 step3 step4 step5
 .PHONY: all
 
+step0:
+	@echo "**** STEP 0: CONVERT TO UPPER ****"
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(POS_FILE)
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
 
 step1: $(POS_FILE) $(NEG_FILE) seq_counter.py 
 	python seq_counter.py $(POS_FILE) $(NEG_FILE)
@@ -46,6 +50,6 @@ step5:
 	mv $(RESULT_YML) $(RESULT_DIR)
 	git add $(RESULT_DIR)
 	git add $(RESULT_DIR)/*
-	#git commit -av
-	#git push origin
+	git commit -m "Adding results for Only TTP vs Common and Only HuR"
+	git push origin
 

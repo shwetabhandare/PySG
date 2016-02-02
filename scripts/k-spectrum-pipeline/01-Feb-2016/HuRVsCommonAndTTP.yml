@@ -1,0 +1,5 @@
+{data: {dataFile: Only_HuR_Clusters_Only_TTP_And_HuR_TTP_Common_Clusters_3206_4628_CompleteSet.txt,
+    negLen: 4628, posLen: 3206}, kspectrum: {C: 10, folds: 5, k1: 9, k2: 12}, output: {
+    featureFile: HuRVsCommonAndTTP_Features.dat, modelFile: HuRVsCommonAndTTP_Model.dat,
+    paramsFile: HuRVsCommonAndTTP_params.dat, resultsFile: HuRVsCommonAndTTP_Results.yml,
+    trainDataFile: HuRVsCommonAndTTP_kspectrum.dat}}
