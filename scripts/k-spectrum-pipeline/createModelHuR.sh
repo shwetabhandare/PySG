@@ -29,4 +29,4 @@
 echo The job has begun
 #make -f Makefile.HuR_Train && make -f Makefile.SaveResultsHuRTrainTest
 #make -f Makefile.HuRvsCommonAndTTP
-make -f Makefile.CommoncsHuRAndTTP
+make -f Makefile.CommonvsHuRAndTTP
