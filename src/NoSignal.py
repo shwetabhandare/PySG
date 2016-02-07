@@ -6,6 +6,9 @@ import os
 import yaml
 import atgcDistribution
 import SeqGenUtils
+from random import choice
+from numpy import *
+import numpy as np
 
 indexArr = []
 
@@ -40,6 +43,32 @@ def GetSequenceToShuffle(NegSequences, targetSeqLength):
 	return allNucs, index;
 
 
+def GetRandomNucleotide(items): 
+    return choice("".join(x * y for x, y in items))
+
+def GenerateNoSignalFromDirichlet(seqDistDirichletList, seqBackGroundDict,
+	SeqLength):
+	seq = ""
+	keys = list(seqBackGroundDict.keys())
+	NegSeqDict = dict()
+	for seqNum, atgcDistribution in  enumerate(seqDistDirichletList):
+		a = atgcDistribution
+		b = list()
+		b = [(keys[0], a[0] * 100), (keys[1], a[1] * 100), (keys[2], a[2] * 100), 
+		     (keys[3], a[3] * 100)]
+		print b
+		for count in range(SeqLength):
+			seq += GetRandomNucleotide(b)
+		key = "NoSignal_" + str(seqNum);
+		NegSeqDict[key] = seq;
+
+	for key, value in NegSeqDict.iteritems():
+		print key, value
+	return NegSeqDict;
+
+
+		
+
 
 def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, 
 	                           SeqLength, OutputFileName):
@@ -63,11 +92,13 @@ def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate,
 		random.shuffle(l)
 		shuffledNucs = ''.join(l);
 		NegSeqDict[NegHeaders[index]] = shuffledNucs
-
-	print type(NegSeqDict)
 	return NegSeqDict;
 
-
+def GetDirichletDistribution(seqBackGroundDict, NumSeqsToGenerate):
+	s = np.random.dirichlet((seqBackGroundDict["A"] * 100, seqBackGroundDict["C"] * 100,
+		                      seqBackGroundDict["T"] * 100, seqBackGroundDict["G"] * 100), 
+	                         NumSeqsToGenerate);
+	return s;
 
 def GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName):
 	NegSequences, NegHeaders = CreateNegDict(NegativeFileName);
@@ -78,12 +109,25 @@ if __name__ == "__main__":
 	import sys
 	configFile = sys.argv[1]
 	confMap = SeqGenUtils.GetConf(configFile)
+	NegativeFileName = "";
+	NegSeqDict  = dict();
 
-
-	NegativeFileName = confMap["sequence"]["fastaFile"]
 	NumSeqsToGenerate = int(confMap["sequence"]["numSeq"])
+
+	if confMap["sequence"].get("fastaFile"):
+		NegativeFileName = confMap["sequence"]["fastaFile"]
+		
+
 	SeqLength = int(confMap["sequence"]["seqLen"])
 	OutFileName = confMap["sequence"]["outFastaFile"]
 
-	NegSeqDict = GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName);
+	if NegativeFileName != "":
+		NegSeqDict = GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName);
+	else:
+		seqBackGroundDict = confMap["sequence"]["seqBackGround"]
+		seqDistList = GetDirichletDistribution(seqBackGroundDict, 
+			                                    NumSeqsToGenerate);
+		NegSeqDict = GenerateNoSignalFromDirichlet(seqDistList, seqBackGroundDict, 
+			SeqLength);	
+
 	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, OutFileName);
