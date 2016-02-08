@@ -54,8 +54,12 @@ if __name__ == "__main__":
 	confMap = SeqGenUtils.GetConf(configFile)
 	kmerToEmbed = ""
 	type = "None";
+	NegativeFileName = "";
+	NegSeqDict  = dict();	
 
-	NegativeFileName = confMap["sequence"]["fastaFile"]
+	if confMap["sequence"].get("fastaFile"):
+		NegativeFileName = confMap["sequence"]["fastaFile"]
+
 	NumSeqsToGenerate = int(confMap["sequence"]["numSeq"])
 	SeqLength = int(confMap["sequence"]["seqLen"])
 	OutFileName = confMap["sequence"]["outFastaFile"]
@@ -80,11 +84,13 @@ if __name__ == "__main__":
 
 	numSeqsWithSignal = int(confMap["sequence"]["seqWithSignal"])
 
+	if NegativeFileName != "":
 
-
-	# Generate sequences that contain no signal.
-	SeqDict = NoSignal.GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, 
-	          SeqLength, OutFileName);
+		# Generate sequences that contain no signal.
+		SeqDict = NoSignal.GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, 
+	   	       SeqLength, OutFileName);
+	else:
+		SeqDict = NoSignal.GenerateNoSignalWithDirichlet(confMap, NumSeqsToGenerate, SeqLength);
 
 	# Embed motif into the sequences.
 	SeqDict = EmbedMotif(SeqDict, type, confMap, numSeqsWithSignal, locationFromStart)

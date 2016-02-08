@@ -1,6 +1,9 @@
 from random import choice
 import yaml
 import os, fnmatch
+from numpy import *
+import numpy as np
+
 def weightedchoice(items): # this doesn't require the numbers to add up to 100
 	return choice("".join(x * y for x, y in items))
 
@@ -10,7 +13,9 @@ def GetConf(configFile):
 	confMap = yaml.load(f)
 	f.close();
 	return confMap;
-
+	
+def GetRandomNucleotide(items): 
+    return choice("".join(x * y for x, y in items))
 
 def WriteSeqDictToFile(NegSeqDict, OutputFileName):
 	OutputFile = open(OutputFileName , "w")
@@ -21,6 +26,36 @@ def WriteSeqDictToFile(NegSeqDict, OutputFileName):
 		OutputFile.write(value)
 		OutputFile.write("\n")
 	OutputFile.close()
+
+def GetDirichletDistribution(seqBackGroundDict, NumSeqsToGenerate):
+	s = np.random.dirichlet((seqBackGroundDict["A"] * 100, seqBackGroundDict["C"] * 100,
+		                      seqBackGroundDict["T"] * 100, seqBackGroundDict["G"] * 100), 
+	                         NumSeqsToGenerate);
+	return s;
+
+def GenerateNoSignalFromDirichlet(seqDistDirichletList, seqBackGroundDict,
+	SeqLength):
+	seq = ""
+	keys = list(seqBackGroundDict.keys())
+	NegSeqDict = dict()
+	for seqNum, atgcDistribution in  enumerate(seqDistDirichletList):
+		a = atgcDistribution
+		b = list()
+		b = [(keys[0], a[0] * 100), (keys[1], a[1] * 100), (keys[2], a[2] * 100), 
+		     (keys[3], a[3] * 100)]
+		#print b
+		count = 0;
+		seq = ""
+		for count in range(SeqLength):
+			seq += GetRandomNucleotide(b)
+		key = "NoSignal_" + str(seqNum);
+		NegSeqDict[key] = seq;
+
+	sorted(NegSeqDict, key=lambda key: NegSeqDict[key])
+
+	#for key, value in NegSeqDict.iteritems():
+	#	print key, len(value)
+	return NegSeqDict;
 
 def findFiles (path, filter):
    for root, dirs, files in os.walk(path):

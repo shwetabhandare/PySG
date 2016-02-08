@@ -1,10 +1,10 @@
 sequence:
    type: "NOSIGNAL"
-   seqLen: 50
-   outFastaFile: "NoSignalDirichlet.fa"
-   numSeq: 10
+   seqLen: 200
+   outFastaFile: "NoSignalSequences_200_1500.fa"
+   numSeq: 1500
    seqBackGround: 
-      A: 0.28
-      C: 0.21
+      A: 0.27
+      C: 0.22
       G: 0.21
       T: 0.30
