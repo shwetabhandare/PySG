@@ -76,7 +76,6 @@ def GenerateNoSignalWithDirichlet(confMap, NumSeqsToGenerate, SeqLength):
 
 def GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName):
 	NegSequences, NegHeaders = CreateNegDict(NegativeFileName);
-	print SeqLength
 	return CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, SeqLength, OutFileName)
 
 def CreateNoSignalDict(confMap):
@@ -89,15 +88,15 @@ def CreateNoSignalDict(confMap):
 	OutFileName = SeqGenUtils.GetNoSignalOutFileName(confMap);
 	NegativeFileName = SeqInfo['inputName'];
 
-	print SeqInfo, OutFileName;
+	print SeqInfo, OutFileName
 
 	if NegativeFileName != "":
-		NegSeqDict = GenerateNoSignalSequences(SeqInfo['inputName'], SeqInfo['numSeq'], 
+		NegSeqDict = GenerateNoSignalSequences(NegativeFileName, SeqInfo['numSeq'], 
 			                                    SeqInfo['seqLen'], OutFileName);
 	else:
 	 	NegSeqDict = GenerateNoSignalWithDirichlet(confMap, SeqInfo['numSeq'], SeqInfo['seqLen']);	
 
-	return NegSeqDict, OutFileName;
+	return NegSeqDict;
 
 def CreateNoSignalFastaFile(configFile):
 	confMap = SeqGenUtils.GetConf(configFile)
