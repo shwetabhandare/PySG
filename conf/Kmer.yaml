@@ -1,14 +1,13 @@
 sequence:
-   type: "KMER"
-   seqLen: 50
-   locationFromStart: 10
-   fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
-   outFastaFile: "SeqWithKmer.fa"
-   numSeq: 10
-   seqWithSignal: 8
-   motifBackGround: 
-      A: 0.407
-      C: 0.041
-      G: 0.060
-      T: 0.493
-   pwmFile: "/projects/bhandare/workspace/PySG/data/Cgd2_3490.pwm"
+   nosignal:
+      seqLen: 25
+      fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
+      outNoSignalFastaFile: "NoSignal.fa"
+      numSeq: 10
+   motif:
+      motifBackGround: 
+         A: 0.407
+         C: 0.041
+         G: 0.060
+         T: 0.493
+      pwmFile: "/projects/bhandare/workspace/PySG/data/Cgd2_3490.pwm"

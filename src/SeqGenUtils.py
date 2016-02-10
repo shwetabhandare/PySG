@@ -15,7 +15,7 @@ def GetConf(configFile):
 	return confMap;
 
 def GetNoSignalOutFileName(confMap):
-	return confMap["sequence"]["nosignal"]["outFastaFile"]
+	return confMap["sequence"]["nosignal"]["outNoSignalFastaFile"]
 
 def GetSequenceInfoFromConfMap(confMap):
 
@@ -32,7 +32,7 @@ def GetSequenceInfoFromConfMap(confMap):
 
 	SeqInfoDict['seqLen'] = SeqLength;
 	SeqInfoDict['inputName'] = NegativeFileName;
-	SeqInfoDict['numSeq'] = NumNoSignalSeq;
+	SeqInfoDict['numSeq'] = NumNoSignalSeq	;
 
 
 	return SeqInfoDict;
