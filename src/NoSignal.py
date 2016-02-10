@@ -79,10 +79,7 @@ def GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, Ou
 	print SeqLength
 	return CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, SeqLength, OutFileName)
 
-
-if __name__ == "__main__":
-	import sys
-	configFile = sys.argv[1]
+def CreateNoSignalDict(configFile):
 	confMap = SeqGenUtils.GetConf(configFile)
 	NegativeFileName = "";
 	NegSeqDict  = dict();
@@ -99,7 +96,15 @@ if __name__ == "__main__":
 		NegSeqDict = GenerateNoSignalSequences(SeqInfo['inputName'], SeqInfo['numSeq'], 
 			                                    SeqInfo['seqLen'], OutFileName);
 	else:
-	 	NegSeqDict = GenerateNoSignalWithDirichlet(confMap, SeqInfo['numSeq'], SeqInfo['seqLen']);
+	 	NegSeqDict = GenerateNoSignalWithDirichlet(confMap, SeqInfo['numSeq'], SeqInfo['seqLen']);	
 
+	return NegSeqDict, OutFileName;
+
+if __name__ == "__main__":
+	import sys
+	configFile = sys.argv[1]
+
+
+	NegSeqDict, OutFileName = CreateNoSignalDict(configFile);
 
 	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, OutFileName);
