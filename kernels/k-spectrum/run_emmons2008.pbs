@@ -1,0 +1,24 @@
+#PBS -l walltime=8:00:00,nodes=1:ppn=1
+#PBS -S /bin/bash
+#PBS -j eo
+#PBS -N TTP-Homo-Emmons-k-spectrum
+
+export DIRECTORY=/home/bhandare/workspace/k-spectrum
+cd $DIRECTORY
+
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_3UTRs_OneTranscriptPerGeneCompleteSet.txt 5 0 212 250 > Emmons_2008_3UTRs_OneTranscriptPerGene_5mer.txt 
+python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_3UTRs_OneTranscriptPerGeneCompleteSet.txt 5 7 212 250 > Emmons_2008_3UTRs_OneTranscriptPerGene_5_7mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_3UTRs_OneTranscriptPerGeneCompleteSet.txt 7 0 212 250 > Emmons_2008_3UTRs_OneTranscriptPerGene_7mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_3UTRs_OneTranscriptPerGeneCompleteSet.txt 9 0 212 250 > Emmons_2008_3UTRs_OneTranscriptPerGene_9mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_3UTRs_OneTranscriptPerGeneCompleteSet.txt 13 0 212 250 > Emmons_2008_3UTRs_OneTranscriptPerGene_13mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_3UTRs_OneTranscriptPerGeneCompleteSet.txt 17 0 212 250 > Emmons_2008_3UTRs_OneTranscriptPerGene_17mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_3UTRs_OneTranscriptPerGeneCompleteSet.txt 21 0 212 250 > Emmons_2008_3UTRs_OneTranscriptPerGene_21mer.txt 
+
+## Longest transcript per gene
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_LongestTranscriptPerGene_3UTR_CompleteSet.txt 5 0 369 350 > Emmons_2008_3UTRs_LongestTranscriptPerGene_5mer.txt 
+python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_LongestTranscriptPerGene_3UTR_CompleteSet.txt 5 7 369 350 > Emmons_2008_3UTRs_LongestTranscriptPerGene_5_7mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_LongestTranscriptPerGene_3UTR_CompleteSet.txt 7 0 369 350 > Emmons_2008_3UTRs_LongestTranscriptPerGene_7mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_LongestTranscriptPerGene_3UTR_CompleteSet.txt 9 0 369 350 > Emmons_2008_3UTRs_LongestTranscriptPerGene_9mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_LongestTranscriptPerGene_3UTR_CompleteSet.txt 13 0 369 350 > Emmons_2008_3UTRs_LongestTranscriptPerGene_13mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_LongestTranscriptPerGene_3UTR_CompleteSet.txt 17 0 369 350 > Emmons_2008_3UTRs_LongestTranscriptPerGene_17mer.txt 
+#python homo_ttp_spectrum.py /projects/debra/workspace/Data/TTP/Homo/Data/Emmons_2008/Emmons_2008_LongestTranscriptPerGene_3UTR_CompleteSet.txt 21 0 369 350 > Emmons_2008_3UTRs_LongestTranscriptPerGene_21mer.txt 

@@ -1,0 +1,28 @@
+1. Create training kernel data:
+mkdir `date +'%m-%d-%Y'`; ./stem_kernel_lite -n --pf-scale `date +'%m-%d-%Y'`/HuR_train_fafrombed.dat +1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/HuR/to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_train.fa -1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/HuR/NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_train.fa
+
+2. Generate model:
+svm-train -t 4 -b 1 HuR_train_fafrombed.dat HuR_train_fafrombed.model
+
+3. Create test kernel data:
+./stem_kernel_lite -n --pf-scale `date +'%m-%d-%Y'`/HuR_train_fafrombed.dat +1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/HuR/to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_train.fa -1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/HuR/NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_train.fa --test +1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/HuR/to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_test.fa -1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/HuR/NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_test.fa
+
+4. Test:
+svm-predict -b 1 HuR_test_fafrombed.dat ../06-26-2015/HuR_train_fafrombed.model  HuR-Test-Output
+
+
+== TTP == 
+
+1. Create training kernel data:
+./stem_kernel_lite -n --pf-scale `date +'%m-%d-%Y'`/TTP_train_fafrombed.dat +1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/TTP/GSM1286117_ZFP36_clusters_train.fa -1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/TTP/NONGSM1286117_ZFP36_clusters_train.fa &
+
+2. Generate model:
+svm-train -t 4 -b 1 06-28-2015/TTP_train_fafrombed.dat 06-28-2015/TTP_train_fafrombed.model
+
+3. Create test kernel data:
+./stem_kernel_lite -n --pf-scale `date +'%m-%d-%Y'`/TTP_train_test_fafrombed.dat +1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/TTP/GSM1286117_ZFP36_clusters_train.fa -1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/TTP/NONGSM1286117_ZFP36_clusters_train.fa --test +1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/TTP/GSM1286117_ZFP36_clusters_test.fa -1 /projects/bhandare/workspace/data/HuR_TTP/faFromBed/TTP/NONGSM1286117_ZFP36_clusters_test.fa
+
+
+4. Test:
+
+4. Test:

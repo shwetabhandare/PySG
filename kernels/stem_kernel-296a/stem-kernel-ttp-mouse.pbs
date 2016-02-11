@@ -1,0 +1,14 @@
+#PBS -l walltime=96:00:00,nodes=1:ppn=1
+#PBS -S /bin/bash
+#PBS -j eo
+#PBS -N stemKernel-mouse-ttp
+
+export DIRECTORY=/home/bhandare/workspace/stem_kernel-296a
+
+JOBIDONLY=${PBS_JOBID%%.ncar-loginmgt}
+
+cd $DIRECTORY
+cd stem_kernel_lite
+
+#Train the model.
+./stem_kernel_lite --pf-scale -n mouse_ttp_3utr.dat +1 /projects/debra/workspace/Data/TTP/Mus/BlackSheer/TTP_Blackshear2006_250UniqueTargets_3UTR.txt -1 /projects/debra/workspace/Data/TTP/Mus/BlackSheer/RandomMus3UTR_750.txt

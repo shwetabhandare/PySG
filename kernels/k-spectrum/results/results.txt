@@ -1,0 +1,52 @@
+== HuR Model, HuR Test == 
+Success Rate:  0.730.
+Balanced Success Rate:  0.730.
+Sensitivity:  0.984.
+PPV:  0.653.
+ROC:  0.871.
+ROC 50 curve: 0.374740 
+predicted labels:
+    -1   +1
+-1 174  191
++1  6   359
+== HuR Model, TTP Test == 
+Success Rate:  0.793.
+Balanced Success Rate:  0.793.
+Sensitivity:  0.756.
+PPV:  0.816.
+ROC:  0.869.
+area under ROC 50 curve: 0.275983
+
+predicted labels:
+     -1   +1
+ -1 384   79
+ +1 113  350
+[trainingTime 2.04
+numSV 6554
+testingTime 30.2]
+== TTP Model, TTP Test == 
+*
+Success Rate:  0.873.
+Balanced Success Rate:  0.873.
+Sensitivity:  0.862.
+PPV:  0.881.
+ROC:  0.935.
+Area under ROC 50 curve: 0.645875
+
+predicted labels:
+    -1   +1
+-1 409   54
++1  64  399
+
+== TTP Model, HuR Test == 
+Success Rate:  0.719.
+Balanced Success Rate:  0.719.
+Sensitivity:  0.658.
+PPV:  0.750.
+ROC:  0.828.
+area under ROC 50 curve: 0.276384
+
+predicted labels:
+   -1   +1
+-1 285   80
++1 125  240

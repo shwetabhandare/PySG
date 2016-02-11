@@ -1,0 +1,6 @@
+roc50: 1.0
+roc: 1.0
+bestSuccessRate: 0.85
+K1: 7, K2: 7
+bestC: 1e-08
+Features: 375

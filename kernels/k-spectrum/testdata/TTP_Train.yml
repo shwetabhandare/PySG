@@ -1,0 +1,3 @@
+{data: {dataFile: TTP_Train_10_10_CompleteSet.fa, negLen: 10, posLen: 10}, kspectrum: {
+    C: 10, folds: 5, k1: 9, k2: 12}, output: {featureFile: TTP_Features.dat, modelFile: TTP_Model.dat,
+    paramsFile: TTP_params.dat, resultsFile: TTP_Results.yml, trainDataFile: TTP_kspectrum.dat}}

@@ -1,0 +1,33 @@
+10
+<SparseDataSet instance>
+number of patterns: 8326
+class Label  /  Size 
+ -1 : 4163
+ +1 : 4163
+
+saving to  /lustre/janus_scratch/bhandare/data/HuR_TTP/faFromBed/TTP_Train_Test_Combined.txt
+detected file format as: sparse
+Cpos, Cneg:  5.0 5.0
+............*
+optimization finished, #iter = 12104
+nu = 0.146317
+obj = -3045.098708, rho = 0.287216
+nSV = 8005, nBSV = 0
+<SparseDataSet instance>
+number of patterns: 1656
+class Label  /  Size 
+ -1 : 828
+ +1 : 828
+
+loading model
+testing ***********************************************************
+1000 patterns classified
+Confusion Matrix:
+      predicted labels:
+       -1   +1 
+   -1 521  307 
+   +1  51  777 
+success rate: 0.783816
+balanced success rate: 0.783816
+area under ROC curve: 0.890639
+area under ROC 50 curve: 0.310797 

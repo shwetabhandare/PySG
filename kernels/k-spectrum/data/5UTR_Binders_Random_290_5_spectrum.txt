@@ -1,0 +1,57 @@
+=== Five UTR, k-mer  length: 5 ===
+
+=== Five UTR, k-mer  length: 7 ===
+
+<SparseDataSet instance>
+number of patterns: 529
+class Label  /  Size 
+ -1 : 256
+ +1 : 273
+
+training ***********************************************************
+Cpos, Cneg:  0.483490566038 0.516509433962
+*
+optimization finished, #iter = 423
+obj = -156.979760, rho = -0.430626
+nSV = 424, nBSV = 423
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.483490566038 0.516509433962
+*
+optimization finished, #iter = 423
+obj = -156.876374, rho = -0.473248
+nSV = 424, nBSV = 423
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.483490566038 0.516509433962
+.*
+optimization finished, #iter = 424
+obj = -158.188443, rho = -0.298686
+nSV = 424, nBSV = 423
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.483490566038 0.516509433962
+*
+optimization finished, #iter = 423
+obj = -157.320094, rho = -0.211357
+nSV = 424, nBSV = 422
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.485714285714 0.514285714286
+.*
+optimization finished, #iter = 420
+obj = -154.883234, rho = -0.272908
+nSV = 420, nBSV = 419
+testing ***********************************************************
+100 patterns classified
+Success Rate:  0.567.
+Balanced Success Rate:  0.567.
+Sensitivity:  0.996.
+PPV:  0.545.
+ROC:  0.705.
+ROC50:  0.678.
+five_utr_7_spectrum.csv.eps

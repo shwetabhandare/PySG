@@ -1,0 +1,20 @@
+HuR_TTP_FAFROMBED_Combined_7_9
+Success Rate:  0.783.
+Balanced Success Rate:  0.783.
+Sensitivity:  0.961.
+PPV:  0.709.
+ROC:  0.901.
+
+HUR
+Success Rate:  0.765.
+Balanced Success Rate:  0.765.
+Sensitivity:  0.966.
+PPV:  0.690.
+ROC:  0.884.
+
+TTP
+Success Rate:  0.836.
+Balanced Success Rate:  0.836.
+Sensitivity:  0.951.
+PPV:  0.773.
+ROC:  0.933.

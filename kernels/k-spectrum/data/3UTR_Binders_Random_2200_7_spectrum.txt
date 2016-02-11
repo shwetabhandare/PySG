@@ -1,0 +1,77 @@
+=== Three UTR, k-mer  length: 5 ===
+
+=== Three UTR, k-mer  length: 7 ===
+
+<SparseDataSet instance>
+number of patterns: 2743
+class Label  /  Size 
+ -1 : 2469
+ +1 : 274
+
+training ***********************************************************
+Cpos, Cneg:  0.899817850638 0.100182149362
+.*
+optimization finished, #iter = 1633
+obj = -146.229449, rho = 0.992436
+nSV = 1695, nBSV = 904
+testing ***********************************************************
+100 patterns classified
+200 patterns classified
+300 patterns classified
+400 patterns classified
+500 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.899817850638 0.100182149362
+.*
+optimization finished, #iter = 1705
+obj = -147.964332, rho = 0.991316
+nSV = 1760, nBSV = 908
+testing ***********************************************************
+100 patterns classified
+200 patterns classified
+300 patterns classified
+400 patterns classified
+500 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.899817850638 0.100182149362
+.*
+optimization finished, #iter = 1551
+obj = -144.147043, rho = 0.994201
+nSV = 1599, nBSV = 896
+testing ***********************************************************
+100 patterns classified
+200 patterns classified
+300 patterns classified
+400 patterns classified
+500 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.899817850638 0.100182149362
+.*
+optimization finished, #iter = 1723
+obj = -147.309591, rho = 0.991513
+nSV = 1769, nBSV = 913
+testing ***********************************************************
+100 patterns classified
+200 patterns classified
+300 patterns classified
+400 patterns classified
+500 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.901279707495 0.0987202925046
+.*
+optimization finished, #iter = 1813
+obj = -149.568834, rho = 0.990543
+nSV = 1816, nBSV = 950
+testing ***********************************************************
+100 patterns classified
+200 patterns classified
+300 patterns classified
+400 patterns classified
+500 patterns classified
+Success Rate:  0.292.
+Balanced Success Rate:  0.292.
+Sensitivity:  0.989.
+PPV:  0.123.
+ROC:  0.912.
+ROC50:  0.759.
+three_utr_7_spectrum_large.csv.eps

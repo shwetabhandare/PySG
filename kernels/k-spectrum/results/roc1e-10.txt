@@ -1,0 +1,4 @@
+roc50: 1.0
+roc: 1.0
+bestSuccessRate: 0.8
+bestC: 1e-10

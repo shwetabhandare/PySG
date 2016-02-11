@@ -1,0 +1,356 @@
+=== Unspliced , k-mer  length: 5 ===
+
+<SparseDataSet instance>
+number of patterns: 450
+class Label  /  Size 
+ -1 : 287
+ +1 : 163
+
+training ***********************************************************
+Cpos, Cneg:  0.637119113573 0.362880886427
+*
+optimization finished, #iter = 198
+obj = -60.620593, rho = 1.067986
+nSV = 190, nBSV = 143
+testing ***********************************************************
+training ***********************************************************
+Cpos, Cneg:  0.637119113573 0.362880886427
+*
+optimization finished, #iter = 202
+obj = -62.505576, rho = 1.050000
+nSV = 187, nBSV = 149
+testing ***********************************************************
+training ***********************************************************
+Cpos, Cneg:  0.637119113573 0.362880886427
+*
+optimization finished, #iter = 207
+obj = -66.407443, rho = 1.116744
+nSV = 195, nBSV = 156
+testing ***********************************************************
+training ***********************************************************
+Cpos, Cneg:  0.637119113573 0.362880886427
+*
+optimization finished, #iter = 204
+obj = -62.941873, rho = 1.011991
+nSV = 194, nBSV = 148
+testing ***********************************************************
+training ***********************************************************
+Cpos, Cneg:  0.640449438202 0.359550561798
+*
+optimization finished, #iter = 199
+obj = -62.808839, rho = 1.076154
+nSV = 191, nBSV = 149
+testing ***********************************************************
+Success rate:
+0.849103514224
+Balanced success rate: 
+0.8202721316
+Sensitivity: 
+0.716785714286
+PPV: 
+0.845429031516
+Confusion Matrix: 
+[[265  46]
+ [ 22 117]]
+Area under ROC: 
+0.906828140266
+=== Unspliced, k-mer  length: 7 ===
+
+<SparseDataSet instance>
+number of patterns: 450
+class Label  /  Size 
+ -1 : 287
+ +1 : 163
+
+training ***********************************************************
+Cpos, Cneg:  0.637119113573 0.362880886427
+.*
+optimization finished, #iter = 366
+obj = -81.640631, rho = 0.801186
+nSV = 350, nBSV = 144
+testing ***********************************************************
+training ***********************************************************
+Cpos, Cneg:  0.637119113573 0.362880886427
+.*
+optimization finished, #iter = 361
+obj = -81.146238, rho = 0.806230
+nSV = 347, nBSV = 151
+testing ***********************************************************
+training ***********************************************************
+Cpos, Cneg:  0.637119113573 0.362880886427
+*
+optimization finished, #iter = 352
+obj = -82.909465, rho = 0.808408
+nSV = 348, nBSV = 155
+testing ***********************************************************
+training ***********************************************************
+Cpos, Cneg:  0.637119113573 0.362880886427
+*
+optimization finished, #iter = 349
+obj = -80.464669, rho = 0.810694
+nSV = 348, nBSV = 148
+testing ***********************************************************
+training ***********************************************************
+Cpos, Cneg:  0.640449438202 0.359550561798
+.*
+optimization finished, #iter = 361
+obj = -82.076008, rho = 0.805280
+nSV = 340, nBSV = 146
+testing ***********************************************************
+Success rate:
+0.54245756634
+Balanced success rate: 
+0.638531445138
+Sensitivity: 
+0.9875
+PPV: 
+0.441511102158
+Confusion Matrix: 
+[[ 83   2]
+ [204 161]]
+Area under ROC: 
+0.917814876173
+=== Three UTR, k-mer  length: 5 ===
+
+<SparseDataSet instance>
+number of patterns: 567
+class Label  /  Size 
+ -1 : 288
+ +1 : 279
+
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+*
+optimization finished, #iter = 267
+obj = -45.217066, rho = 0.975869
+nSV = 260, nBSV = 79
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+*
+optimization finished, #iter = 290
+obj = -48.093186, rho = 0.966488
+nSV = 274, nBSV = 80
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+*
+optimization finished, #iter = 271
+obj = -46.451296, rho = 1.007251
+nSV = 246, nBSV = 82
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+*
+optimization finished, #iter = 262
+obj = -50.208962, rho = 0.985362
+nSV = 267, nBSV = 88
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.508928571429 0.491071428571
+*
+optimization finished, #iter = 257
+obj = -45.332648, rho = 0.968501
+nSV = 246, nBSV = 79
+testing ***********************************************************
+100 patterns classified
+Success rate:
+0.822058823529
+Balanced success rate: 
+0.82447733355
+Sensitivity: 
+0.97842835131
+PPV: 
+0.743547103918
+Confusion Matrix: 
+[[193   6]
+ [ 95 273]]
+Area under ROC: 
+0.973855594302
+=== Three UTR, k-mer  length: 7 ===
+
+<SparseDataSet instance>
+number of patterns: 567
+class Label  /  Size 
+ -1 : 288
+ +1 : 279
+
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 588
+obj = -119.202578, rho = 0.616070
+nSV = 439, nBSV = 179
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 608
+obj = -117.169227, rho = 0.623303
+nSV = 437, nBSV = 177
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 599
+obj = -113.634336, rho = 0.630264
+nSV = 437, nBSV = 163
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 596
+obj = -114.073653, rho = 0.628225
+nSV = 436, nBSV = 168
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.508928571429 0.491071428571
+.*
+optimization finished, #iter = 577
+obj = -117.517439, rho = 0.615013
+nSV = 432, nBSV = 175
+testing ***********************************************************
+100 patterns classified
+Success rate:
+0.624369747899
+Balanced success rate: 
+0.629944178628
+Sensitivity: 
+0.981818181818
+PPV: 
+0.569092882069
+Confusion Matrix: 
+[[ 80   5]
+ [208 274]]
+Area under ROC: 
+0.9697702268
+=== Five UTR, k-mer  length: 5 ===
+
+<SparseDataSet instance>
+number of patterns: 567
+class Label  /  Size 
+ -1 : 288
+ +1 : 279
+
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 458
+obj = -165.559594, rho = 0.434617
+nSV = 455, nBSV = 441
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 458
+obj = -165.783006, rho = 0.472819
+nSV = 455, nBSV = 441
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 460
+obj = -167.540688, rho = 0.461341
+nSV = 455, nBSV = 441
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 461
+obj = -165.749009, rho = 0.480020
+nSV = 454, nBSV = 431
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.508928571429 0.491071428571
+.*
+optimization finished, #iter = 450
+obj = -165.151752, rho = 0.400236
+nSV = 448, nBSV = 441
+testing ***********************************************************
+100 patterns classified
+Success rate:
+0.50231092437
+Balanced success rate: 
+0.509006163328
+Sensitivity: 
+0.928012326656
+PPV: 
+0.497409541092
+Confusion Matrix: 
+[[ 26  20]
+ [262 259]]
+Area under ROC: 
+0.682839185792
+=== Five UTR, k-mer  length: 7 ===
+
+<SparseDataSet instance>
+number of patterns: 567
+class Label  /  Size 
+ -1 : 288
+ +1 : 279
+
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 459
+obj = -170.993030, rho = 0.476201
+nSV = 455, nBSV = 448
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 477
+obj = -170.229992, rho = 0.503657
+nSV = 455, nBSV = 422
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 475
+obj = -169.906126, rho = 0.497543
+nSV = 454, nBSV = 423
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.507692307692 0.492307692308
+.*
+optimization finished, #iter = 459
+obj = -170.788939, rho = 0.481710
+nSV = 455, nBSV = 448
+testing ***********************************************************
+100 patterns classified
+training ***********************************************************
+Cpos, Cneg:  0.508928571429 0.491071428571
+.*
+optimization finished, #iter = 448
+obj = -168.625638, rho = 0.450376
+nSV = 448, nBSV = 447
+testing ***********************************************************
+100 patterns classified
+Success rate:
+0.607878151261
+Balanced success rate: 
+0.60685291812
+Sensitivity: 
+0.537565485362
+PPV: 
+0.623723038015
+Confusion Matrix: 
+[[195 129]
+ [ 93 150]]
+Area under ROC: 
+0.657057416268

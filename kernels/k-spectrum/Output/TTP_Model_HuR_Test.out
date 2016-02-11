@@ -1,0 +1,32 @@
+10
+<SparseDataSet instance>
+number of patterns: 8326
+class Label  /  Size 
+ -1 : 4163
+ +1 : 4163
+
+saving to  TTP_Model_HuR_Test_Features.txt
+detected file format as: sparse
+Cpos, Cneg:  5.0 5.0
+............*
+optimization finished, #iter = 12104
+nu = 0.146317
+obj = -3045.098708, rho = 0.287216
+nSV = 8005, nBSV = 0
+<SparseDataSet instance>
+number of patterns: 730
+class Label  /  Size 
+ -1 : 365
+ +1 : 365
+
+loading model
+testing ***********************************************************
+Confusion Matrix:
+      predicted labels:
+       -1   +1 
+   -1 214  151 
+   +1  31  334 
+success rate: 0.750685
+balanced success rate: 0.750685
+area under ROC curve: 0.827825
+area under ROC 50 curve: 0.283178 

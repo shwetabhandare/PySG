@@ -1,0 +1,6 @@
+1000 patterns classified
+Success Rate:  0.750.
+Balanced Success Rate:  0.750.
+Sensitivity:  0.967.
+PPV:  0.674.
+ROC:  0.867.

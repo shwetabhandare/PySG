@@ -1,0 +1,43 @@
+HUR: 7, 13, Success Rate: 0.717119453449, ROC: 0.877870776463,  ROC50: 0.309355000174, Best C: 0.01
+TTP: 7, 11, Success Rate: 0.724484396591, ROC: 0.925206110208,  ROC50: 0.49494077614,  Best C: 0.001
+
+
+HuR Test Data -> Generate k-spectrum kernel (7, 13) -> Save HuR k-mers.
+TTP Test Data -> Generate k-spectrum kernel (7, 11) -> Save TTP k-mers.
+
+
+Combine HuR, TTP test data : Add HuR_, TTP_ to them as well.
+
+
+Generate model with the combined data.
+
+1. In domain HuR/TTP:
+
+Train: 90% HuR data Test: 10% HuR Data
+
+Train: 90% TTP data Test: 10% TTP Data
+
+2. Train 90% HuR, Test: 10% TTP data
+
+3. Train: 90% TTP, Test: 10% HuR Data
+
+4. From experiment 1, we get four feature file: HuR_Train_Features.txt,
+TTP_Train_Features.txt, HuR_Test_Features.txt, TTP_Test_Features.txt
+
+5. Create HuR_Train_Features_Prime.txt, TTP_Train_Features_Prime.txt where
+each sequence has both regular k-mers and “HUR/TTP” prepended k-mers.
+
+6. Create HuR_Test_Features_Prime.txt, TTP_Test_Features_Prime.txt where each
+sequence has both regular k-mers and “HUR/TTP” prepended k-mers.
+
+7. Combine HuR_Train_Features_Prime.txt  and TTP_Train_Features_Prime.txt so
+we have both HuR and TTP training features together. This file will have three
+types of k-mers: regular kmers and HUR_kmers and TTP_kmers.
+
+8. Combine HuR_Test_Features_Prime.txt  and TTP_Test_Features_Prime.txt so we
+have both HuR and TTP test features together. This file will have three types
+of k-mers: regular kmers and HUR_kmers and TTP_kmers.
+
+9. Load the train file, generate the model. Load the test file, and test SVM
+on test data.
+

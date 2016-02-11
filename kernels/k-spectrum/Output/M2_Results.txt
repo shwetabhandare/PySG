@@ -1,0 +1,13 @@
+<SparseDataSet instance>
+number of patterns: 1656
+class Label  /  Size 
+ -1 : 828
+  +1 : 828
+
+  testing ***********************************************************
+  1000 patterns classified
+  Success Rate:  0.784.
+  Balanced Success Rate:  0.784.
+  Sensitivity:  0.938.
+  PPV:  0.717.
+  ROC:  0.891.

@@ -1,0 +1,41 @@
+env CPPFLAGS='-I/projects/bhandare/workspace/include/ViennaRNA -I/curc/tools/x_86_64/rh6//boost/1.56/anaconda/2.0.0/openmpi/1.8.2/intel/13.0.0/include -I/projects/bhandare/workspace/include/' LDFLAGS='-L/projects/bhandare/workspace/lib -L/projects/bhandare/workspace/tools/ViennaRNA-1.8.5/lib/ -L/curc/tools/x_86_64/rh6//boost/1.56/anaconda/2.0.0/openmpi/1.8.2/intel/13.0.0/lib' ./configure --help
+ 1068   env CPPFLAGS='-I/projects/bhandare/workspace/include/ViennaRNA -I/curc/tools/x_86_64/rh6//boost/1.56/anaconda/2.0.0/openmpi/1.8.2/intel/13.0.0/include -I/projects/bhandare/workspace/include/' LDFLAGS='-L/projects/bhandare/workspace/lib -L/projects/bhandare/workspace/tools/ViennaRNA-1.8.5/lib/ -L/curc/tools/x_86_64/rh6//boost/1.56/anaconda/2.0.0/openmpi/1.8.2/intel/13.0.0/lib' ./configure --prefix=/projects/bhandare/workspace/
+  1069  make -j && make install
+[bhandare@login03 stem_kernel-296a]$ module list
+
+Currently Loaded Modules:
+  1) perl/perl-5.18.0   5) intel/intel-13.0.0
+    2) python/epd-7.3.2   6) openmpi/openmpi-1.8.2_intel-13.0.0
+	   3) slurm/slurm        7)
+		boost/boost-1.56_anaconda-2.0.0_openmpi-1.8.2_intel-13.0.0
+		  4) jdk/jdk-1.7.0_17
+
+
+
+./stem_kernel_lite -n --pf-scale km.dat +1 pos.fa -1 neg.fa
+
+First, calculate base-pairing probabilities by using Vienna RNA
+packages.
+
+Second, pick up base-pairs whose base-pairing probabilities are more
+than a predefined threshold.
+
+Then, we build a directed acyclic graph (DAG) for each sequence or
+alignment.
+
+Finally, we calculate the partition function of aligning two DAGs.
+
+http://www.ncbi.nlm.nih.gov/pubmed/18647390
+and
+http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2515856/figure/F1/
+
+We calculate only the partition function, that is, we don't predict
+any structures.
+
+stem_kernel doesn't identify any stems explicitly, too.
+It takes into account all possible secondary structures and calculates
+the partition function.
+
+The main difference of stem_kernel_lite from old stem_kernel is use of
+DAGs, which are used for fast calculation of the partition function.
+
