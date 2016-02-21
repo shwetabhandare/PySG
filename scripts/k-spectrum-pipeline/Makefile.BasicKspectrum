@@ -1,0 +1,48 @@
+POS_FILE=$(pos_file)
+NEG_FILE=$(neg_file)
+
+CONF_PREFIX=$(conf_prefix)
+CONF_YML=$(CONF_PREFIX).yml
+
+RESULT_YML=$(CONF_PREFIX)_Results.yml
+
+FEATURES_FILE=$(CONF_PREFIX)_Features.dat
+TOP_KMERS_FILE=$(CONF_PREFIX)_Features_TopKmers.dat
+
+BASIC_KSPECTRUM_SCRIPT=/projects/bhandare/workspace/PySG/kernels/k-spectrum/scripts/basic_kspectrum.py
+CREATE_CONF_SCRIPT=/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline/CreateConfFile.py
+
+RESULT_DIR=`date +'%d-%b-%Y'`/$(CONF_PREFIX)
+
+all: step0 step1 step2 step3 step4 step5
+
+.PHONY: all
+
+step0: $(POS_FILE) $(NEG_FILE)
+	@echo $(CONF_PREFIX)
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(POS_FILE)
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
+
+step1: $(POS_FILE) $(NEG_FILE) seq_counter.py 
+	python seq_counter.py $(POS_FILE) $(NEG_FILE)
+
+step2:
+	$(eval COMBINED_FILE_NAME := $(shell ls *.txt))
+	@echo "*** COMBINED FILE: ***: $(COMBINED_FILE_NAME)"
+	python $(CREATE_CONF_SCRIPT) $(COMBINED_FILE_NAME) $(CONF_PREFIX) $(CONF_YML)
+
+step3:
+	python $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
+
+
+step4:
+	python GenerateFlankingRegions.py $(POS_FILE) $(NEG_FILE) $(FEATURES_FILE) $(TOP_KMERS_FILE)
+
+step5:
+	mkdir -p $(RESULT_DIR)
+	mv $(COMBINED_FILE_NAME) $(RESULT_DIR)
+	mv $(FEATURES_FILE) $(RESULT_YML) $(TOP_KMERS_FILE) $(CONF_YML) $(RESULT_DIR)
+	git add $(RESULT_DIR)
+	git add $(RESULT_DIR)/*
+	git commit -m "Basic TTP Model"
+	git push origin

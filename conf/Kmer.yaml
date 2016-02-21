@@ -1,10 +1,10 @@
 sequence:
    nosignal:
-      seqLen: 50
+      seqLen: 100
       fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
-      outNoSignalFastaFile: "NoSignal.fa"
-      numSeq: 10
+      outNoSignalFastaFile: "output/NoSignal.fa"
+      numSeq: 100
    motif:
       kmer: "GCTGCT"
-      outSignalFile: "SignalMotif.fa"
-      seqWithSignal: 8
+      outSignalFile: "output/SignalMotif.fa"
+      seqWithSignal: 100

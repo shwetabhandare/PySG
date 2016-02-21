@@ -46,10 +46,14 @@ if __name__ == '__main__':
 	resultFile = confMap["output"]["resultsFile"]
 	modelFile = confMap["output"]["modelFile"]
 
+	buildModel = False;
+
 	trainData = generate_model.get_spectrum_data(dataFile, k1, k2, posLen, negLen, normalize=True, repeatCount=True);
-	results, m = BuildModel(trainData, modelFile, numFolds);
-	print_results(results, resultFile, k1, k2)
-	find_features(trainData, featureFile, m.classifier.C);
-	
-	#results = CrossValidate(trainData, numFolds)
-	#find_features(trainData, featureFile);
+	if buildModel:
+		results, m = BuildModel(trainData, modelFile, numFolds);
+		print_results(results, resultFile, k1, k2)
+		find_features(trainData, featureFile, m.classifier.C);
+	else:
+		results = CrossValidate(trainData, numFolds)
+		print_results(results, resultFile, k1, k2)
+		find_features(trainData, featureFile);

@@ -36,8 +36,9 @@ def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
 def EmbedMotif(SeqDict, kmerList, numSeqsWithSignal, locationFromStart):
 	generateKmer = False;
 	motifBackGround = ""
-
+	print "Num Sequences with Signal", str(numSeqsWithSignal)
 	keysToReplace = random.sample(SeqDict, numSeqsWithSignal)
+	print len(keysToReplace)
 	for idx, key in enumerate(keysToReplace):
 		kmerToEmbed = kmerList[idx];
 
@@ -47,6 +48,7 @@ def EmbedMotif(SeqDict, kmerList, numSeqsWithSignal, locationFromStart):
 			shiftStart = endIndex - len(value);
 			locationFromStart = locationFromStart - shiftStart
 		newValue = value[:locationFromStart] + kmerToEmbed + value[endIndex:]
+		print newValue
 		SeqDict[key] = newValue;
 	return SeqDict;
 
@@ -104,6 +106,12 @@ if __name__ == "__main__":
 	# Embed motif into the sequences.
 	SeqDict = EmbedMotif(SeqDict, kmerList, numSeqsWithSignal, locationFromStart);
 
-	OutFileName = confMap["sequence"]["motif"]["outSignalFile"]
+	NegSeqDict = NoSignal.CreateNoSignalDict(confMap);
+
+	NoSignalOutFileName = confMap["sequence"]["nosignal"]["outNoSignalFastaFile"]
+	MotifOutFileName = confMap["sequence"]["motif"]["outSignalFile"]
+
+
 	# Write sequences to file.
-	SeqGenUtils.WriteSeqDictToFile(SeqDict, OutFileName);
+	SeqGenUtils.WriteSeqDictToFile(SeqDict, MotifOutFileName);
+	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, NoSignalOutFileName);
