@@ -1,10 +1,20 @@
 import yaml
-
-#numSeq = [1000, 2000, 3000, 4000, 5000]
-#seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
+import os
+from os import path
 
 numSeq = [1000, 2000, 3000, 4000, 5000]
 seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
+seqWithSignalPercent = [0, 50, 75, 90, 100]
+pwmFileDirectory = "/projects/bhandare/workspace/PySG/data/pwm"
+utrDist = dict(
+	seqBackGround = dict(
+		A = 0.27,
+		T = 0.22,
+		G = 0.21,
+		C = 0.30,
+	)
+)
+
 # generate A, T, G, C using s = np.random.dirichlet((0.1,0.1,0.1,0.1),1)
 # expect sparse distribution, there is no apriori information.
 # tp = np.random.dirichlet((0.1,0.1,0.1,0.1),1)[0]
@@ -27,32 +37,62 @@ seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
 # here gammma = 100.
 
 
-def generateYaml(location, numberSeq, seqLength, inpFastaFile):
+def getNoSignalDict(location, numberSeq, seqLength, inpFastaFile):
 	outFileName = "NoSignal_" + str(numberSeq) + "_" + str(seqLength)
-	print outFileName
 	data = dict(
-	 sequence = dict (
-		nosignal = dict(
 		  seqLen = seqLength,
 		  numSeq = numberSeq,
 		  fastaFile = inpFastaFile,
-		  outFastaFile = location + "/" + outFileName + ".fa",
-		  )
+		  outNoSignalFastaFile = location + "/" + outFileName + ".fa",
+	)
+
+	return data;
+
+def getMotifDict(location, numberSeq, seqLength, signalSeq, pwmFileName):
+	signalLocation = 10;
+	outFileName = "Motif_" + str(numberSeq) + "_" + str(seqLength) + "_" + str(signalSeq) + "_" + str(signalLocation) + "_" + pwmFileName;
+	pwmFileToAdd = pwmFileDirectory + "/" + pwmFileName;
+	data = dict(
+			outSignalFile = location + "/" + outFileName + ".fa",
+			seqBackGround = utrDist,
+			seqWithSignal = signalSeq,
+			locationFromStart = signalLocation,
+			pwmFile = pwmFileToAdd,
+		)
+	yamlFileName = str(numberSeq) + "_" + str(seqLength) + "_" + str(signalSeq) + "_" + str(signalLocation) + "_" + pwmFileName + ".yml"
+	return yamlFileName, data;
+
+def writeYamlFile(location, yamlFileName, noSignalDict, motifDict):
+	data = dict(
+		sequence = dict(
+				nosignal = noSignalDict,
+				motif = motifDict,
 		)
 	)
-	yamlFileName = location + "/" + outFileName + ".yml";
-	print "Data: ", data
-	with open(yamlFileName, 'w') as outfile:
+
+	with open(location + "/" + yamlFileName, 'w') as outfile:
 		 outfile.write( yaml.dump(data, default_flow_style=True) )
+
+def getPwmFiles(pwmDir):
+	pwmFiles = [];
+	for f in os.listdir(pwmDir):
+		if f.lower().endswith(('.pwm')):
+			pwmFiles.append(f)
+	print pwmFiles;
+	return pwmFiles;
 
 ## Program stats here.
 def CreateConfFiles(location):
 	inpFastaFile = "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
+	pwmFiles = getPwmFiles(pwmFileDirectory);	
 	for numSeqIdx, i in enumerate(numSeq):
 		for numSeqLenIdx, j in enumerate(seqLen):
-			print i, j
-			generateYaml(location, i, j, inpFastaFile);
-
+			noSignalDict = getNoSignalDict(location, i, j, inpFastaFile);
+			for signalPercent in seqWithSignalPercent:
+				print signalPercent
+				for pwmFile in pwmFiles:
+					yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile);
+					writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
 
 if __name__ == "__main__":
 	import sys
