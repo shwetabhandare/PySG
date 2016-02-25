@@ -13,7 +13,30 @@ def GetConf(configFile):
 	confMap = yaml.load(f)
 	f.close();
 	return confMap;
-	
+
+def GetNoSignalOutFileName(confMap):
+	return confMap["sequence"]["nosignal"]["outNoSignalFastaFile"]
+
+def GetSequenceInfoFromConfMap(confMap):
+
+	SeqInfoDict = dict();
+	NegativeFileName = ""
+
+	NumNoSignalSeq = int(confMap["sequence"]["nosignal"]["numSeq"])
+	if confMap["sequence"]["nosignal"].get("fastaFile"):
+		NegativeFileName = confMap["sequence"]["nosignal"]["fastaFile"]	
+	if confMap["sequence"]["nosignal"].get("seqLen"):
+		SeqLength = int(confMap["sequence"]["nosignal"]["seqLen"])
+	else:
+		SeqLength = 200;
+
+	SeqInfoDict['seqLen'] = SeqLength;
+	SeqInfoDict['inputName'] = NegativeFileName;
+	SeqInfoDict['numSeq'] = NumNoSignalSeq	;
+
+
+	return SeqInfoDict;
+
 def GetRandomNucleotide(items): 
     return choice("".join(x * y for x, y in items))
 
