@@ -4,6 +4,8 @@ import os, fnmatch
 from numpy import *
 import numpy as np
 
+np.set_printoptions(precision=2)
+
 def weightedchoice(items): # this doesn't require the numbers to add up to 100
 	return choice("".join(x * y for x, y in items))
 
@@ -21,10 +23,13 @@ def GetSequenceInfoFromConfMap(confMap):
 
 	SeqInfoDict = dict();
 	NegativeFileName = ""
+	alpha = 0;
 
 	NumNoSignalSeq = int(confMap["sequence"]["nosignal"]["numSeq"])
 	if confMap["sequence"]["nosignal"].get("fastaFile"):
 		NegativeFileName = confMap["sequence"]["nosignal"]["fastaFile"]	
+	else:
+		alpha = int(confMap["sequence"]["nosignal"]["alpha"])
 	if confMap["sequence"]["nosignal"].get("seqLen"):
 		SeqLength = int(confMap["sequence"]["nosignal"]["seqLen"])
 	else:
@@ -33,6 +38,7 @@ def GetSequenceInfoFromConfMap(confMap):
 	SeqInfoDict['seqLen'] = SeqLength;
 	SeqInfoDict['inputName'] = NegativeFileName;
 	SeqInfoDict['numSeq'] = NumNoSignalSeq	;
+	SeqInfoDict['alpha'] = alpha;
 
 
 	return SeqInfoDict;
@@ -50,10 +56,12 @@ def WriteSeqDictToFile(NegSeqDict, OutputFileName):
 		OutputFile.write("\n")
 	OutputFile.close()
 
-def GetDirichletDistribution(seqBackGroundDict, NumSeqsToGenerate):
-	s = np.random.dirichlet((seqBackGroundDict["A"] * 100, seqBackGroundDict["C"] * 100,
-		                      seqBackGroundDict["T"] * 100, seqBackGroundDict["G"] * 100), 
-	                         NumSeqsToGenerate);
+def GetDirichletDistribution(seqBackGroundDict, scaleFactor, NumSeqsToGenerate):
+	utr_dist = list()
+	for key, value in seqBackGroundDict.iteritems():
+		utr_dist.append(value)
+	alpha = scaleFactor * np.array(utr_dist)
+	s = np.random.dirichlet(alpha, NumSeqsToGenerate);
 	return s;
 
 def GenerateNoSignalFromDirichlet(seqDistDirichletList, seqBackGroundDict,

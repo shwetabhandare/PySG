@@ -2,6 +2,7 @@ import yaml
 import os
 from os import path
 
+alpha = [0.1, 1, 10, 100, 1000]
 numSeq = [1000, 2000, 3000, 4000, 5000]
 seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
 seqWithSignalPercent = [0, 50, 75, 90, 100]
@@ -36,6 +37,17 @@ utrDist = dict(
 # when gamma is large, the ATGC percentages will be similar, and when its smaller they will differ more.
 # here gammma = 100.
 
+
+def getNoSignalDictWithAlpha(location, numberSeq, seqLength, alphaValue):
+	outFileName = "NoSignal_" + str(numberSeq) + "_" + str(seqLength) + "_" + str(alpha)
+	data = dict(
+		  seqLen = seqLength,
+		  numSeq = numberSeq,
+		  outNoSignalFastaFile = location + "/" + outFileName + ".fa",
+		  seqBackGround = utrDist,
+		  alpha = alphaValue,
+	)
+	return data;
 
 def getNoSignalDict(location, numberSeq, seqLength, inpFastaFile):
 	outFileName = "NoSignal_" + str(numberSeq) + "_" + str(seqLength)
@@ -81,8 +93,19 @@ def getPwmFiles(pwmDir):
 	print pwmFiles;
 	return pwmFiles;
 
-## Program stats here.
-def CreateConfFiles(location):
+def GenerateNoSignalWithDirichlet(location):
+	pwmFiles = getPwmFiles(pwmFileDirectory);	
+	for numSeqIdx, i in enumerate(numSeq):
+		for numSeqLenIdx, j in enumerate(seqLen):
+			for a in alpha:
+				noSignalDict = getNoSignalDictWithAlpha(location, i, j, a);
+				for signalPercent in seqWithSignalPercent:
+					print signalPercent
+					for pwmFile in pwmFiles:
+						yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile);
+						writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+
+def GenerateNoSignalWithFasta(location):
 	inpFastaFile = "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
 	pwmFiles = getPwmFiles(pwmFileDirectory);	
 	for numSeqIdx, i in enumerate(numSeq):
@@ -94,7 +117,15 @@ def CreateConfFiles(location):
 					yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile);
 					writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
 
+## Program stats here.
+def CreateConfFiles(location, type):
+	if type == 'shuffle':
+		GenerateNoSignalWithFasta(location);
+	elif type == 'dirichlet':
+		GenerateNoSignalWithDirichlet(location);
+
 if __name__ == "__main__":
 	import sys
 	location = sys.argv[1]
-	CreateConfFiles(location)
+	type = sys.argv[2]
+	CreateConfFiles(location, type)
