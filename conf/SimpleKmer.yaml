@@ -3,12 +3,12 @@ sequence:
    seqLen: 50
    locationFromStart: 10
    fastaFile: "/Users/shweta.bhandare/Downloads/Research/3UTR_transcripts_Human.txt"
-   outFastaFile: "SeqWithPWMAndBackground.fa"
+   outFastaFile: "SeqWithSimpleKmer.fa"
    numSeq: 10
    seqWithSignal: 8
+   kmer: "TTATTTATT"
    motifBackGround: 
-      A: 0.407
-      C: 0.041
+      A: 0.307
+      C: 0.141
       G: 0.060
       T: 0.493
-   pwmFile: "/Users/shweta.bhandare/workspace/PySG/data/Cgd2_3490.pwm"
