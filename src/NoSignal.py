@@ -42,15 +42,6 @@ def GetSequenceToShuffle(NegSequences, targetSeqLength):
 
 	return allNucs, index;
 
-
-
-
-
-
-
-		
-
-
 def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, 
 	                           SeqLength, OutputFileName):
 	NumNegSequences = len(NegSequences)
@@ -59,7 +50,6 @@ def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate,
 	for i in range(0, NumSeqsToGenerate):
 		allNucs, index = GetSequenceToShuffle(NegSequences, SeqLength)
 		allNucsLength = len(allNucs)
-		#print "All Nucs Length: " + str(allNucsLength)
 		startPoint = random.randint(0, allNucsLength - 1)
 		#print "Start Point: " + str(startPoint)
 		if startPoint + SeqLength < allNucsLength:
@@ -76,7 +66,7 @@ def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate,
 	return NegSeqDict;
 
 def GenerateNoSignalWithDirichlet(confMap, NumSeqsToGenerate, SeqLength):
-	seqBackGroundDict = confMap["sequence"]["seqBackGround"]
+	seqBackGroundDict = confMap["sequence"]["nosignal"]["seqBackGround"]
 	seqDistList = SeqGenUtils.GetDirichletDistribution(seqBackGroundDict, 
 			                                  NumSeqsToGenerate);
 	NegSeqDict = SeqGenUtils.GenerateNoSignalFromDirichlet(seqDistList, seqBackGroundDict, 
@@ -88,28 +78,33 @@ def GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, Ou
 	NegSequences, NegHeaders = CreateNegDict(NegativeFileName);
 	return CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, SeqLength, OutFileName)
 
+def CreateNoSignalDict(confMap):
+	NegativeFileName = "";
+	NegSeqDict  = dict();
+	SeqInfo  = dict();
+		
+	SeqInfo = SeqGenUtils.GetSequenceInfoFromConfMap(confMap);
+
+	OutFileName = SeqGenUtils.GetNoSignalOutFileName(confMap);
+	NegativeFileName = SeqInfo['inputName'];
+
+	print SeqInfo, OutFileName
+
+	if NegativeFileName != "":
+		NegSeqDict = GenerateNoSignalSequences(NegativeFileName, SeqInfo['numSeq'], 
+			                                    SeqInfo['seqLen'], OutFileName);
+	else:
+	 	NegSeqDict = GenerateNoSignalWithDirichlet(confMap, SeqInfo['numSeq'], SeqInfo['seqLen']);	
+
+	return NegSeqDict;
+
+def CreateNoSignalFastaFile(configFile):
+	confMap = SeqGenUtils.GetConf(configFile)
+	NegSeqDict = CreateNoSignalDict(confMap);
+	OutFileName = SeqGenUtils.GetNoSignalOutFileName(confMap);
+	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, OutFileName);	
 
 if __name__ == "__main__":
 	import sys
 	configFile = sys.argv[1]
-	confMap = SeqGenUtils.GetConf(configFile)
-	NegativeFileName = "";
-	NegSeqDict  = dict();
 
-	NumSeqsToGenerate = int(confMap["sequence"]["numSeq"])
-
-	if confMap["sequence"].get("fastaFile"):
-		NegativeFileName = confMap["sequence"]["fastaFile"]
-		
-
-	SeqLength = int(confMap["sequence"]["seqLen"])
-	print "Sequence Length: ", str(SeqLength)
-	OutFileName = confMap["sequence"]["outFastaFile"]
-
-	if NegativeFileName != "":
-		NegSeqDict = GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName);
-	else:
-		NegSeqDict = GenerateNoSignalWithDirichlet(confMap, NumSeqsToGenerate, SeqLength);
-
-
-	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, OutFileName);
