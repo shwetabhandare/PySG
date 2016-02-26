@@ -1,4 +1,0 @@
-{data: {dataFile: ELAV1_Conservative_OnlyZFP36_clusters_3206_4161_CompleteSet.txt,
-    negLen: 4161, posLen: 3206}, kspectrum: {C: 1.0e-05, folds: 5, k1: 7, k2: 13},
-  output: {featureFile: HuRVsTTP_Features.dat, modelFile: HuRVsTTP_Model.dat, paramsFile: HuRVsTTP_params.dat,
-    resultsFile: HuRVsTTP_Results.yml, trainDataFile: HuRVsTTP_kspectrum.dat}}
