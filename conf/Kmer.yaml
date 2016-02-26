@@ -4,7 +4,7 @@ sequence:
       fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
       outNoSignalFastaFile: "output/NoSignal.fa"
       numSeq: 100
-   motif:
+   signal:
       kmer: "GCTGCT"
       outSignalFile: "output/SignalMotif.fa"
       seqWithSignal: 100

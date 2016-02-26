@@ -11,19 +11,19 @@ def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
 	motifBackGround = ""
 
 	if type == "pwm" or type == "motif":
-		if confMap['sequence']['motif'].get('motifBackGround'):
-			motifBackGround = confMap["sequence"]["motif"]["motifBackGround"]
+		if confMap['sequence']['signal'].get('motifBackGround'):
+			motifBackGround = confMap["sequence"]["signal"]["motifBackGround"]
 
 	if type == 'pwm':
-		motiffile = confMap["sequence"]['motif']["pwmFile"]
+		motiffile = confMap["sequence"]['signal']["pwmFile"]
 		motif = TAMO_Motif.Make_PWM_Motif(motiffile, motifBackGround)
 		generateKmer = True;
 	elif type == 'motif':
-		textMotif  = confMap["sequence"]['motif']["textMotif"]
+		textMotif  = confMap["sequence"]['signal']["textMotif"]
 		motif = TAMO_Motif.Make_Text_Motif(textMotif)
 		generateKmer = True;
 	else:
-		kmerToEmbed = confMap["sequence"]['motif']["kmer"]
+		kmerToEmbed = confMap["sequence"]['signal']["kmer"]
 
 	for i in range(numSeqsWithSignal):
 		if generateKmer:
@@ -60,58 +60,70 @@ def PrintConfMap(confMap):
 			print "\n",
 
 def GetMotifType(confMap):
-	if confMap['sequence']['motif'].get('kmer'):
-		kmerToEmbed = confMap["sequence"]['motif']["kmer"]
+	kmerToEmbed = ""
+	if confMap['sequence']['signal'].get('kmer'):
+		kmerToEmbed = confMap["sequence"]['signal']["kmer"]
 		motifType = "kmer"
-	elif confMap['sequence']['motif'].get('pwmFile'):
-		motifFile = confMap['sequence']['motif'].get('pwmFile');
+	elif confMap['sequence']['signal'].get('pwmFile'):
+		motifFile = confMap['sequence']['signal'].get('pwmFile');
 		motifType = "pwm"
-	elif confMap['sequence']['motif'].get('textMotif'):
-		textMotif = confMap['sequence']['motif'].get('textMotif');
+	elif confMap['sequence']['signal'].get('textMotif'):
+		textMotif = confMap['sequence']['signal'].get('textMotif');
 		motifType = "motif"
 	return motifType;
 
 def GetMotifLocation(confMap, SeqLength):
-	if confMap['sequence']['motif'].get('locationFromEnd'):
+	if confMap['sequence']['signal'].get('locationFromEnd'):
 		locationFromEnd = int(confMap["sequence"]["motif"]["locationFromEnd"])
 		locationFromStart = SeqLength - locationFromEnd;
-	elif confMap['sequence']['motif'].get('locationFromStart'):
+	elif confMap['sequence']['signal'].get('locationFromStart'):
 		locationFromStart = int(confMap["sequence"]['motif']["locationFromStart"])
 	else:
-		locationFromStart = random.randint(0, SeqLength - len(kmerToEmbed))
+		locationFromStart = random.randint(0, SeqLength)
 	return locationFromStart;
 
-if __name__ == "__main__":
-	import sys
+def GetSignalSeqInfo(confMap, SeqLength):
+	SignalSeqInfo = dict();
 
-	kmerToEmbed = ""
-	type = "None";
+	if confMap['sequence'].get('signal'):
+		motifType = GetMotifType(confMap);
+		locationFromStart = GetMotifLocation(confMap, SeqLength);
+		numSeqsWithSignal = int(confMap["sequence"]["signal"]["seqWithSignal"])
+		SignalSeqInfo['motifType'] = motifType;
+		SignalSeqInfo['locationFromStart'] = locationFromStart;
+		SignalSeqInfo['seqWithSignal'] = numSeqsWithSignal;
+	return SignalSeqInfo;
 
+
+def CreateFastaWithSignal(configFile):
 	configFile = sys.argv[1]
 	confMap = SeqGenUtils.GetConf(configFile)
 	SeqLength = confMap["sequence"]["nosignal"]["seqLen"]
-
-	if confMap['sequence'].get('motif'):
-		motifType = GetMotifType(confMap);
-		locationFromStart = GetMotifLocation(confMap, SeqLength);
-		numSeqsWithSignal = int(confMap["sequence"]["motif"]["seqWithSignal"])
+	SignalSeqInfo = GetSignalSeqInfo(confMap, SeqLength);
+	if len(SignalSeqInfo) == 0:
+		print "Did not find any signal data in the yaml file: ", configFile;
 	else:
-		print "Unable to generate sequences with motif"
+		kmerList = GetKmersToEmbed(SignalSeqInfo['motifType'], SignalSeqInfo['seqWithSignal'], confMap);
+		SeqDict = NoSignal.CreateNoSignalDict(confMap);
 
-	kmerList = GetKmersToEmbed(motifType, numSeqsWithSignal, confMap);
+		# Embed motif into the sequences.
+		SeqDict = EmbedMotif(SeqDict, kmerList, SignalSeqInfo['seqWithSignal'], SignalSeqInfo['locationFromStart']);
+
+		NegSeqDict = NoSignal.CreateNoSignalDict(confMap);
+
+		NoSignalOutFileName = confMap["sequence"]["nosignal"]["outNoSignalFastaFile"]
+		MotifOutFileName = confMap["sequence"]["signal"]["outSignalFile"]
+		# Write sequences to file.
+		SeqGenUtils.WriteSeqDictToFile(SeqDict, MotifOutFileName);
+		SeqGenUtils.WriteSeqDictToFile(NegSeqDict, NoSignalOutFileName);
+
+if __name__ == "__main__":
+	import sys
+	configFile = sys.argv[1]
+	CreateFastaWithSignal(configFile);
 
 
-	SeqDict = NoSignal.CreateNoSignalDict(confMap);
-
-	# Embed motif into the sequences.
-	SeqDict = EmbedMotif(SeqDict, kmerList, numSeqsWithSignal, locationFromStart);
-
-	NegSeqDict = NoSignal.CreateNoSignalDict(confMap);
-
-	NoSignalOutFileName = confMap["sequence"]["nosignal"]["outNoSignalFastaFile"]
-	MotifOutFileName = confMap["sequence"]["motif"]["outSignalFile"]
 
 
-	# Write sequences to file.
-	SeqGenUtils.WriteSeqDictToFile(SeqDict, MotifOutFileName);
-	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, NoSignalOutFileName);
+
+

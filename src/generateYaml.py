@@ -78,7 +78,7 @@ def writeYamlFile(location, yamlFileName, noSignalDict, motifDict):
 	data = dict(
 		sequence = dict(
 				nosignal = noSignalDict,
-				motif = motifDict,
+				signal = motifDict,
 		)
 	)
 
