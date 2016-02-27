@@ -1,5 +1,6 @@
 from generateYaml import *;
 from SeqGenUtils import *;
+from NoSignal import *
 import sys;
 
 directory = sys.argv[1]
@@ -8,7 +9,10 @@ CreateConfFiles(directory, 'shuffle');
 
 for confFile in findFiles(directory, '*.yml'):
 
-	print confFile;
+	print "Generating sequences for : ", confFile;
+	CreateNoSignalFastaFile(confFile);
+
+
 #	seqGen = SeqGen(conf);
 #	filename = os.path.splitext(os.path.basename(confFile))[0]
 #	posFastaFile = directory + "/" + filename + "_pos.fa";

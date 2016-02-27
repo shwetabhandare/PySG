@@ -3,8 +3,10 @@ import os
 from os import path
 
 alpha = [0.1, 1, 10, 100, 1000]
-numSeq = [1000, 2000, 3000, 4000, 5000]
-seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
+#numSeq = [1000, 2000, 3000, 4000, 5000]
+#seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
+numSeq = [100, 200, 300, 400, 500]
+seqLen = [200, 300, 400, 500, 600]
 seqWithSignalPercent = [0, 50, 75, 90, 100]
 pwmFileDirectory = "/projects/bhandare/workspace/PySG/data/pwm"
 utrDist = dict(
