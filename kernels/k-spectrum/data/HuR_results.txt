@@ -1,8 +1,0 @@
-=== Three UTR, k-mer  length: 5 ===
-
-<SparseDataSet instance>
-number of patterns: 567
-class Label  /  Size 
- -1 : 288
- +1 : 279
-
