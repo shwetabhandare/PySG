@@ -2,12 +2,13 @@ import yaml
 import os
 from os import path
 
-alpha = [0.1, 1, 10, 100, 1000]
+#alpha = [0.1, 1, 10, 100, 1000]
 #numSeq = [1000, 2000, 3000, 4000, 5000]
 #seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
-numSeq = [100, 200, 300, 400, 500]
-seqLen = [200, 300, 400, 500, 600]
-seqWithSignalPercent = [0, 50, 75, 90, 100]
+alpha = [10, 100, 1000]
+numSeq = [100, 200, 300]
+seqLen = [200, 300, 400]
+seqWithSignalPercent = [10, 75, 90]
 pwmFileDirectory = "/projects/bhandare/workspace/PySG/data/pwm"
 utrDist = dict(
 	seqBackGround = dict(
@@ -40,8 +41,8 @@ utrDist = dict(
 # here gammma = 100.
 
 
-def getNoSignalDictWithAlpha(location, numberSeq, seqLength, alphaValue):
-	outFileName = "NoSignal_" + str(numberSeq) + "_" + str(seqLength) + "_" + str(alpha)
+def getNoSignalDictWithAlpha(location, numberSeq, seqLength, alphaValue, fileId):
+	outFileName = "NoSignal_" + fileId
 	data = dict(
 		  seqLen = seqLength,
 		  numSeq = numberSeq,
@@ -51,8 +52,8 @@ def getNoSignalDictWithAlpha(location, numberSeq, seqLength, alphaValue):
 	)
 	return data;
 
-def getNoSignalDict(location, numberSeq, seqLength, inpFastaFile):
-	outFileName = "NoSignal_" + str(numberSeq) + "_" + str(seqLength)
+def getNoSignalDict(location, numberSeq, seqLength, inpFastaFile, fileId):
+	outFileName = "NoSignal_" + fileId
 	data = dict(
 		  seqLen = seqLength,
 		  numSeq = numberSeq,
@@ -62,9 +63,9 @@ def getNoSignalDict(location, numberSeq, seqLength, inpFastaFile):
 
 	return data;
 
-def getMotifDict(location, numberSeq, seqLength, signalSeq, pwmFileName):
+def getMotifDict(location, numberSeq, seqLength, signalSeq, pwmFileName, fileId):
 	signalLocation = 10;
-	outFileName = "Motif_" + str(numberSeq) + "_" + str(seqLength) + "_" + str(signalSeq) + "_" + str(signalLocation) + "_" + pwmFileName;
+	outFileName = "Signal_" + fileId;
 	pwmFileToAdd = pwmFileDirectory + "/" + pwmFileName;
 	data = dict(
 			outSignalFile = location + "/" + outFileName + ".fa",
@@ -100,11 +101,12 @@ def GenerateNoSignalWithDirichlet(location):
 	for numSeqIdx, i in enumerate(numSeq):
 		for numSeqLenIdx, j in enumerate(seqLen):
 			for a in alpha:
-				noSignalDict = getNoSignalDictWithAlpha(location, i, j, a);
 				for signalPercent in seqWithSignalPercent:
 					print signalPercent
 					for pwmFile in pwmFiles:
-						yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile);
+						fileId = str(i) + "_" + str(j) + "_" + str(signalPercent) + "_" + str(alpha) + pwmFile;
+						yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile, fileId);
+						noSignalDict = getNoSignalDictWithAlpha(location, i, j, a, fileId);
 						writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
 
 def GenerateNoSignalWithFasta(location):
@@ -112,11 +114,11 @@ def GenerateNoSignalWithFasta(location):
 	pwmFiles = getPwmFiles(pwmFileDirectory);	
 	for numSeqIdx, i in enumerate(numSeq):
 		for numSeqLenIdx, j in enumerate(seqLen):
-			noSignalDict = getNoSignalDict(location, i, j, inpFastaFile);
 			for signalPercent in seqWithSignalPercent:
-				print signalPercent
 				for pwmFile in pwmFiles:
-					yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile);
+					fileId = str(i) + "_" + str(j) + "_" + str(signalPercent) + pwmFile;
+					yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile, fileId);
+					noSignalDict = getNoSignalDict(location, i, j, inpFastaFile, fileId);
 					writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
 
 ## Program stats here.

@@ -65,16 +65,9 @@ def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate,
 		NegSeqDict[NegHeaders[index]] = shuffledNucs
 	return NegSeqDict;
 
-<<<<<<< HEAD
 def GenerateNoSignalWithDirichlet(confMap, alpha, NumSeqsToGenerate, SeqLength):
 	seqBackGroundDict = confMap["sequence"]["nosignal"]["seqBackGround"]
 	seqDistList = SeqGenUtils.GetDirichletDistribution(seqBackGroundDict, alpha, NumSeqsToGenerate);
-=======
-def GenerateNoSignalWithDirichlet(confMap, NumSeqsToGenerate, SeqLength):
-	seqBackGroundDict = confMap["sequence"]["nosignal"]["seqBackGround"]
-	seqDistList = SeqGenUtils.GetDirichletDistribution(seqBackGroundDict, 
-			                                  NumSeqsToGenerate);
->>>>>>> origin/master
 	NegSeqDict = SeqGenUtils.GenerateNoSignalFromDirichlet(seqDistList, seqBackGroundDict, 
 			SeqLength);	
 	return NegSeqDict

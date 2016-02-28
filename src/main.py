@@ -1,6 +1,7 @@
 from generateYaml import *;
 from SeqGenUtils import *;
 from NoSignal import *
+from Kmer import *
 import sys;
 
 directory = sys.argv[1]
@@ -11,6 +12,7 @@ for confFile in findFiles(directory, '*.yml'):
 
 	print "Generating sequences for : ", confFile;
 	CreateNoSignalFastaFile(confFile);
+	CreateFastaWithSignal(confFile)
 
 
 #	seqGen = SeqGen(conf);

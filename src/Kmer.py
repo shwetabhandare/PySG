@@ -76,7 +76,7 @@ def GetMotifLocation(confMap, SeqLength):
 		locationFromEnd = int(confMap["sequence"]["motif"]["locationFromEnd"])
 		locationFromStart = SeqLength - locationFromEnd;
 	elif confMap['sequence']['signal'].get('locationFromStart'):
-		locationFromStart = int(confMap["sequence"]['motif']["locationFromStart"])
+		locationFromStart = int(confMap["sequence"]['signal']["locationFromStart"])
 	else:
 		locationFromStart = random.randint(0, SeqLength)
 	return locationFromStart;
@@ -95,7 +95,6 @@ def GetSignalSeqInfo(confMap, SeqLength):
 
 
 def CreateFastaWithSignal(configFile):
-	configFile = sys.argv[1]
 	confMap = SeqGenUtils.GetConf(configFile)
 	SeqLength = confMap["sequence"]["nosignal"]["seqLen"]
 	SignalSeqInfo = GetSignalSeqInfo(confMap, SeqLength);
@@ -120,3 +119,4 @@ if __name__ == "__main__":
 	import sys
 	configFile = sys.argv[1]
 	CreateFastaWithSignal(configFile);
+
