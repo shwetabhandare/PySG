@@ -4,6 +4,7 @@ import yaml
 import random
 import SeqGenUtils
 import TAMO_Motif
+import os
 
 def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
 	kmers = list();
@@ -93,6 +94,13 @@ def GetSignalSeqInfo(confMap, SeqLength):
 		SignalSeqInfo['seqWithSignal'] = numSeqsWithSignal;
 	return SignalSeqInfo;
 
+def WriteKmersToFile(KmerList, OutputFileName):
+	OutputFile = open(OutputFileName , "w")
+	for kmer in KmerList:
+  		OutputFile.write(kmer);
+		OutputFile.write("\n")
+	OutputFile.close()
+
 
 def CreateFastaWithSignal(configFile):
 	confMap = SeqGenUtils.GetConf(configFile)
@@ -113,6 +121,9 @@ def CreateFastaWithSignal(configFile):
 		# Create No signal Sequences
 		NegSeqDict = NoSignal.CreateNoSignalDict(confMap);
 		MotifOutFileName = confMap["sequence"]["signal"]["outSignalFile"]
+
+		KmersFileName = os.path.splitext(MotifOutFileName)[0] + ".kmers"
+		WriteKmersToFile(kmerList, KmersFileName);
 
 		# Write sequences to file.
 		SeqGenUtils.WriteSeqDictToFile(SeqDict, MotifOutFileName);
