@@ -56,9 +56,10 @@ def WriteSeqDictToFile(NegSeqDict, OutputFileName):
 	OutputFile.close()
 
 def GetDirichletDistribution(seqBackGroundDict, scaleFactor, NumSeqsToGenerate):
-	utr_dist = list()
+	utr_dist = []
 	for key, value in seqBackGroundDict.iteritems():
-		utr_dist.append(value)
+		for k, v in value.iteritems():
+			utr_dist.append(v)
 	alpha = scaleFactor * np.array(utr_dist)
 	s = np.random.dirichlet(alpha, NumSeqsToGenerate);
 	return s;
@@ -66,7 +67,10 @@ def GetDirichletDistribution(seqBackGroundDict, scaleFactor, NumSeqsToGenerate):
 def GenerateNoSignalFromDirichlet(seqDistDirichletList, seqBackGroundDict,
 	SeqLength):
 	seq = ""
-	keys = list(seqBackGroundDict.keys())
+	keys = []
+	for key, value in seqBackGroundDict.iteritems():
+		for k, v in value.iteritems():
+			keys.append(k)
 	NegSeqDict = dict()
 	for seqNum, atgcDistribution in  enumerate(seqDistDirichletList):
 		a = atgcDistribution

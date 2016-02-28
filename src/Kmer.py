@@ -29,16 +29,16 @@ def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
 		if generateKmer:
 			kmerToEmbed = motif.emit();
 
-		print "Appending kmer: ", kmerToEmbed;
+		#print "Appending kmer: ", kmerToEmbed;
 		kmers.append(kmerToEmbed);
 	return kmers;
 
 def EmbedMotif(SeqDict, kmerList, numSeqsWithSignal, locationFromStart):
 	generateKmer = False;
 	motifBackGround = ""
-	print "Num Sequences with Signal", str(numSeqsWithSignal)
+	#print "Num Sequences with Signal", str(numSeqsWithSignal)
 	keysToReplace = random.sample(SeqDict, numSeqsWithSignal)
-	print len(keysToReplace)
+	#print len(keysToReplace)
 	for idx, key in enumerate(keysToReplace):
 		kmerToEmbed = kmerList[idx];
 
@@ -101,19 +101,21 @@ def CreateFastaWithSignal(configFile):
 	if len(SignalSeqInfo) == 0:
 		print "Did not find any signal data in the yaml file: ", configFile;
 	else:
+		# Get the list of k-mers to embed in sequences.
 		kmerList = GetKmersToEmbed(SignalSeqInfo['motifType'], SignalSeqInfo['seqWithSignal'], confMap);
+
+		# Get no signal sequences to embed the kmers into.
 		SeqDict = NoSignal.CreateNoSignalDict(confMap);
 
 		# Embed motif into the sequences.
 		SeqDict = EmbedMotif(SeqDict, kmerList, SignalSeqInfo['seqWithSignal'], SignalSeqInfo['locationFromStart']);
 
+		# Create No signal Sequences
 		NegSeqDict = NoSignal.CreateNoSignalDict(confMap);
-
-		NoSignalOutFileName = confMap["sequence"]["nosignal"]["outNoSignalFastaFile"]
 		MotifOutFileName = confMap["sequence"]["signal"]["outSignalFile"]
+
 		# Write sequences to file.
 		SeqGenUtils.WriteSeqDictToFile(SeqDict, MotifOutFileName);
-		SeqGenUtils.WriteSeqDictToFile(NegSeqDict, NoSignalOutFileName);
 
 if __name__ == "__main__":
 	import sys

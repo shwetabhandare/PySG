@@ -5,7 +5,8 @@ from Kmer import *
 import sys;
 
 directory = sys.argv[1]
-CreateConfFiles(directory, 'shuffle');
+#CreateConfFiles(directory, 'shuffle');
+CreateConfFiles(directory, 'dirichlet');
 
 
 for confFile in findFiles(directory, '*.yml'):

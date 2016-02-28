@@ -87,7 +87,7 @@ def CreateNoSignalDict(confMap):
 	OutFileName = SeqGenUtils.GetNoSignalOutFileName(confMap);
 	NegativeFileName = SeqInfo['inputName'];
 
-	print SeqInfo, OutFileName
+	#print SeqInfo, OutFileName
 
 	if NegativeFileName != "":
 		NegSeqDict = GenerateNoSignalSequences(NegativeFileName, SeqInfo['numSeq'], 

@@ -39,7 +39,7 @@ def Make_PWM_Motif(filename, motifBackGround=""):
 	
 	#print "Building motif:", name
 	m = MotifTools.toDict(pwm)
-	print "Motif BackGround: ", motifBackGround
+	#print "Motif BackGround: ", motifBackGround
 	if motifBackGround != "":
 		motif = MotifTools.Motif_from_counts(m, bg=motifBackGround)
 	else:

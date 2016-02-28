@@ -6,9 +6,9 @@ from os import path
 #numSeq = [1000, 2000, 3000, 4000, 5000]
 #seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
 alpha = [10, 100, 1000]
-numSeq = [100, 200, 300]
-seqLen = [200, 300, 400]
-seqWithSignalPercent = [10, 75, 90]
+numSeq = [100, 200]
+seqLen = [200, 300]
+seqWithSignalPercent = [90]
 pwmFileDirectory = "/projects/bhandare/workspace/PySG/data/pwm"
 utrDist = dict(
 	seqBackGround = dict(
@@ -93,7 +93,6 @@ def getPwmFiles(pwmDir):
 	for f in os.listdir(pwmDir):
 		if f.lower().endswith(('.pwm')):
 			pwmFiles.append(f)
-	print pwmFiles;
 	return pwmFiles;
 
 def GenerateNoSignalWithDirichlet(location):
@@ -102,9 +101,8 @@ def GenerateNoSignalWithDirichlet(location):
 		for numSeqLenIdx, j in enumerate(seqLen):
 			for a in alpha:
 				for signalPercent in seqWithSignalPercent:
-					print signalPercent
 					for pwmFile in pwmFiles:
-						fileId = str(i) + "_" + str(j) + "_" + str(signalPercent) + "_" + str(alpha) + pwmFile;
+						fileId = str(i) + "_" + str(j) + "_" + str(signalPercent) + "_" + str(a) + "_" + pwmFile;
 						yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile, fileId);
 						noSignalDict = getNoSignalDictWithAlpha(location, i, j, a, fileId);
 						writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
