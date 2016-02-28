@@ -27,7 +27,7 @@ def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
 
 	for i in range(numSeqsWithSignal):
 		if generateKmer:
-			kmerToEmbed = motif.random_kmer();
+			kmerToEmbed = motif.emit();
 
 		print "Appending kmer: ", kmerToEmbed;
 		kmers.append(kmerToEmbed);
