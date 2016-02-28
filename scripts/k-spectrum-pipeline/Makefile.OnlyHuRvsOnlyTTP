@@ -1,0 +1,57 @@
+DATA_DIR=../../data/HuR_TTP/faFromBed/
+PROJECTS_DIR=/projects/bhandare
+
+POS_FILE_NAME=Only_HuR_Clusters.fa
+NEG_FILE_NAME=Only_TTP_Clusters.fa
+
+POS_FILE=$(DATA_DIR)/$(POS_FILE_NAME)
+NEG_FILE=$(DATA_DIR)/$(NEG_FILE_NAME)
+
+CONF_PREFIX=OnlyHuRVsOnlyTTP
+CONF_YML=$(CONF_PREFIX).yml
+RESULT_YML=$(CONF_PREFIX)_Results.yml
+
+
+FEATURES_FILE=$(CONF_PREFIX)_Features.dat
+TOP_KMERS_FILE=$(CONF_PREFIX)_Features_TopKmers.dat
+
+
+BASIC_KSPECTRUM_SCRIPT=$(PROJECTS_DIR)/workspace/kernels/k-spectrum/scripts/basic_kspectrum.py
+CREATE_CONF_SCRIPT=/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline/CreateConfFile.py
+
+RESULT_DIR=`date +'%d-%b-%Y'`
+
+all: step0 step1 step2 step3 step4 step5
+.PHONY: all
+
+step0:
+	@echo "**** STEP 0: CONVERT TO UPPER ****"
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(POS_FILE)
+	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
+
+step1: $(POS_FILE) $(NEG_FILE) seq_counter.py 
+	python seq_counter.py $(POS_FILE) $(NEG_FILE)
+
+step2:
+	$(eval COMBINED_FILE_NAME := $(shell ls *.txt))
+	@echo "*** COMBINED FILE: ***: $(COMBINED_FILE_NAME)"
+	python $(CREATE_CONF_SCRIPT) $(COMBINED_FILE_NAME) $(CONF_PREFIX) $(CONF_YML)
+
+step3:
+	python $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
+
+step4:
+	python GenerateFlankingRegions.py $(POS_FILE) $(NEG_FILE) $(FEATURES_FILE) $(TOP_KMERS_FILE)
+
+step5:
+	mkdir -p $(RESULT_DIR)
+	mv $(COMBINED_FILE_NAME) $(RESULT_DIR)
+	mv $(FEATURES_FILE) $(TOP_KMERS_FILE) $(RESULT_DIR)
+	mv $(CONF_YML) $(RESULT_DIR)
+	mv $(RESULT_YML) $(RESULT_DIR)
+	git add $(RESULT_DIR)
+	git add $(RESULT_DIR)/*
+	git commit -m "Adding results for Only HuR vs OnlyTTP"
+	git push origin
+
+
