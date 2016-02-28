@@ -1,0 +1,34 @@
+# DREME 4.9.0
+# command:   dreme -p SignalMotif.fa -n NoSignal.fa -oc Test
+# host:      login01.rc.colorado.edu
+# when:      Wed Feb 10 20:49:53 MST 2016
+# positives: 100
+#      from: SignalMotif.fa (Wed Feb 10 20:48:50 MST 2016)
+# negatives: 100
+#      from: NoSignal.fa (Wed Feb 10 20:48:50 MST 2016)
+
+
+MEME version 4.9.0
+
+ALPHABET= ACGT
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.262 C 0.218 G 0.237 T 0.282
+
+MOTIF AGCAGC
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST      AGCAGC     GCTGCT        100          4   5.1e-053   8.0e-049
+#           AGCAGC     GCTGCT        100          4   5.1e-053   8.0e-049
+
+letter-probability matrix: alength= 4 w= 6 nsites= 103 E= 8.0e-049
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000 0.000000
+
+

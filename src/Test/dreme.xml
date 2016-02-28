@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<!DOCTYPE dreme[
+<!ELEMENT dreme (model, motifs, run_time)>
+<!ATTLIST dreme version CDATA #REQUIRED release CDATA #REQUIRED>
+<!ELEMENT model 
+  (command_line, positives, negatives, background, stop, norc, ngen, add_pv_thresh, 
+  seed, host, when, description?)>
+<!ELEMENT command_line (#PCDATA)>
+<!ELEMENT positives EMPTY>
+<!ATTLIST positives 
+  name CDATA #REQUIRED count CDATA #REQUIRED file CDATA #REQUIRED 
+  last_mod_date CDATA #REQUIRED>
+<!--  
+  negatives must have a file and last_mod_date specified when the from
+  attribute is file.
+-->
+<!ELEMENT negatives EMPTY>
+<!ATTLIST negatives 
+  name CDATA #REQUIRED count CDATA #REQUIRED from (shuffled|file) #REQUIRED
+  file CDATA #IMPLIED last_mod_date CDATA #IMPLIED>
+<!-- 
+  background allows DNA and RNA (AA is not going to be supported with DREME) 
+  however currently only DNA is implemented. Note that when type is dna the
+  value for T must be supplied and when the type is rna the value for U must
+  be supplied. The sum of the frequencies must be 1 (with a small error).
+-->
+<!ELEMENT background EMPTY>
+<!ATTLIST background 
+  type (dna|rna) #REQUIRED
+  A CDATA #REQUIRED C CDATA #REQUIRED G CDATA #REQUIRED 
+  T CDATA #IMPLIED U CDATA #IMPLIED 
+  from (dataset|file) #REQUIRED 
+  file CDATA #IMPLIED last_mod_date CDATA #IMPLIED>
+<!ELEMENT stop EMPTY>
+<!ATTLIST stop 
+  evalue CDATA #IMPLIED count CDATA #IMPLIED time CDATA #IMPLIED>
+<!ELEMENT norc (#PCDATA)>
+<!ELEMENT ngen (#PCDATA)>
+<!ELEMENT seed (#PCDATA)>
+<!ELEMENT add_pv_thresh (#PCDATA)>
+<!ELEMENT host (#PCDATA)>
+<!ELEMENT when (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT motifs (motif+)>
+<!ELEMENT motif (pos+, match+)>
+<!ATTLIST motif
+  id CDATA #REQUIRED seq CDATA #REQUIRED length CDATA #REQUIRED 
+  nsites CDATA #REQUIRED p CDATA #REQUIRED n CDATA #REQUIRED
+  pvalue CDATA #REQUIRED evalue CDATA #REQUIRED unerased_evalue CDATA #REQUIRED>
+<!--
+  pos allows DNA and RNA (AA is not going to be supported with DREME)
+  however current only DNA is implemented. When the type in the background
+  is 'dna' pos must have a T attribute and when it is 'rna' pos must have a
+  U attribute
+-->
+<!ELEMENT pos EMPTY>
+<!ATTLIST pos
+  i CDATA #REQUIRED A CDATA #REQUIRED C CDATA #REQUIRED G CDATA #REQUIRED 
+  T CDATA #IMPLIED U CDATA #IMPLIED>
+<!ELEMENT match EMPTY>
+<!ATTLIST match
+  seq CDATA #REQUIRED p CDATA #REQUIRED n CDATA #REQUIRED 
+  pvalue CDATA #REQUIRED evalue CDATA #REQUIRED>
+<!ELEMENT run_time EMPTY>
+<!ATTLIST run_time
+  cpu CDATA #REQUIRED real CDATA #REQUIRED stop (evalue|count|time) #REQUIRED>
+]>
+<dreme version="4.9.0" release="Wed Oct  3 11:07:26 EST 2012">
+  <model>
+    <command_line>dreme -p SignalMotif.fa -n NoSignal.fa -oc Test</command_line>
+    <positives name="SignalMotif" count="100" file="SignalMotif.fa" last_mod_date="Wed Feb 10 20:48:50 MST 2016" />
+    <negatives name="NoSignal" count="100" from="file" file="NoSignal.fa" last_mod_date="Wed Feb 10 20:48:50 MST 2016" />
+    <background type="dna" A="0.262" C="0.218" G="0.237" T="0.282" from="dataset"/>
+    <stop evalue="0.05"/>
+    <norc>FALSE</norc>
+    <ngen>100</ngen>
+    <add_pv_thresh>0.01</add_pv_thresh>
+    <seed>1</seed>
+    <host>login01.rc.colorado.edu</host>
+    <when>Thu Feb 11 05:49:01 MST 2016</when>
+  </model>
+  <motifs>
+    <motif id="m01" seq="AGCAGC" length="6" nsites="103" p="100" n="4" pvalue="5.1e-053" evalue="8.0e-049" unerased_evalue="8.0e-049">
+      <pos i="1" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="2" A="0.000000" C="0.000000" G="1.000000" T="0.000000"/>
+      <pos i="3" A="0.000000" C="1.000000" G="0.000000" T="0.000000"/>
+      <pos i="4" A="1.000000" C="0.000000" G="0.000000" T="0.000000"/>
+      <pos i="5" A="0.000000" C="0.000000" G="1.000000" T="0.000000"/>
+      <pos i="6" A="0.000000" C="1.000000" G="0.000000" T="0.000000"/>
+      <match seq="AGCAGC" p="100" n="4" pvalue="5.1e-053" evalue="8.0e-049"/>
+    </motif>
