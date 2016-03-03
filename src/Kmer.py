@@ -37,6 +37,8 @@ def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
 def EmbedMotif(SeqDict, kmerList, numSeqsWithSignal, locationFromStart):
 	generateKmer = False;
 	motifBackGround = ""
+	embeddedKmerDict = dict();
+
 	#print "Num Sequences with Signal", str(numSeqsWithSignal)
 	keysToReplace = random.sample(SeqDict, numSeqsWithSignal)
 	#print len(keysToReplace)
@@ -50,7 +52,8 @@ def EmbedMotif(SeqDict, kmerList, numSeqsWithSignal, locationFromStart):
 			locationFromStart = locationFromStart - shiftStart
 		newValue = value[:locationFromStart] + kmerToEmbed + value[endIndex:]
 		SeqDict[key] = newValue;
-	return SeqDict;
+		embeddedKmerDict[key] = [kmerToEmbed, locationFromStart]
+	return SeqDict, embeddedKmerDict;
 
 
 def PrintConfMap(confMap):
@@ -94,10 +97,14 @@ def GetSignalSeqInfo(confMap, SeqLength):
 		SignalSeqInfo['seqWithSignal'] = numSeqsWithSignal;
 	return SignalSeqInfo;
 
-def WriteKmersToFile(KmerList, OutputFileName):
+def WriteKmersToFile(embeddedKmerDict, OutputFileName):
 	OutputFile = open(OutputFileName , "w")
-	for kmer in KmerList:
-  		OutputFile.write(kmer);
+	for key, value in embeddedKmerDict.iteritems():
+  		OutputFile.write(key);
+  		OutputFile.write(",");
+  		OutputFile.write(value[0]);
+  		OutputFile.write(",");
+  		OutputFile.write(str(value[1]));
 		OutputFile.write("\n")
 	OutputFile.close()
 
@@ -116,14 +123,14 @@ def CreateFastaWithSignal(configFile):
 		SeqDict = NoSignal.CreateNoSignalDict(confMap);
 
 		# Embed motif into the sequences.
-		SeqDict = EmbedMotif(SeqDict, kmerList, SignalSeqInfo['seqWithSignal'], SignalSeqInfo['locationFromStart']);
+		SeqDict, embeddedKmerDict = EmbedMotif(SeqDict, kmerList, SignalSeqInfo['seqWithSignal'], SignalSeqInfo['locationFromStart']);
 
 		# Create No signal Sequences
 		NegSeqDict = NoSignal.CreateNoSignalDict(confMap);
 		MotifOutFileName = confMap["sequence"]["signal"]["outSignalFile"]
 
 		KmersFileName = os.path.splitext(MotifOutFileName)[0] + ".kmers"
-		WriteKmersToFile(kmerList, KmersFileName);
+		WriteKmersToFile(embeddedKmerDict, KmersFileName);
 
 		# Write sequences to file.
 		SeqGenUtils.WriteSeqDictToFile(SeqDict, MotifOutFileName);
