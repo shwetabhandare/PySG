@@ -8,14 +8,14 @@ def read_file(dreme_file):
 
 def findKmers(file_contents):
 	kmerDict = dict();
-	pattern2 = re.compile('#\s+([ATGC]+)\s+([ATGC]+)\s+(\d+)\s+(\d+)')
+	pattern2 = re.compile('(\d+\.\d+)\,([ATGC]+)')
 	for match2 in pattern2.finditer(file_contents):
-		kmer = match2.group(1);
-		kmer_rc = match2.group(2);
-		kmer_pos_count = match2.group(3);
-		kmer_neg_count = match2.group(4);
-		#print "%s:%s:%s:%s" %(match2.group(1), match2.group(2), match2.group(3), match2.group(4))
-		kmerDict[kmer] = [kmer_rc, kmer_pos_count, kmer_neg_count];
+		kmer_score = match2.group(1);
+		kmer = match2.group(2);
+		if float(kmer_score) >= 1.0:
+			#print "%s:%s" %(match2.group(1), match2.group(2))
+			kmerDict[kmer] = kmer_score;
+
 	return kmerDict;
 
 def FindDremeKmers(dremeResultFile):
