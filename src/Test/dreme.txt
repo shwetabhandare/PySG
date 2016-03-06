@@ -21,7 +21,8 @@ MOTIF AGCAGC
 
 #             Word    RC Word        Pos        Neg    P-value    E-value
 # BEST      AGCAGC     GCTGCT        100          4   5.1e-053   8.0e-049
-#           AGCAGC     GCTGCT        100          4   5.1e-053   8.0e-049
+#           AGTACC     GCTGCT        100          4   5.1e-053   8.0e-049
+#           GCTGCT     GCTGCT        100          4   5.1e-053   8.0e-049
 
 letter-probability matrix: alength= 4 w= 6 nsites= 103 E= 8.0e-049
 1.000000 0.000000 0.000000 0.000000
