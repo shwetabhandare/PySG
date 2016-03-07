@@ -8,7 +8,7 @@ def read_file(dreme_file):
 
 def findKmers(file_contents):
 	kmerDict = dict();
-	pattern2 = re.compile('#\s+([ATGC]+)\s+([ATGC]+)\s+(\d+)\s+(\d+)')
+	pattern2 = re.compile('#\s(?:BEST\s+|\s+)([ATGC]+)\s+([ATGC]+)\s+(\d+)\s+(\d+)')
 	for match2 in pattern2.finditer(file_contents):
 		kmer = match2.group(1);
 		kmer_rc = match2.group(2);
@@ -26,4 +26,4 @@ if __name__ == "__main__":
 	import sys
 	kmerDict = FindDremeKmers(sys.argv[1]);
 	#for key, value in kmerDict.iteritems():
-		#print key, value
+	#	print key, value
