@@ -5,6 +5,6 @@ sequence:
       outNoSignalFastaFile: "output/NoSignal.fa"
       numSeq: 100
    signal:
-      kmer: "GCTGCT"
+      pwmFile:/projects/bhandare/workspace/PySG/data/pwm/Gal4.pwm
       outSignalFile: "output/SignalMotif.fa"
       seqWithSignal: 100

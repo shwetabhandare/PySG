@@ -11,12 +11,10 @@ seqLen = [200, 300]
 seqWithSignalPercent = [90]
 pwmFileDirectory = "/projects/bhandare/workspace/PySG/data/pwm"
 utrDist = dict(
-	seqBackGround = dict(
-		A = 0.27,
-		T = 0.22,
-		G = 0.21,
-		C = 0.30,
-	)
+	A = 0.27,
+	T = 0.22,
+	G = 0.21,
+	C = 0.30,
 )
 
 # generate A, T, G, C using s = np.random.dirichlet((0.1,0.1,0.1,0.1),1)
@@ -39,6 +37,7 @@ utrDist = dict(
 # Feed hur_tp, ttp_tp to the sequence generator for A, T, G, C percents.
 # when gamma is large, the ATGC percentages will be similar, and when its smaller they will differ more.
 # here gammma = 100.
+
 
 
 def getNoSignalDictWithAlpha(location, numberSeq, seqLength, alphaValue, fileId):
@@ -78,15 +77,21 @@ def getMotifDict(location, numberSeq, seqLength, signalSeq, pwmFileName, fileId)
 	return yamlFileName, data;
 
 def writeYamlFile(location, yamlFileName, noSignalDict, motifDict):
+	from yaml.representer import Representer
+	import collections;
+	import sys
+	yaml.add_representer(collections.defaultdict, Representer.represent_dict)
 	data = dict(
 		sequence = dict(
-				nosignal = noSignalDict,
-				signal = motifDict,
+			nosignal = noSignalDict,
+			signal = motifDict,
 		)
 	)
+	noalias_dumper = yaml.dumper.SafeDumper
+	noalias_dumper.ignore_aliases = lambda self, data: True
 
 	with open(location + "/" + yamlFileName, 'w') as outfile:
-		 outfile.write( yaml.dump(data, default_flow_style=True) )
+		 outfile.write(yaml.dump(data, default_flow_style=False, Dumper=noalias_dumper))
 
 def getPwmFiles(pwmDir):
 	pwmFiles = [];
