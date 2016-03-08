@@ -3,6 +3,8 @@ from SeqGenUtils import *;
 from NoSignal import *
 from Kmer import *
 import sys;
+import glob, os
+import subprocess
 
 directory = sys.argv[1]
 #CreateConfFiles(directory, 'shuffle');
@@ -15,6 +17,12 @@ for confFile in findFiles(directory, '*.yml'):
 	CreateNoSignalFastaFile(confFile);
 	CreateFastaWithSignal(confFile)
 
+os.chdir(directory)
+for signalFile in glob.glob("Signal*"):
+	dremeDir = signalFile + "_DremeOut"
+	noSignalFile = "No" + signalFile;
+	print "Calling DREME for ", signalFile, ", ", noSignalFile;
+	subprocess.call(["dreme", "-p", signalFile, "-n", noSignalFile, "-oc", dremeDir])
 
 #	seqGen = SeqGen(conf);
 #	filename = os.path.splitext(os.path.basename(confFile))[0]
