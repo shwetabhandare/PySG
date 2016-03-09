@@ -3,12 +3,20 @@ import yaml
 import os, fnmatch
 from numpy import *
 import numpy as np
+import fasta
 
 np.set_printoptions(precision=2)
 
 def weightedchoice(items): # this doesn't require the numbers to add up to 100
 	return choice("".join(x * y for x, y in items))
 
+
+def fasta_read(file_name):
+   """read the sequence from a file in fasta format"""
+   seq_dict = dict()
+   for record in fasta.fasta_itr(file_name):
+      seq_dict[record.header] = record.sequence;
+   return seq_dict;
 
 def GetConf(configFile):
 	f = open(configFile);
