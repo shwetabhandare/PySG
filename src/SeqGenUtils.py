@@ -64,7 +64,7 @@ def GetDirichletDistribution(seqBackGroundDict, scaleFactor, NumSeqsToGenerate):
 	return s;
 
 def GenerateNoSignalFromDirichlet(seqDistDirichletList, seqBackGroundDict,
-	SeqLength):
+	SeqLength, signalFlag):
 	seq = ""
 	keys = []
 	for key, value in seqBackGroundDict.iteritems():
@@ -80,7 +80,10 @@ def GenerateNoSignalFromDirichlet(seqDistDirichletList, seqBackGroundDict,
 		seq = ""
 		for count in range(SeqLength):
 			seq += GetRandomNucleotide(b)
-		key = "NoSignal_" + str(seqNum);
+		if signalFlag == False:
+			key = "NoSignal_" + str(seqNum);
+		else:
+			key = "Signal_" + str(seqNum);
 		NegSeqDict[key] = seq;
 
 	sorted(NegSeqDict, key=lambda key: NegSeqDict[key])

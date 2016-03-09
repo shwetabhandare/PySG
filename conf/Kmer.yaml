@@ -1,10 +1,21 @@
 sequence:
-   nosignal:
-      seqLen: 100
-      fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
-      outNoSignalFastaFile: "output/NoSignal.fa"
-      numSeq: 100
-   signal:
-      pwmFile:/projects/bhandare/workspace/PySG/data/pwm/Gal4.pwm
-      outSignalFile: "output/SignalMotif.fa"
-      seqWithSignal: 100
+  nosignal:
+    alpha: 1000
+    numSeq: 20
+    outNoSignalFastaFile: /projects/bhandare/workspace/PySG/conf/NoSignal.fa
+    seqBackGround:
+      A: 0.27
+      C: 0.3
+      G: 0.21
+      T: 0.22
+    seqLen: 100
+  signal:
+    locationFromStart: 10
+    outSignalFile: /projects/bhandare/workspace/PySG/conf/Signal.fa
+    pwmFile: /projects/bhandare/workspace/PySG/data/pwm/Gal4.pwm
+    seqBackGround:
+      A: 0.27
+      C: 0.3
+      G: 0.21
+      T: 0.22
+    seqWithSignal: 20

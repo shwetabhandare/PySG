@@ -120,13 +120,11 @@ def CreateFastaWithSignal(configFile):
 		kmerList = GetKmersToEmbed(SignalSeqInfo['motifType'], SignalSeqInfo['seqWithSignal'], confMap);
 
 		# Get no signal sequences to embed the kmers into.
-		SeqDict = NoSignal.CreateNoSignalDict(confMap);
+		SeqDict = NoSignal.CreateNoSignalDict(confMap, True);
 
 		# Embed motif into the sequences.
 		SeqDict, embeddedKmerDict = EmbedMotif(SeqDict, kmerList, SignalSeqInfo['seqWithSignal'], SignalSeqInfo['locationFromStart']);
 
-		# Create No signal Sequences
-		NegSeqDict = NoSignal.CreateNoSignalDict(confMap);
 		MotifOutFileName = confMap["sequence"]["signal"]["outSignalFile"]
 
 		KmersFileName = os.path.splitext(MotifOutFileName)[0] + ".kmers"
