@@ -8,12 +8,7 @@ def GetRealKmerDict(realKmersCsvFile):
 			seq_id = row[0]
 			kmer = row[1]
 			location = row[2]
-			if kmer in realKmersDict.keys():
-				#print kmer, ": Appending ", seq_id , " at location: ", location;
-				realKmersDict[kmer][0].append(seq_id)
-				realKmersDict[kmer][1].append(location)
-			else:
-				realKmersDict[kmer] = [[seq_id], [location]];
+			realKmersDict[seq_id] = [kmer, location];
 	return realKmersDict;
 
 if __name__ == "__main__":

@@ -17,13 +17,38 @@ def compareKmers(realKmerDict, predictedKmerDict, posFile, negFile):
 	PosSeqDict = SeqGenUtils.fasta_read(posFile);
 	NegSeqDict = SeqGenUtils.fasta_read(negFile);
 
-	for key, value in realKmerDict.iteritems():
-		print key, value
-
 	for seqid, seq in PosSeqDict.iteritems():
+		numTN = 0;
+		numTP = 0;
+		numFP = 0;
+		realStart = int(realKmerDict[seqid][1])
+		realEnd = int(realKmerDict[seqid][1]) + len(realKmerDict[seqid][0])
 		for predKmer, value in predictedKmerDict.iteritems():
+			realKmerIndex = 0;
 			for m in re.finditer(predKmer, seq):
-				print "Found ", predKmer, " at: ", m.start(), m.end(), ", seq id: ", seqid;
+				print "Seq ID: ", seqid, ", : ", predKmer, " at: ", m.start(), m.end(), ", real kmer at: ", realStart, ", ", realEnd
+				if m.start() > realStart:
+					startIndex = realStart;
+					numTN = m.start() - realStart;
+				else:
+					startIndex = m.start();
+					numTP = m.start() - startIndex;
+
+				if m.end() < realEnd:
+					endIndex = m.end()
+				else:
+					endIndex = realEnd;
+
+				# Now go through the predicted kmer, and compare with real kmer
+				predKmerIndex = 0;
+				for index in startIndex, endIndex:
+					if seq[index] == predKmer[predKmerIndex]:
+						numTP = numTP + 1;
+					else:
+						numFP = numFP + 1;
+					predKmerIndex = predKmerIndex + 1;
+
+				realStart = endIndex;
 
 def aho():
 	# search N words from dict
