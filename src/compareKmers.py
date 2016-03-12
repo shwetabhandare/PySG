@@ -34,8 +34,14 @@ def compareKmers(realKmerDict, predictedKmerDict, posFile, negFile):
 				print "Predicted Start: ", str(predictedStart), ", End: ", str(predictedEnd)
 
 				if predictedStart > realStart:
-					startIndex = predictedStart;
-					numFN = predictedStart - realStart;
+					if predictedStart > realEnd:
+						numFP = numFP + len(predKmer)
+						#There is no k-mer to compare, so we set startIndex to realEnd
+						# so that we never compare the k-mer.
+						startIndex = realEnd;
+					else:
+						startIndex = predictedStart;
+						numFN = predictedStart - realStart;
 				else:
 					#Predicted k-mer starts before the real k-mer.
 					if predictedEnd < realStart:
