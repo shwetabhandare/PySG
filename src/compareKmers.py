@@ -16,34 +16,44 @@ def getReadKmerDict(realKmersCsvFile):
 def compareKmers(realKmerDict, predictedKmerDict, posFile, negFile):
 	PosSeqDict = SeqGenUtils.fasta_read(posFile);
 	NegSeqDict = SeqGenUtils.fasta_read(negFile);
-	numGN = 0;
+	numFN = 0;
 	numTP = 0;
 	numFP = 0;
 	for seqid, seq in PosSeqDict.iteritems():
 
 		realStart = int(realKmerDict[seqid][1])
 		realEnd = int(realKmerDict[seqid][1]) + len(realKmerDict[seqid][0])
-		print "SeqID: ", seqid, ", Real Start:", str(realStart), ", Real End: ", str(realEnd)
+		print "***** SeqID: ", seqid, ", KMER" , realKmerDict[seqid][0],  ", Real Start:", str(realStart), ", Real End: ", str(realEnd)
 		for predKmer, value in predictedKmerDict.iteritems():
+			print "Predicted KMER: ", predKmer
+			predictedStart = predictedEnd = 0;
 			for m in re.finditer(predKmer, seq):
 				predictedStart = int(m.start())
 				predictedEnd = int(m.end())
-				print "Predicted Kmer: ", predKmer, ", Start: ", str(predictedStart), ", End: ", str(predictedEnd)
+
+				print "Predicted Start: ", str(predictedStart), ", End: ", str(predictedEnd)
 
 				if predictedStart > realStart:
 					startIndex = predictedStart;
 					numFN = predictedStart - realStart;
 				else:
-					startIndex = realStart;
-					numFP = predictedStart - realStart;
+					#Predicted k-mer starts before the real k-mer.
+					if predictedEnd < realStart:
+						#Predicted k-mer ends before the real k-mer starts
+						startIndex = predictedEnd;
+						numFP = numFP + len(predKmer)
+					else:
+						#Predicted k-mer ends after the real-kmer starts.
+						startIndex = realStart;
+						numFP = numFP + (realStart - predictedStart);
+
 
 				if predictedEnd < realEnd:
 					endIndex = predictedEnd
 				else:
 					endIndex = realEnd;
 
-				print "Based on Start Location: FP: " , str(numFP), ", FN: ", str(numFN)
-
+				print "Based on Start Location: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
 				# Now go through the predicted kmer, and compare with real kmer
 				predKmerIndex = 0;
 				print "Start Index: ", str(startIndex), ", End Index: ", str(endIndex)
@@ -56,12 +66,24 @@ def compareKmers(realKmerDict, predictedKmerDict, posFile, negFile):
 					predKmerIndex = predKmerIndex + 1;
 				print "After KMER: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
 
-				realStart = endIndex;
+				if endIndex > realStart:
+					realStart = endIndex;
+
+			if predictedStart == 0 and predictedEnd == 0:
+				# We did not find the predicted k-mer in the sequence.
+				numFP = numFP + len(predKmer)
+				print "NOT FOUND KMER: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
 			#Handle the case where we have nucleotides left after going 
 			#through the predicted k-mers.	
 		if realStart < realEnd:
 			numFN = numFN + (realEnd - realStart)
-		print "End of Kmer: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
+			print "REST OF KMER: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
+
+		if realEnd < predictedEnd:
+			numFP = numFP + (predictedEnd - realEnd)
+			print "REST OF PREDICTED KMER: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
+
+		print "End of KMER: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
 
 def aho():
 	# search N words from dict
