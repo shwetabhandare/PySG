@@ -18,7 +18,7 @@ def findKmers(file_contents):
 		kmerDict[kmer] = [kmer_rc, kmer_pos_count, kmer_neg_count];
 	return kmerDict;
 
-def FindDremeMotifs(file_contents):
+def getPredictedDremeMotifs(file_contents):
 	motifs = []
 	pattern = re.compile(r"MOTIF\s+([ACGTURYSWKMBDHVN]+)")
 	for match in pattern.finditer(str([file_contents])):

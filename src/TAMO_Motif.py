@@ -3,6 +3,10 @@ import TAMO
 from   TAMO		import MotifTools
 from   TAMO.seq import Fasta
 
+def GetKmerForSeq(motifText, seq):
+	motif = MotifTools.Motif_from_text(motifText);
+	return motif.bestscanseq(seq);
+
 def Read_Dreme_PSSM(filename):
 	pwm = []
 	f = open(filename)
