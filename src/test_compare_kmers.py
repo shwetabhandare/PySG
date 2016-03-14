@@ -172,7 +172,13 @@ class TestCompareKmers(unittest.TestCase):
 		self.assertEqual(numTP, len(predKmer) - 3)
 		self.assertEqual(numFP, 3)		
 
-	def test_getNumbersForSeq(self):
+	def test_kmerREString(self):
+		seq = "GGAACCGCGTTCGGGGGGGGGGGGGCCGAACCCTTCCAGCATTGAGCTCCTGCCGCTAGCTTATGCGGCCTCCCATCCAGTCGGCCGAGACGCACGACTT"
+		predictedMotifs = ['MCCCGA', 'AAAAAA']
+		kmerReString = compareKmers.getKmerRE(predictedMotifs, seq)
+		self.assertEqual(kmerReString, '(TCGGGG|CTTATG)')
+
+	def test_getNumbersForSeqOneKmer(self):
 		seq = "GGAACCGCXXXXXXGGGGGCGACXXXXXXGGGCATTGAGCTC"
 		predKmer = "XXXXXX"
 
@@ -180,5 +186,25 @@ class TestCompareKmers(unittest.TestCase):
 		realEnd = 44
 		realKmer = "CCGCXXXXXXGGGGGCGACXXXXXXGGGCAT"
 
-		numTP, numFP, numFN = compareKmers.getNumbersForSeq(realKmer, realStart, realEnd, predKmer, seq);
+		kmerREString = "(XXXXXX)"
 
+		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realKmer, realStart, realEnd, seq);
+		self.assertEqual(numTP, 12)
+		self.assertEqual(numFP, 0)
+		self.assertEqual(numFN, 28)
+
+
+	def test_getNumbersForSeqOneKmer(self):
+		seq = "GGAACCGCXXXXXXGGGGGCGACYYYYYYGGGCATTGAGCTC"
+		predKmer = "XXXXXX"
+
+		realStart = 4;
+		realEnd = 44
+		realKmer = "CCGCXXXXXXGGGGGCGACYYYYYYGGGCAT"
+
+		kmerREString = "(XXXXXX|YYYYYY)"
+
+		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realKmer, realStart, realEnd, seq);
+		self.assertEqual(numTP, 12)
+		self.assertEqual(numFP, 0)
+		self.assertEqual(numFN, 28)

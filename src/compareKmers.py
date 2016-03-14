@@ -71,16 +71,18 @@ def getNumbersAfterAllKmers(realStart, realEnd, predictedStart, predictedEnd):
 
 	return numFP, numFN;
 
-def getNumbersForSeq(realKmer, realStart, realEnd, predKmer, seq):
+def getNumbersForSeq(kmerREString, realKmer, realStart, realEnd, seq):
 	predictedStart = predictedEnd = 0;
 	notFoundFP = 0;
 	numTP = 0;
 	numFN = 0;
 	numFP = 0;
 
-	for m in re.finditer(predKmer, seq):
+	for m in re.finditer(kmerREString, seq):
+
 		predictedStart = int(m.start())
 		predictedEnd = int(m.end())
+		predKmer = m.group(1)
 
 		print "Predicted Start: ", str(predictedStart), ", End: ", str(predictedEnd)
 		startIndex, startFP, startFN = getStartIndexAndUpdateNumbers(predictedStart, predictedEnd, realStart, realEnd, predKmer);
@@ -124,6 +126,17 @@ def getEndIndex(predictedEnd, realEnd):
 def getRealKmerDetails(realKmerDict, seqid):
 	return realKmerDict[seqid][0], int(realKmerDict[seqid][1]), (int(realKmerDict[seqid][1]) + len(realKmerDict[seqid][0]))
 
+def getKmerRE(predictedMotifs, seq):
+	kmerReToSearchFor = "("
+	for motif in predictedMotifs:
+		bestSeqKmerTuple = TAMO_Motif.GetKmerForSeq(motif, seq)
+		kmer = bestSeqKmerTuple[1]
+		kmerReToSearchFor = kmerReToSearchFor + kmer
+		kmerReToSearchFor = kmerReToSearchFor + '|'
+	kmerReToSearchFor = kmerReToSearchFor[:-1]
+	kmerReToSearchFor = kmerReToSearchFor + ")"
+	return kmerReToSearchFor;
+
 def findKmerInSeq(realKmerDict, predictedMotifs, posFile, negFile):
 	PosSeqDict = SeqGenUtils.fasta_read(posFile);
 	NegSeqDict = SeqGenUtils.fasta_read(negFile);
@@ -132,9 +145,9 @@ def findKmerInSeq(realKmerDict, predictedMotifs, posFile, negFile):
 	numFP = 0;
 	for seqid, seq in PosSeqDict.iteritems():
 		realKmer, realStart, realEnd = getRealKmerDetails(realKmerDict, seqid);
-		for motif in predictedMotifs:
-			kmer = TAMO_Motif.GetKmerForSeq(motif, seq)
-			numTP, numFP, numFN = getNumbersForSeq(realKmer, realStart, realEnd, kmer, seq);
+		kmerREString = getKmerRE(predictedMotifs, seq)
+		print "Kmer RE String:", kmerREString
+		numTP, numFP, numFN = getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 			
 		print "End of KMER: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
 		
