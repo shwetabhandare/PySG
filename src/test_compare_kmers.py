@@ -171,3 +171,14 @@ class TestCompareKmers(unittest.TestCase):
 		numTP, numFP = compareKmers.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
 		self.assertEqual(numTP, len(predKmer) - 3)
 		self.assertEqual(numFP, 3)		
+
+	def test_getNumbersForSeq(self):
+		seq = "GGAACCGCXXXXXXGGGGGCGACXXXXXXGGGCATTGAGCTC"
+		predKmer = "XXXXXX"
+
+		realStart = 4;
+		realEnd = 44
+		realKmer = "CCGCXXXXXXGGGGGCGACXXXXXXGGGCAT"
+
+		numTP, numFP, numFN = compareKmers.getNumbersForSeq(realKmer, realStart, realEnd, predKmer, seq);
+

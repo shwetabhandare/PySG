@@ -48,7 +48,6 @@ def getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer):
 	predKmerIndex = 0;
 	print "Start Index: ", str(startIndex), ", End Index: ", str(endIndex)
 	for index in range(startIndex, endIndex):
-		print "Seq Index: ", seq[index], ", Pred index: ", predKmer[predKmerIndex]
 		if seq[index] == predKmer[predKmerIndex]:
 			numTP = numTP + 1;
 		else:
@@ -58,31 +57,59 @@ def getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer):
 
 	return numTP, numFP;
 
+def getNumbersAfterAllKmers(realStart, realEnd, predictedStart, predictedEnd):
+	numFN = 0;
+	numFP = 0;
+
+	if realStart < realEnd:
+		numFN = numFN + (realEnd - realStart)
+		print "REST OF KMER: FN: ", str(numFN)
+
+	if realEnd < predictedEnd:
+		numFP = numFP + (predictedEnd - realEnd)
+		print "REST OF PREDICTED KMER: FP: " , str(numFP)
+
+	return numFP, numFN;
+
 def getNumbersForSeq(realKmer, realStart, realEnd, predKmer, seq):
 	predictedStart = predictedEnd = 0;
 	notFoundFP = 0;
+	numTP = 0;
+	numFN = 0;
+	numFP = 0;
 
 	for m in re.finditer(predKmer, seq):
 		predictedStart = int(m.start())
 		predictedEnd = int(m.end())
 
-		startIndex, startFP, startFN = getStartIndexAndUpdateNumbers(predictedStart, predictedEnd, realStart, realEnd);
+		print "Predicted Start: ", str(predictedStart), ", End: ", str(predictedEnd)
+		startIndex, startFP, startFN = getStartIndexAndUpdateNumbers(predictedStart, predictedEnd, realStart, realEnd, predKmer);
+
+		numFN = numFN + startFN;
+		numFP = numFP + startFP;
+
+		print "Based on Start Location: FP: " , str(startFP), ", FN: ", str(startFN)
 		endIndex = getEndIndex(predictedEnd, realEnd)	
 	
-		print "Based on Start Location: TP: ", str(startTP), ", FP: " , str(startFP), ", FN: ", str(numFN)
 		kmerTP, kmerFP = getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		print "After Kmer comparison: TP: ", str(kmerTP), ", FP: ", str(kmerFP);
+		numTP = numTP + kmerTP
 		
 		# Update realStart Index after k-mer is parsed.
 		if endIndex > realStart:
 			realStart = endIndex;
 
+
+	# We did not find the predicted k-mer in the sequence.
 	if predictedStart == 0 and predictedEnd == 0:
-		# We did not find the predicted k-mer in the sequence.
 		notFoundFP = notFoundFP + len(predKmer)
 
-	numFP = 	startFP + kmerFP + notFoundFP
-	numTP = kmerTP
-	numFP = startFN
+	numFPAfterKmer, numFNAfterKmer = getNumbersAfterAllKmers(realStart, realEnd, predictedStart, predictedEnd)	
+
+	numFP = numFP + notFoundFP + numFPAfterKmer;
+	numFN = numFN + numFNAfterKmer;
+
+	print "Total numbers: TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
 
 	return numTP, numFP, numFN;
 
@@ -109,13 +136,6 @@ def findKmerInSeq(realKmerDict, predictedMotifs, posFile, negFile):
 			kmer = TAMO_Motif.GetKmerForSeq(motif, seq)
 			numTP, numFP, numFN = getNumbersForSeq(realKmer, realStart, realEnd, kmer, seq);
 			
-		if realStart < realEnd:
-			numFN = numFN + (realEnd - realStart)
-			print "REST OF KMER: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
-
-		if realEnd < predictedEnd:
-			numFP = numFP + (predictedEnd - realEnd)
-			print "REST OF PREDICTED KMER: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
 		print "End of KMER: TP: ", str(numTP), ", FP: " , str(numFP), ", FN: ", str(numFN)
 		
 			
