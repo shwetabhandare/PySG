@@ -200,7 +200,7 @@ class TestCompareKmers(unittest.TestCase):
 
 		realStart = 4;
 		realEnd = 44
-		realKmer = "CCGCXXXXXXGGGGGCGACYYYYYYGGGCAT"
+		realKmer = "CGCXXXXXXGGGGGCGACYYYYYYGGGCAT"
 
 		kmerREString = "(XXXXXX|YYYYYY)"
 
