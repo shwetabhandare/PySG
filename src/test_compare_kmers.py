@@ -11,7 +11,7 @@ class TestCompareKmers(unittest.TestCase):
 
 		startIndex, numFP, numFN = compareKmers.getStartIndexAndUpdateNumbers(predictedStart, 
 			predictedEnd, realStart, realEnd, predKmer)
-		self.assertEqual(startIndex, realEnd)
+		self.assertEqual(startIndex, realStart)
 		self.assertEqual(numFP, 5)
 		self.assertEqual(numFN, 0)
 
@@ -26,7 +26,7 @@ class TestCompareKmers(unittest.TestCase):
 			predictedEnd, realStart, realEnd, predKmer)
 		self.assertEqual(startIndex, realEnd)
 		self.assertEqual(numFP, 5)
-		self.assertEqual(numFN, 0)		
+		self.assertEqual(numFN, 5)		
 
 	def testPredictedStartBeforeRealStartButEndBeforeRealEnd(self):
 		predictedStart = 0;
@@ -184,7 +184,6 @@ class TestCompareKmers(unittest.TestCase):
 
 		realStart = 4;
 		realEnd = 44
-
 		kmerREString = "(XXXXXX)"
 
 		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
@@ -233,3 +232,6 @@ class TestCompareKmers(unittest.TestCase):
 
 		print "Running Signal-3 sequence"
 		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		self.assertEqual(numTP, 6)
+		self.assertEqual(numFP, 6)
+		self.assertEqual(numFN, 13)

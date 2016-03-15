@@ -21,6 +21,7 @@ def getStartIndexAndUpdateNumbers(predictedStart, predictedEnd, realStart, realE
 	if predictedStart > realStart:
 		if predictedStart > realEnd:
 			numFP = numFP + len(predKmer)
+			numFN = numFN + (realEnd - realStart)
 			#There is no k-mer to compare, so we set startIndex to realEnd
 			# so that we never compare the k-mer. 
 			startIndex = realEnd;
@@ -32,8 +33,10 @@ def getStartIndexAndUpdateNumbers(predictedStart, predictedEnd, realStart, realE
 		if predictedEnd < realStart:
 			#Predicted k-mer ends before the real k-mer starts,
 			# There is no real k-mer to compare.
-			startIndex = realEnd;
+			startIndex = realStart;
 			numFP = numFP + len(predKmer)
+			# We can't update the numFN here as there might be more k-mers
+			# that are after the real start.
 		else:
 			#Predicted k-mer ends after the real-kmer starts.
 			startIndex = realStart;
@@ -100,6 +103,10 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 
 		print "Based on Start Location: FP: " , str(startFP), ", FN: ", str(startFN)
 		endIndex = getEndIndex(predictedEnd, realEnd)	
+
+		# This can happen if the predicted kmer ends before the real kmer starts.
+		if endIndex < startIndex:
+			endIndex = startIndex;
 	
 
 		kmerTP, kmerFP = getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
@@ -107,20 +114,25 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 		numTP = numTP + kmerTP
 
 		#No more k-mers found, and you want to handle the case for the rest of the real kmer
-		if endIndex == realEnd:
-			numFPAfterKmer, numFNAfterKmer = getNumbersAfterAllKmers(realStart, realEnd, predictedStart, predictedEnd)
-			numFP = numFP + numFPAfterKmer
-			numFN = numFN + numFNAfterKmer
+		#if endIndex == realEnd:
+		#	numFPAfterKmer, numFNAfterKmer = getNumbersAfterAllKmers(realStart, realEnd, predictedStart, predictedEnd)
+		#	numFP = numFP + numFPAfterKmer
+		#	numFN = numFN + numFNAfterKmer
 
 		# Update realStart Index after k-mer is parsed.
-		if endIndex > realStart:
+		if endIndex >= realStart:
 			realStart = endIndex;
+		
+		print "End of kmer: ", predKmer, ", Real Start: ", realStart
 
 
 	# We did not find the predicted k-mer in the sequence.
 	if predictedStart == 0 and predictedEnd == 0:
 		notFoundFP = notFoundFP + getKmerLengthFromREString(kmerREString)
-		notFoundFN = notFoundFN + (realEnd - realStart)
+
+	# We have rest of the real k-mer to process.
+	if realStart < realEnd:
+		numFN = numFN + (realEnd - realStart);
 
 	numFP = numFP + notFoundFP
 	numFN = numFN + notFoundFN
