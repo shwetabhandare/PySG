@@ -184,27 +184,52 @@ class TestCompareKmers(unittest.TestCase):
 
 		realStart = 4;
 		realEnd = 44
-		realKmer = "CCGCXXXXXXGGGGGCGACXXXXXXGGGCAT"
 
 		kmerREString = "(XXXXXX)"
 
-		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realKmer, realStart, realEnd, seq);
+		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		self.assertEqual(numTP, 12)
 		self.assertEqual(numFP, 0)
 		self.assertEqual(numFN, 28)
 
 
-	def test_getNumbersForSeqOneKmer(self):
+	def test_getNumbersForSeqTwoKmers(self):
 		seq = "GGAACCGCXXXXXXGGGGGCGACYYYYYYGGGCATTGAGCTC"
-		predKmer = "XXXXXX"
-
 		realStart = 4;
 		realEnd = 44
-		realKmer = "CGCXXXXXXGGGGGCGACYYYYYYGGGCAT"
 
 		kmerREString = "(XXXXXX|YYYYYY)"
 
-		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realKmer, realStart, realEnd, seq);
+		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		self.assertEqual(numTP, 12)
 		self.assertEqual(numFP, 0)
 		self.assertEqual(numFN, 28)
+
+	def test_getLengthOfKmersFromKmerREString(self):
+		kmerREString = "(XXXXXX|YYYYYY)"
+
+		kmerStringLen = compareKmers.getKmerLengthFromREString(kmerREString);
+		self.assertEqual(kmerStringLen, len(kmerREString) - 3)
+
+	def test_getNumbersForSeqKmerNotFound(self):
+		seq = "XXXXXXGCCCCCXXXXXXGGGGGCGACYYYYYYGGGCATTGAGCTC"
+
+		realStart = 4;
+		realEnd = 44
+
+		kmerREString = "(ABCDEF|XYZFFF)"
+
+		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		self.assertEqual(numTP, 0)
+		self.assertEqual(numFP, 12)
+		self.assertEqual(numFN, 40)
+
+	def test_getNumbersForSeqOneKmerInOneKmerOut(self):
+		seq = "ATCCCTAACTCCGGCAAAAAAAAAACCGGAAACTACATCGCTCTCCACCGGTGCAGACGTCGCCTCGCGCCCCGAAACCGGTGCTGGCAGGGTACGTAAT"
+		kmerREString = "(CCCCGA|AAAAAA)"
+		realKmer = "CCGGCAAAAAAAAAACCGG"
+		realStart = 10
+		realEnd = realStart + len(realKmer)
+
+		print "Running Signal-3 sequence"
+		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);

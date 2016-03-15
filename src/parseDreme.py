@@ -18,13 +18,12 @@ def findKmers(file_contents):
 		kmerDict[kmer] = [kmer_rc, kmer_pos_count, kmer_neg_count];
 	return kmerDict;
 
-def getPredictedDremeMotifs(file_contents):
+def getPredictedDremeMotifs(dremeFile):
+	fileContents = read_file(dremeFile)
 	motifs = []
 	pattern = re.compile(r"MOTIF\s+([ACGTURYSWKMBDHVN]+)")
-	for match in pattern.finditer(str([file_contents])):
+	for match in pattern.finditer(str([fileContents])):
 		motifs.append(match.group(1))
-
-	print motifs
 	return motifs
 
 def FindDremeKmers(dremeResultFile):
@@ -33,8 +32,9 @@ def FindDremeKmers(dremeResultFile):
 
 if __name__ == "__main__":
 	import sys
+	dremeFile = sys.argv[1]
 	#kmerDict = FindDremeKmers(sys.argv[1]);
-	fileContents = read_file(sys.argv[1])
-	FindDremeMotifs(fileContents)
+	
+	getPredictedDremeMotifs(dremeFile)
 	#for key, value in kmerDict.iteritems():
 	#	print key, value
