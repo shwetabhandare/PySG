@@ -235,3 +235,16 @@ class TestCompareKmers(unittest.TestCase):
 		self.assertEqual(numTP, 6)
 		self.assertEqual(numFP, 6)
 		self.assertEqual(numFN, 13)
+	
+	def test_getNumbersForSeqTwoKmersInSeq(self):
+		seq = "CTGTCCCTTTTCGGGTTTTTTTTTTCCGAGCGGCCTCGGTGGGTGAAATGAACGACACTCATGCGAGCGACACTAGGGCGCCGTTCGTTCTGTGCACCCA"
+		kmerREString = "(TCGGGT|TTTTTT)"
+		realKmer = "TCGGGTTTTTTTTTTCCGA"
+		realStart = 10;
+		realEnd = realStart + len(realKmer)
+		print "Running Signal-2 sequence"
+		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		self.assertEqual(numTP, 12)
+		self.assertEqual(numFP, 0)
+		self.assertEqual(numFN, 7)
+	
