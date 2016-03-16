@@ -2,63 +2,32 @@ import sys, os, math, errno, getopt, re
 import TAMO
 from   TAMO		import MotifTools
 from   TAMO.seq import Fasta
+import parseDreme
 
-def GetKmerForSeq(motifText, seq):
+def GetKmerFromTextMotifForSeq(motifText, seq):
 	motif = MotifTools.Motif_from_text(motifText);
 	return motif.bestscanseq(seq);
 
-def Read_Dreme_PSSM(filename):
+def Read_Dreme_PSSM(lines):
 	pwm = []
-	f = open(filename)
-	lines = f.readlines()
-	fields = lines[0].split()
-	
-	name = fields[1]
+	name = "Dreme Motif";
 
 	vals = []
-	for item in lines[1].split():
-		vals.append(float(item))
-	pwm.append(vals)
-	vals = []
-	for item in lines[2].split():
-		vals.append(float(item))
-	pwm.append(vals)
-	vals = []
-	for item in lines[3].split():
-		vals.append(float(item))
-	pwm.append(vals)
-	vals = []
-	for item in lines[4].split():
-		vals.append(float(item))
-	pwm.append(vals)
-	vals = []
-	for item in lines[5].split():
-		vals.append(float(item))
-	pwm.append(vals)
-	vals = []
-	for item in lines[6].split():
-		vals.append(float(item))
-	pwm.append(vals)
-
+	for line in lines.split('\n'):
+		for item in line.split():
+			vals.append(float(item))
+		pwm.append(vals)
+		vals = [];
 	#print pwm
 
 	m = MotifTools.toDict(pwm)
-	motif = MotifTools.Motif_from_text('MCCCGA')
-	#motif = MotifTools.Motif_from_counts(m)
-	#print m;
+	motif = MotifTools.Motif_from_counts(m)
+	return motif;
 
-	seq1 = "GGGGGCAGCGTCGGGTTTTTTTTTTCCGAGGAACGCGGCATATCAAGAGGTATAAGGTCTATCTAACCTTACCCGCTATAAGCAATAGCCAAAAAACGAC"
 
-	seq2 = "GGAACCGCGTTCGGGGGGGGGGGGGCCGAACCCTTCCAGCATTGAGCTCCTGCCGCTAGCTTATGCGGCCTCCCATCCAGTCGGCCGAGACGCACGACTT"
-
-	seq3 = "CTAGCCACGATCGGGTTTTTTTTTTCCGACTTTCACTCCGCATAGTTCGCACTGACCCAGGTGGTCCTAAACACTCGCATCGGTATCCCGTCCTAGTCTA"
-	print "Seq 1: ", motif.bestscanseq(seq1)
-	print "Seq 2: ", motif.bestscanseq(seq2)
-	print "Seq 3: ", motif.bestscanseq(seq3)
-
-	print "Best k-mers: "
-	print motif.bestseqs()
-	return pwm;
+def GetKmerFromMotifFromPSSM(lines, seq):
+	motif = Read_Dreme_PSSM(lines);
+	return motif.bestscanseq(seq);
 
 def Read_PWM(filename):
 	pwm = []
@@ -118,12 +87,7 @@ def Make_Text_Motif(textMotif):
 	return MotifTools.Motif_from_text(textMotif)
 
 if __name__ == "__main__":
-	motiffile = sys.argv[1]
-	dreme = int(sys.argv[2])
-	if (dreme == 1):
-		Read_Dreme_PSSM(motiffile)
-	else:
-		motif = Make_PWM_Motif(motiffile)
-		print motif;
-		print motif.random_kmer()
-	
+	dremeFile = sys.argv[1]
+	pssmList = parseDreme.getPSSMListFromDremeFile(dremeFile);
+	for pssmLines in pssmList:
+		Read_Dreme_PSSM(pssmLines);

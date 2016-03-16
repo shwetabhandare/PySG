@@ -1,5 +1,7 @@
 import unittest
 import compareKmers
+import parseDreme
+import TAMO_Motif
 
 class TestCompareKmers(unittest.TestCase):
 	def testPredictedStartEndBeforeRealStart(self):
@@ -248,3 +250,12 @@ class TestCompareKmers(unittest.TestCase):
 		self.assertEqual(numFP, 0)
 		self.assertEqual(numFN, 7)
 	
+	def test_getKmerREFromPSSM(seq):
+		dremeFile = "/projects/bhandare/workspace/PySG/conf/Signal.fa_DremeOut/dreme.txt"
+		seq = "CTGTCCCTTTTCGGGTTTTTTTTTTCCGAGCGGCCTCGGTGGGTGAAATGAACGACACTCATGCGAGCGACACTAGGGCGCCGTTCGTTCTGTGCACCCA"
+		pssmList = parseDreme.getPSSMListFromDremeFile(dremeFile);
+		tamoMotifs = [];
+	
+		kmerREString = compareKmers.getKmerFromPSSM(pssmList, seq)
+
+		print "FROM PSSM: ", kmerREString

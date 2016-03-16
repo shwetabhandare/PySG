@@ -150,17 +150,41 @@ def getEndIndex(predictedEnd, realEnd):
 def getRealKmerDetails(realKmerDict, seqid):
 	return realKmerDict[seqid][0], int(realKmerDict[seqid][1]), (int(realKmerDict[seqid][1]) + len(realKmerDict[seqid][0]))
 
-def getKmerRE(predictedMotifs, seq):
-	print predictedMotifs
+def getKmerFromPSSM(pssmList, seq):
 	kmerReToSearchFor = "("
-	for motif in predictedMotifs:
-		bestSeqKmerTuple = TAMO_Motif.GetKmerForSeq(motif, seq)
+	for pssmLines in pssmList:
+		bestSeqKmerTuple = TAMO_Motif.GetKmerFromMotifFromPSSM(pssmLines, seq);
 		kmer = bestSeqKmerTuple[1]
 		kmerReToSearchFor = kmerReToSearchFor + kmer
 		kmerReToSearchFor = kmerReToSearchFor + '|'
 	kmerReToSearchFor = kmerReToSearchFor[:-1]
 	kmerReToSearchFor = kmerReToSearchFor + ")"
 	return kmerReToSearchFor;
+
+def getKmerRE(predictedMotifs, seq):
+	print predictedMotifs
+	kmerReToSearchFor = "("
+	for motif in predictedMotifs:
+		bestSeqKmerTuple = TAMO_Motif.GetKmerFromTextMotifForSeq(motif, seq)
+		kmer = bestSeqKmerTuple[1]
+		kmerReToSearchFor = kmerReToSearchFor + kmer
+		kmerReToSearchFor = kmerReToSearchFor + '|'
+	kmerReToSearchFor = kmerReToSearchFor[:-1]
+	kmerReToSearchFor = kmerReToSearchFor + ")"
+	return kmerReToSearchFor;
+
+def findKmerInSeqFromMotifCounts(realKmerDict, tamoMotifs, posFile, negFile):
+	PosSeqDict = SeqGenUtils.fasta_read(posFile);
+	NegSeqDict = SeqGenUtils.fasta_read(negFile);
+	numFN = 0;
+	numTP = 0;
+	numFP = 0;
+	for seqid, seq in PosSeqDict.iteritems():
+		realKmer, realStart, realEnd = getRealKmerDetails(realKmerDict, seqid);
+		print "Real KMER: ", realKmer;
+		kmerREString = getKmerREForTamoMotifs(tamoMotifs, seq)
+		numTP, numFP, numFN = getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		print "SeqID" , seqid, "Numbers: TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
 
 def findKmerInSeq(realKmerDict, predictedMotifs, posFile, negFile):
 	PosSeqDict = SeqGenUtils.fasta_read(posFile);
@@ -183,9 +207,18 @@ if __name__ == "__main__":
 	predictedDremeFile= sys.argv[2]
 	posFile = sys.argv[3]
 	negFile = sys.argv[4]
+	textMotif = int(sys.argv[5])
 
 	realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);
-	predictedKmers = parseDreme.getPredictedDremeMotifs(predictedDremeFile);
+	tamoMotifs = [];
+	if textMotif == 1:
+		predictedKmers = parseDreme.getPredictedDremeMotifs(predictedDremeFile);
+		findKmerInSeq(realKmerDict, predictedKmers, posFile, negFile)
+	else:
+		pssmList = parseDreme.getPSSMListFromDremeFile(dremeFile);
+		for pssmLines in pssmList:
+			tamoMotif = Read_Dreme_PSSM(pssmLines);
+			tamoMotifs.append(tamoMotif);
+		findKmerInSeqFromMotifCounts(realKmerDict, tamoMotifs, posFile, negFile)
 
 	#print "Predicted: ", predictedKmers, "\nReal: ", realKmerDict.keys()
-	findKmerInSeq(realKmerDict, predictedKmers, posFile, negFile)
