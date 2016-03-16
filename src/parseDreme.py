@@ -18,6 +18,36 @@ def findKmers(file_contents):
 		kmerDict[kmer] = [kmer_rc, kmer_pos_count, kmer_neg_count];
 	return kmerDict;
 
+def getPSSMListFromDremeFile(dremeFile):
+	pattern = re.compile('letter-probability matrix: alength=\s+(\d+)\s+w=\s+(\d+)');
+	fileContents = str(read_file(dremeFile))
+	fileOffset = 0;
+	pssmLinesList = [];
+	for match in pattern.finditer(fileContents[fileOffset:]):
+
+		lengthOfPSSM = match.group(2)
+		fileOffset = match.end();
+
+		pssmRe = "(\d.\d+\s+\d.\d+\s+\d.\d+\s+\d.\d+)"
+		pattern2 = re.compile(pssmRe);
+		count = 0;
+		pssmLines = ""
+		for match2 in pattern2.finditer(fileContents[fileOffset:]):
+			fileOffset = match2.end();
+			pssmLine = match2.group(1)
+
+			if count < int(lengthOfPSSM):
+				count = count + 1;
+				pssmLines = pssmLines + pssmLine + "\n";
+
+			if count >= int(lengthOfPSSM):
+				pssmLines = pssmLines[:-1];
+				pssmLinesList.append(pssmLines);
+				break;
+
+
+	return pssmLinesList;
+
 def getPredictedDremeMotifs(dremeFile):
 	fileContents = read_file(dremeFile)
 	motifs = []
@@ -35,6 +65,7 @@ if __name__ == "__main__":
 	dremeFile = sys.argv[1]
 	#kmerDict = FindDremeKmers(sys.argv[1]);
 	
-	getPredictedDremeMotifs(dremeFile)
+	#getPredictedDremeMotifs(dremeFile)
+	getPSSMListFromDremeFile(dremeFile)
 	#for key, value in kmerDict.iteritems():
 	#	print key, value
