@@ -112,6 +112,7 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 		kmerTP, kmerFP = getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
 		print "After Kmer comparison: TP: ", str(kmerTP), ", FP: ", str(kmerFP);
 		numTP = numTP + kmerTP
+		numFP = numFP + kmerFP
 
 		# Update realStart Index after k-mer is parsed.
 		if endIndex >= realStart:
@@ -124,7 +125,7 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 	if predictedStart == 0 and predictedEnd == 0:
 		notFoundFP = notFoundFP + getKmerLengthFromREString(kmerREString)
 
-	# We have rest of the real k-mer to process.
+	# We did not find any predicted k-mers in the sequence. 
 	if realStart < realEnd:
 		numFN = numFN + (realEnd - realStart);
 
