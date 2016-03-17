@@ -113,12 +113,6 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 		print "After Kmer comparison: TP: ", str(kmerTP), ", FP: ", str(kmerFP);
 		numTP = numTP + kmerTP
 
-		#No more k-mers found, and you want to handle the case for the rest of the real kmer
-		#if endIndex == realEnd:
-		#	numFPAfterKmer, numFNAfterKmer = getNumbersAfterAllKmers(realStart, realEnd, predictedStart, predictedEnd)
-		#	numFP = numFP + numFPAfterKmer
-		#	numFN = numFN + numFNAfterKmer
-
 		# Update realStart Index after k-mer is parsed.
 		if endIndex >= realStart:
 			realStart = endIndex;
@@ -173,7 +167,7 @@ def getKmerRE(predictedMotifs, seq):
 	kmerReToSearchFor = kmerReToSearchFor + ")"
 	return kmerReToSearchFor;
 
-def findKmerInSeqFromMotifCounts(realKmerDict, tamoMotifs, posFile, negFile):
+def findKmerInSeqFromPSSM(realKmerDict, pssmList, posFile, negFile):
 	PosSeqDict = SeqGenUtils.fasta_read(posFile);
 	NegSeqDict = SeqGenUtils.fasta_read(negFile);
 	numFN = 0;
@@ -182,24 +176,27 @@ def findKmerInSeqFromMotifCounts(realKmerDict, tamoMotifs, posFile, negFile):
 	for seqid, seq in PosSeqDict.iteritems():
 		realKmer, realStart, realEnd = getRealKmerDetails(realKmerDict, seqid);
 		print "Real KMER: ", realKmer;
-		kmerREString = getKmerREForTamoMotifs(tamoMotifs, seq)
+		kmerREString = getKmerFromPSSM(pssmList, seq)
 		numTP, numFP, numFN = getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		print "SeqID" , seqid, "Numbers: TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
 
 def findKmerInSeq(realKmerDict, predictedMotifs, posFile, negFile):
 	PosSeqDict = SeqGenUtils.fasta_read(posFile);
 	NegSeqDict = SeqGenUtils.fasta_read(negFile);
-	numFN = 0;
-	numTP = 0;
-	numFP = 0;
+	numTotalFN = 0;
+	numTotalTP = 0;
+	numTotalFP = 0;
 	for seqid, seq in PosSeqDict.iteritems():
 		realKmer, realStart, realEnd = getRealKmerDetails(realKmerDict, seqid);
 		print "Real KMER: ", realKmer;
 		kmerREString = getKmerRE(predictedMotifs, seq)
 		numTP, numFP, numFN = getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		print "SeqID" , seqid, "Numbers: TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
-		
-			
+		numTotalTP = numTotalTP + numTP;
+		numTotalFP = numTotalFP + numFP;
+		numTotalFN = numTotalFN + numFN;
+	
+	print "Pos File: TP: ", str(numTotalTP), ", FP: ", numTotalFP, ", FN: ", numTotalFN
 
 if __name__ == "__main__":
 	import sys
@@ -215,10 +212,7 @@ if __name__ == "__main__":
 		predictedKmers = parseDreme.getPredictedDremeMotifs(predictedDremeFile);
 		findKmerInSeq(realKmerDict, predictedKmers, posFile, negFile)
 	else:
-		pssmList = parseDreme.getPSSMListFromDremeFile(dremeFile);
-		for pssmLines in pssmList:
-			tamoMotif = Read_Dreme_PSSM(pssmLines);
-			tamoMotifs.append(tamoMotif);
-		findKmerInSeqFromMotifCounts(realKmerDict, tamoMotifs, posFile, negFile)
+		pssmList = parseDreme.getPSSMListFromDremeFile(predictedDremeFile);
+		findKmerInSeqFromPSSM(realKmerDict, pssmList, posFile, negFile)
 
 	#print "Predicted: ", predictedKmers, "\nReal: ", realKmerDict.keys()
