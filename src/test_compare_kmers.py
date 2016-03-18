@@ -232,7 +232,6 @@ class TestCompareKmers(unittest.TestCase):
 		realStart = 10
 		realEnd = realStart + len(realKmer)
 
-		print "Running Signal-3 sequence"
 		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		self.assertEqual(numTP, 6)
 		self.assertEqual(numFP, 6)
@@ -244,7 +243,6 @@ class TestCompareKmers(unittest.TestCase):
 		realKmer = "TCGGGTTTTTTTTTTCCGA"
 		realStart = 10;
 		realEnd = realStart + len(realKmer)
-		print "Running Signal-2 sequence"
 		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		self.assertEqual(numTP, 12)
 		self.assertEqual(numFP, 0)
@@ -256,5 +254,26 @@ class TestCompareKmers(unittest.TestCase):
 		pssmList = parseDreme.getPSSMListFromDremeFile(dremeFile);
 		kmerREString = compareKmers.getKmerFromPSSM(pssmList, seq)
 
-		print "FROM PSSM: ", kmerREString
 		self.assertEqual(kmerREString, '(TCGGGT|TTTTTT)')
+
+	def test_compareKmersPSSM(self):
+		predicedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.kmers"
+		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.fa"
+		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal.fa"
+
+		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predicedDremeFile, posFile, negFile, 0);
+		self.assertEqual(numTP, 174)
+		self.assertEqual(numFP, 60)
+		self.assertEqual(numFN, 206)
+
+	def test_compareKmersTextMotif(self):
+		predicedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.kmers"
+		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.fa"
+		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal.fa"
+
+		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predicedDremeFile, posFile, negFile, 1);
+		self.assertEqual(numTP, 170)
+		self.assertEqual(numFP, 64)
+		self.assertEqual(numFN, 207)
