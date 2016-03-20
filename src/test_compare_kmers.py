@@ -249,31 +249,51 @@ class TestCompareKmers(unittest.TestCase):
 		self.assertEqual(numFN, 7)
 	
 	def test_getKmerREFromPSSM(self):
-		dremeFile = "/projects/bhandare/workspace/PySG/conf/Signal.fa_DremeOut/dreme.txt"
+		predictedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
 		seq = "CTGTCCCTTTTCGGGTTTTTTTTTTCCGAGCGGCCTCGGTGGGTGAAATGAACGACACTCATGCGAGCGACACTAGGGCGCCGTTCGTTCTGTGCACCCA"
-		pssmList = parseDreme.getPSSMListFromDremeFile(dremeFile);
+		pssmList = parseDreme.getPSSMListFromDremeFile(predictedDremeFile);
 		kmerREString = compareKmers.getKmerFromPSSM(pssmList, seq)
 
 		self.assertEqual(kmerREString, '(TCGGGT|TTTTTT)')
 
 	def test_compareKmersPSSM(self):
-		predicedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
+		predictedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
 		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.kmers"
 		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.fa"
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal.fa"
 
-		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predicedDremeFile, posFile, negFile, 0);
+		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, 0);
 		self.assertEqual(numTP, 174)
 		self.assertEqual(numFP, 60)
 		self.assertEqual(numFN, 206)
 
-	def test_compareKmersTextMotif(self):
-		predicedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
-		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.kmers"
-		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.fa"
-		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal.fa"
+	def test_compareKmersPSSMNotAllSeqContainKmer(self):
+		predictedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme90.txt"
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.kmers"
+		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.fa"
+		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal90.fa"
 
-		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predicedDremeFile, posFile, negFile, 1);
-		self.assertEqual(numTP, 170)
-		self.assertEqual(numFP, 64)
-		self.assertEqual(numFN, 207)
+		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, 0);
+		self.assertEqual(numTP, 292)
+		self.assertEqual(numFP, 58)
+		self.assertEqual(numFN, 105)
+
+
+	def test_getRealKmerDetailsKeyDoesNotExists(self):
+		realKmerDict  = dict();
+
+		realKmerDict['0'] = ['ATTTA', 10]
+		realKmerDict['1'] = ['ATTTTA', 10]
+		realKmerDict['2'] = ['ATTTTTA', 10]
+		realKmerDict['3'] = ['ATTTAAAA', 10]
+
+		realKmer, realStart, realEnd = compareKmers.getRealKmerDetails(realKmerDict, '0')
+		self.assertEqual(realKmer, 'ATTTA');
+		self.assertEqual(realStart, 10);
+		self.assertEqual(realEnd, 15)
+
+		# does not exist.
+		realKmer, realStart, realEnd = compareKmers.getRealKmerDetails(realKmerDict, '4')
+		self.assertEqual(realKmer, '');
+		self.assertEqual(realStart, 0);
+		self.assertEqual(realEnd, 0)		

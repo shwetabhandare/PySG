@@ -139,7 +139,10 @@ def getEndIndex(predictedEnd, realEnd):
 	return endIndex;
 
 def getRealKmerDetails(realKmerDict, seqid):
-	return realKmerDict[seqid][0], int(realKmerDict[seqid][1]), (int(realKmerDict[seqid][1]) + len(realKmerDict[seqid][0]))
+	if seqid in realKmerDict:
+		return realKmerDict[seqid][0], int(realKmerDict[seqid][1]), (int(realKmerDict[seqid][1]) + len(realKmerDict[seqid][0]))
+	else:
+		return "", 0, 0
 
 def getKmerFromPSSM(pssmList, seq):
 	kmerReToSearchFor = "("
@@ -150,6 +153,7 @@ def getKmerFromPSSM(pssmList, seq):
 		kmerReToSearchFor = kmerReToSearchFor + '|'
 	kmerReToSearchFor = kmerReToSearchFor[:-1]
 	kmerReToSearchFor = kmerReToSearchFor + ")"
+	#print "PSSM RE: ", kmerReToSearchFor
 	return kmerReToSearchFor;
 
 def getKmerRE(predictedMotifs, seq):
@@ -171,7 +175,10 @@ def findKmerInSeqFromPSSM(realKmerDict, pssmList, posFile, negFile):
 	numTotalFP = 0;	
 	for seqid, seq in PosSeqDict.iteritems():
 		realKmer, realStart, realEnd = getRealKmerDetails(realKmerDict, seqid);
+		if realKmer == "" and realStart == 0 and realEnd == 0:
+			print "SeqID: ", seqid , " does not contain kmer."
 		kmerREString = getKmerFromPSSM(pssmList, seq)
+
 		numTP, numFP, numFN = getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		#print seqid, ": TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
 		numTotalTP = numTotalTP + numTP;
@@ -189,6 +196,8 @@ def findKmerInSeq(realKmerDict, predictedMotifs, posFile, negFile):
 	numTotalFP = 0;
 	for seqid, seq in PosSeqDict.iteritems():
 		realKmer, realStart, realEnd = getRealKmerDetails(realKmerDict, seqid);
+		if realKmer == "" and realStart == 0 and realEnd == 0:
+			print "SeqID: ", seqid , " does not contain kmer."
 		kmerREString = getKmerRE(predictedMotifs, seq)
 		numTP, numFP, numFN = getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		#print seqid, ": TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)

@@ -11,14 +11,14 @@ directory = sys.argv[1]
 CreateConfFiles(directory, 'dirichlet');
 
 
-for confFile in findFiles(directory, 'Kmer.yaml'):
+for confFile in findFiles(directory, 'Kmer90.yaml'):
 
 	print "Generating sequences for : ", confFile;
 	CreateNoSignalFastaFile(confFile);
 	CreateFastaWithSignal(confFile)
 
 os.chdir(directory)
-for signalFile in glob.glob("Signal*.fa"):
+for signalFile in glob.glob("Signal*90.fa"):
 	dremeDir = signalFile + "_DremeOut"
 	noSignalFile = "No" + signalFile;
 	print "Calling DREME for ", signalFile, ", ", noSignalFile;

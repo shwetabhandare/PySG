@@ -1,0 +1,35 @@
+# DREME 4.9.0
+# command:   dreme -p Signal90.fa -n NoSignal90.fa -oc Signal90.fa_DremeOut
+# host:      login02.rc.colorado.edu
+# when:      Sun Mar 20 07:56:28 MDT 2016
+# positives: 50
+#      from: Signal90.fa (Sun Mar 20 07:56:28 MDT 2016)
+# negatives: 50
+#      from: NoSignal90.fa (Sun Mar 20 07:56:28 MDT 2016)
+
+
+MEME version 4.9.0
+
+ALPHABET= ACGT
+
+strands: + -
+
+Background letter frequencies (from dataset):
+A 0.271 C 0.309 G 0.202 T 0.218
+
+MOTIF AAATAAA
+
+#             Word    RC Word        Pos        Neg    P-value    E-value
+# BEST     AAATAAA    TTTATTT         43          0   2.6e-021   2.6e-017
+#          AAATAAA    TTTATTT         43          0   2.6e-021   2.6e-017
+
+letter-probability matrix: alength= 4 w= 7 nsites= 44 E= 2.6e-017
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+1.000000 0.000000 0.000000 0.000000
+
+

@@ -2,7 +2,7 @@ sequence:
   nosignal:
     alpha: 1000
     numSeq: 20
-    outNoSignalFastaFile: /projects/bhandare/workspace/PySG/conf/NoSignal.fa
+    outNoSignalFastaFile: /projects/bhandare/workspace/PySG/conf/NoSignal90.fa
     seqBackGround:
       A: 0.27
       C: 0.3
@@ -11,7 +11,7 @@ sequence:
     seqLen: 100
   signal:
     locationFromStart: 10
-    outSignalFile: /projects/bhandare/workspace/PySG/conf/Signal.fa
+    outSignalFile: /projects/bhandare/workspace/PySG/conf/Signal90.fa
     pwmFile: /projects/bhandare/workspace/PySG/data/pwm/Gal4.pwm
     seqBackGround:
       A: 0.27
