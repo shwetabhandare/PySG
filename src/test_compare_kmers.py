@@ -225,6 +225,20 @@ class TestCompareKmers(unittest.TestCase):
 		self.assertEqual(numFP, 12)
 		self.assertEqual(numFN, 40)
 
+	def test_getNumbersForSeqKmerInNegFile(self):
+		seq = "GTCTTACAAGAGCCCCGACGCCCCGGCCACTGCGCGCGACTAGCCCTATGTCAGGAAAAAACGCGCACAATGTCCTCCTGCAGGACAGTCGGCTGGCGCTACCGATACGGAT"
+
+		realStart = 0;
+		realEnd = 0;
+
+		kmerREString = "(CCCCGA|AAAAAA)"
+
+		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		
+		#self.assertEqual(numTP, 0)
+		#self.assertEqual(numFP, 12)
+		#self.assertEqual(numFN, 40)
+
 	def test_getNumbersForSeqOneKmerInOneKmerOut(self):
 		seq = "ATCCCTAACTCCGGCAAAAAAAAAACCGGAAACTACATCGCTCTCCACCGGTGCAGACGTCGCCTCGCGCCCCGAAACCGGTGCTGGCAGGGTACGTAAT"
 		kmerREString = "(CCCCGA|AAAAAA)"
@@ -255,6 +269,28 @@ class TestCompareKmers(unittest.TestCase):
 		kmerREString = compareKmers.getKmerFromPSSM(pssmList, seq)
 
 		self.assertEqual(kmerREString, '(TCGGGT|TTTTTT)')
+
+	def test_compareKmersTextMotif(self):
+		predictedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.kmers"
+		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.fa"
+		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal.fa"
+
+		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
+		self.assertEqual(numTP, 170)
+		self.assertEqual(numFP, 64)
+		self.assertEqual(numFN, 207)
+
+	def test_compareKmersTextMotifNotAllSeqContainKmer(self):
+		predictedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme90.txt"
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.kmers"
+		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.fa"
+		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal90.fa"
+
+		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
+		self.assertEqual(numTP, 292)
+		self.assertEqual(numFP, 58)
+		self.assertEqual(numFN, 105)
 
 	def test_compareKmersPSSM(self):
 		predictedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
@@ -296,4 +332,16 @@ class TestCompareKmers(unittest.TestCase):
 		realKmer, realStart, realEnd = compareKmers.getRealKmerDetails(realKmerDict, '4')
 		self.assertEqual(realKmer, '');
 		self.assertEqual(realStart, 0);
-		self.assertEqual(realEnd, 0)		
+		self.assertEqual(realEnd, 0)
+
+	def test_getTotalFPWhenPredictedIsEmpty(self):
+		realKmerDict  = dict();
+
+		realKmerDict['0'] = ['ATTTA', 10]
+		realKmerDict['1'] = ['ATTTTA', 10]
+		realKmerDict['2'] = ['ATTTTTA', 10]
+		realKmerDict['3'] = ['ATTTAAAA', 10]
+
+		totalFN = compareKmers.getTotalFNKmerNotFound(realKmerDict);
+		self.assertEqual(totalFN, 26);
+		
