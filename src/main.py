@@ -2,6 +2,9 @@ from generateYaml import *;
 from SeqGenUtils import *;
 from NoSignal import *
 from Kmer import *
+import compareKmers;
+
+
 import sys;
 import glob, os
 import subprocess
@@ -21,8 +24,18 @@ os.chdir(directory)
 for signalFile in glob.glob("Signal*90.fa"):
 	dremeDir = signalFile + "_DremeOut"
 	noSignalFile = "No" + signalFile;
+
 	print "Calling DREME for ", signalFile, ", ", noSignalFile;
 	subprocess.call(["dreme", "-p", signalFile, "-n", noSignalFile, "-oc", dremeDir])
+
+	predictedDremeFile = dremeDir + "/" + "dreme.txt";
+	realKmersCsvFile = os.path.splitext(signalFile)[0] + ".kmers"
+
+	numTP, numFP, numFN = compareKmers.CompareKmers(realKmersCsvFile, predictedDremeFile,
+		signalFile, noSignalFile)
+
+
+
 
 #	seqGen = SeqGen(conf);
 #	filename = os.path.splitext(os.path.basename(confFile))[0]
