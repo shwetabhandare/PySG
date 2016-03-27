@@ -1,0 +1,7 @@
+{data: {dataFile: to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_20_20_CompleteSet.txt,
+    negLen: 20, posLen: 20}, kspectrum: {C: 10, folds: 5, k1: 9, k2: 12}, output: {
+    featureFile: to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_2913_2913_CompleteSet.txt_Features.dat,
+    modelFile: to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_2913_2913_CompleteSet.txt_Model.dat,
+    paramsFile: to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_2913_2913_CompleteSet.txt_params.dat,
+    resultsFile: to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_2913_2913_CompleteSet.txt_Results.yml,
+    trainDataFile: to_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_NONto_ucsc.fp_0.05.filtered.hg19.elavl1_conservative_strand_train_2913_2913_CompleteSet.txt_kspectrum.dat}}
