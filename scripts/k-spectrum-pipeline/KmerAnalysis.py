@@ -50,6 +50,7 @@ def getNumKmersFoundInDict(KmerList, SeqDict):
 
 def checkKmersInSeqDict(HuR_Kmers, TTP_Kmers, Common_Kmers, Common_Seq_Dict, HuROnly_Seq_Dict, TTP_Only_Seq_Dict):
 
+	TTP_Kmers = ["ATTTATTTA"]
 	hurFoundInHuR = getNumKmersFoundInDict(HuR_Kmers, HuROnly_Seq_Dict);
 	hurFoundInTTP = getNumKmersFoundInDict(HuR_Kmers, TTP_Only_Seq_Dict);
 	hurFoundInCommon = getNumKmersFoundInDict(HuR_Kmers, Common_Seq_Dict);
