@@ -18,7 +18,7 @@ def findKmers(file_contents):
 
 	return kmerDict;
 
-def FindDremeKmers(dremeResultFile):
+def FindKspectrumKmers(dremeResultFile):
 	fileContents = str(read_file(dremeResultFile))
 	return findKmers(fileContents);
 
