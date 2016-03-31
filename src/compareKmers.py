@@ -5,6 +5,8 @@ import fasta
 import SeqGenUtils
 import re
 import TAMO_Motif;
+import splitKmerInDict;
+
 #from itertools import imap
 
 def getPredictedKmerDict(dremeResultFile):
@@ -229,26 +231,50 @@ def getTotalFNKmerNotFound(realKmerDict):
 		totalFN = totalFN + len(kmer)
 	return totalFN;
 
-def ComparePSSMKmers(realKmerDict, predictedDremeFile, posFile, negFile, pssmFlag):
+def ComparePWMKmers(realKmerDict, predictedKspectrumFile, posFile, negFile):
 	numFP = numTP = numFN = 0	
-	if pssmFlag == 1:
-		pssmList = parseDreme.getPSSMListFromDremeFile(predictedDremeFile);
-		if len(pssmList) == 0:
-			numFP = getTotalFNKmerNotFound(realKmerDict);		
-		else:
-			numTP, numFP, numFN = GetTotalNumbers(realKmerDict, pssmList, posFile, negFile, None)
+	pssmList = splitKmerDict.GetKspectrumPWM(predictedKspectrumFile);
+	if len(pssmList) == 0:
+		numFP = getTotalFNKmerNotFound(realKmerDict);		
 	else:
-		predictedKmers = parseDreme.getPredictedDremeMotifs(predictedDremeFile);
-		if len(predictedKmers) == 0:
-			numFN = getTotalFNKmerNotFound(realKmerDict);
-		else:
-			numTP, numFP, numFN = GetTotalNumbers(realKmerDict, None, posFile, negFile, predictedKmers)
-
+		numTP, numFP, numFN = GetTotalNumbers(realKmerDict, pssmList, posFile, negFile, None)
 
 	return numTP, numFP, numFN;
 
+def GetDremePSSM(predictedDremeFile):
+	pssmList = parseDreme.getPSSMListFromDremeFile(predictedDremeFile);
+	return pssmList;
 
-def CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMotif=0):
+def ComparePSSMKmers(realKmerDict, predictedDremeFile, posFile, negFile, pssmList):
+	if len(pssmList) == 0:
+		numFP = getTotalFNKmerNotFound(realKmerDict);		
+	else:
+		numTP, numFP, numFN = GetTotalNumbers(realKmerDict, pssmList, posFile, negFile, None)
+
+	return numTP, numFP, numFN;
+
+def CompareTextMotifKmers(realKmerDict, predictedKmers, posFile, negFile):
+	numFP = numTP = numFN = 0	
+	if len(predictedKmers) == 0:
+		numFN = getTotalFNKmerNotFound(realKmerDict);
+	else:
+		numTP, numFP, numFN = GetTotalNumbers(realKmerDict, None, posFile, negFile, predictedKmers)
+	return numTP, numFP, numFN;
+
+
+def CompareKspectrumKmers(realCsvFile, predictedKspectrumFile, posFile, negFile):
+
+	realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);
+	numTP = 0
+	numFP = 0
+	numFN = 0
+
+	pssmList = splitKmerInDict.GetKspectrumPWM(predictedKspectrumFile);
+	numTP, numFP, numFN = ComparePWMKmers(realKmerDict, predictedKspectrumFile, posFile, negFile, pssmList);
+	
+	return numTP, numFP, numFN;
+
+def CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMotif=0):
 
 	realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);
 
@@ -257,11 +283,14 @@ def CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMotif=0)
 	numFN = 0
 
 	if textMotif == 1:
-		numTP, numFP, numFN = ComparePSSMKmers(realKmerDict, predictedDremeFile, posFile, negFile, 0)
+		predictedKmers = parseDreme.getPredictedDremeMotifs(predictedDremeFile);
+		numTP, numFP, numFN = CompareTextMotifKmers(realKmerDict, predictedKmers, posFile, negFile)
 	else:
-		numTP, numFP, numFN = ComparePSSMKmers(realKmerDict, predictedDremeFile, posFile, negFile, 1)
+		pssmList = GetDremePSSM(predictedDremeFile);
+		numTP, numFP, numFN = ComparePSSMKmers(realKmerDict, predictedDremeFile, posFile, negFile, pssmList)
 	
 	return numTP, numFP, numFN;
+
 
 if __name__ == "__main__":
 	import sys

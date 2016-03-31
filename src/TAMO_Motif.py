@@ -25,6 +25,12 @@ def Read_Dreme_PSSM(lines):
 	return motif;
 
 
+def GetKmerFromMotifFromPWM(pwm, seq):
+	m = MotifTools.toDict(pwm)
+	print m
+	motif = MotifTools.Motif_from_counts(m)
+	return motif.bestscanseq(seq);
+
 def GetKmerFromMotifFromPSSM(lines, seq):
 	motif = Read_Dreme_PSSM(lines);
 	return motif.bestscanseq(seq);

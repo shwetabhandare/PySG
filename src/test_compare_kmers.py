@@ -276,7 +276,7 @@ class TestCompareKmers(unittest.TestCase):
 		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.fa"
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal.fa"
 
-		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
+		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
 		self.assertEqual(numTP, 170)
 		self.assertEqual(numFP, 64)
 		self.assertEqual(numFN, 207)
@@ -287,7 +287,7 @@ class TestCompareKmers(unittest.TestCase):
 		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.fa"
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal90.fa"
 
-		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
+		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
 		self.assertEqual(numTP, 292)
 		self.assertEqual(numFP, 58)
 		self.assertEqual(numFN, 105)
@@ -298,7 +298,7 @@ class TestCompareKmers(unittest.TestCase):
 		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.fa"
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal.fa"
 
-		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, 0);
+		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 0);
 		self.assertEqual(numTP, 174)
 		self.assertEqual(numFP, 60)
 		self.assertEqual(numFN, 206)
@@ -309,7 +309,7 @@ class TestCompareKmers(unittest.TestCase):
 		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.fa"
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal90.fa"
 
-		numTP, numFP, numFN = compareKmers.CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, 0);
+		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 0);
 		self.assertEqual(numTP, 292)
 		self.assertEqual(numFP, 58)
 		self.assertEqual(numFN, 105)

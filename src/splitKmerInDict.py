@@ -1,5 +1,9 @@
 import sys
 import parseKspectrum
+import TAMO
+from   TAMO    import MotifTools
+from   TAMO.seq import Fasta
+import TAMO_Motif
 
 def zerolistmaker(n):
 	listofzeros = [0] * n;
@@ -41,6 +45,11 @@ def getUpdatedCounts(maxKmerLen, kmerDictList):
 			elif value == 'G':
 				gList[key] = gList[key] + 1;
 
+	print aList
+	print cList
+	print gList
+	print tList
+
 	return aList, tList, gList, cList;
 
 def createNormalizedLists(aList, tList, gList, cList, numKmers):
@@ -49,31 +58,36 @@ def createNormalizedLists(aList, tList, gList, cList, numKmers):
 	gList[:] = [round(float(x)/numKmers, 3) for x in gList]
 	cList[:] = [round(float(x)/numKmers, 3) for x in cList]
 
+	print aList
+	print cList
+	print gList
+	print tList
+
 	return aList, tList, gList, cList;
 
 def createPwm(aList, tList, gList, cList):
 
-	pwm = [4]
+	pwm = list()
+	for i in range(1,len(aList)):
+		vals = [float(aList[i]), float(cList[i]), float(gList[i]), float(tList[i])]
+		pwm.append(vals)
 
-	pwm[0] = tList;
-	pwm[1] = gList;
-	pwm[2] = cList;
-	pwm[3] = aList;
-
-
+	print pwm
 	return pwm;
-if __name__ == "__main__":
-	import sys
-	kmerFile = sys.argv[1]
+
+def GetKspectrumPWM(kmerFile):
 	kmerDict = parseKspectrum.FindKspectrumKmers(kmerFile)
 	kmerList = kmerDict.keys();
 	maxKmerLen, kmerDictList = createKmerDictList(kmerList);
 	aList, tList, gList, cList = getUpdatedCounts(maxKmerLen, kmerDictList);
 	numKmers = len(kmerList)
-	aList, tList, gList, cList = createNormalizedLists(aList, tList, gList, cList, numKmers);
-	print "A List: ", aList
-	print "C List: ", cList
-	print "G List: ", gList
-	print "T List: ", tList
+
+	aList, tList, gList, cList = createNormalizedLists(aList, tList, gList, cList, len(kmerList));
 	pwm = createPwm(aList, tList, gList, cList)
-	print pwm
+	return pwm;
+
+if __name__ == "__main__":
+	import sys
+	kmerFile = sys.argv[1]
+	pwm = GetKspectrumPWM(sys.argv[1])
+

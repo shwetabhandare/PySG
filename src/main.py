@@ -60,9 +60,10 @@ def RunComputationalTools(directory):
 if __name__ == "__main__":
 	import sys
 	directory = sys.argv[1]
-	CreateConfFiles(directory, 'dirichlet');
-	GenerateFastaFiles(directory);
-	RunComputationalTools(directory);
+	#CreateConfFiles(directory, 'dirichlet');
+	#GenerateFastaFiles(directory);
+	#RunComputationalTools(directory);
+	TestKspectrumResults(sys.argv[2])
 
 
 

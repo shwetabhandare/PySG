@@ -24,6 +24,6 @@ def FindKspectrumKmers(dremeResultFile):
 
 if __name__ == "__main__":
 	import sys
-	kmerDict = FindDremeKmers(sys.argv[1]);
-	#for key, value in kmerDict.iteritems():
-		#print key, value
+	kmerDict = FindKspectrumKmers(sys.argv[1]);
+	for key, value in kmerDict.iteritems():
+		print key, value
