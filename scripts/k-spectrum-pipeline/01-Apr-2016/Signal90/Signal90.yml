@@ -1,4 +1,4 @@
-{data: {dataFile: Signal_NoSignal_50_50_CompleteSet.txt, negLen: 50, posLen: 50},
+{data: {dataFile: Signal90_NoSignal90_50_20_CompleteSet.txt, negLen: 20, posLen: 50},
   kspectrum: {C: 10, folds: 5, k1: 8, k2: 14}, output: {featureFile: Signal90_Features.dat,
     modelFile: Signal90_Model.dat, paramsFile: Signal90_params.dat, resultsFile: Signal90_Results.yml,
     trainDataFile: Signal90_kspectrum.dat}}
