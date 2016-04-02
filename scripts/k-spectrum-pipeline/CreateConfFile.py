@@ -40,8 +40,9 @@ def CreateConf(filename, output_prefix, confFile):
 				)
 		)
 
-	with open(confFile, 'w') as outfile:
+	with open(confFile, 'w+') as outfile:
 		outfile.write(yaml.dump(data, default_flow_style=True))
+	outfile.close()
 
 if __name__ == '__main__':
 	import sys

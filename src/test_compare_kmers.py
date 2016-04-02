@@ -2,6 +2,7 @@ import unittest
 import compareKmers
 import parseDreme
 import TAMO_Motif
+import splitKmerInDict
 
 class TestCompareKmers(unittest.TestCase):
 	def testPredictedStartEndBeforeRealStart(self):
@@ -278,7 +279,7 @@ class TestCompareKmers(unittest.TestCase):
 
 		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
 		self.assertEqual(numTP, 170)
-		self.assertEqual(numFP, 64)
+		self.assertEqual(numFP, 304)
 		self.assertEqual(numFN, 207)
 
 	def test_compareKmersTextMotifNotAllSeqContainKmer(self):
@@ -288,9 +289,9 @@ class TestCompareKmers(unittest.TestCase):
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal90.fa"
 
 		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
-		self.assertEqual(numTP, 292)
-		self.assertEqual(numFP, 58)
-		self.assertEqual(numFN, 105)
+		self.assertEqual(numTP, 0)
+		self.assertEqual(numFP, 490)
+		self.assertEqual(numFN, 0)
 
 	def test_compareKmersPSSM(self):
 		predictedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
@@ -300,7 +301,7 @@ class TestCompareKmers(unittest.TestCase):
 
 		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 0);
 		self.assertEqual(numTP, 174)
-		self.assertEqual(numFP, 60)
+		self.assertEqual(numFP, 300)
 		self.assertEqual(numFN, 206)
 
 	def test_compareKmersPSSMNotAllSeqContainKmer(self):
@@ -310,9 +311,9 @@ class TestCompareKmers(unittest.TestCase):
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal90.fa"
 
 		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 0);
-		self.assertEqual(numTP, 292)
-		self.assertEqual(numFP, 58)
-		self.assertEqual(numFN, 105)
+		self.assertEqual(numTP, 0)
+		self.assertEqual(numFP, 490)
+		self.assertEqual(numFN, 0)
 
 
 	def test_getRealKmerDetailsKeyDoesNotExists(self):
@@ -345,3 +346,21 @@ class TestCompareKmers(unittest.TestCase):
 		totalFN = compareKmers.getTotalFNKmerNotFound(realKmerDict);
 		self.assertEqual(totalFN, 26);
 		
+	def test_getKmerFromPWM(self):
+		predictedKspectrumKmers = "/projects/bhandare/workspace/PySG/src/resources/Signal90_Features.dat"
+		pwm = splitKmerInDict.GetKspectrumPWM(predictedKspectrumKmers);
+		seq = "GATCTCCCCGTATTTATTTCCTCGACTACCCCCTCTCGCTAAGTTGCAACACAACAACCCGACCCGTTATAACTATGAGAGAAACAAATCGCTCGGACCC"
+		kmerRE = compareKmers.getKmerFromPWM(pwm, seq);
+		self.assertEqual(kmerRE, "(TATTTATTT)");
+
+	def test_compareKspectrumKmers(self):
+		predictedKspectrumKmers = "/projects/bhandare/workspace/PySG/src/resources/Signal90_Features.dat"
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.kmers"
+		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.fa"
+		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal.fa"
+
+		numTP, numFP, numFN = compareKmers.CompareKspectrumKmers(realCsvFile, predictedKspectrumKmers,  posFile, negFile);
+
+		self.assertEqual(numTP, 50)
+		self.assertEqual(numFP, (63 + 180))
+		self.assertEqual(numFN, 112)

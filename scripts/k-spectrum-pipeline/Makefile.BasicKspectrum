@@ -2,7 +2,7 @@ POS_FILE=$(pos_file)
 NEG_FILE=$(neg_file)
 
 CONF_PREFIX=$(conf_prefix)
-CONF_YML=$(CONF_PREFIX).yml
+EXTENSION=".yml"
 
 RESULT_YML=$(CONF_PREFIX)_Results.yml
 
@@ -19,7 +19,6 @@ all: step0 step1 step2 step3 step4 step5
 .PHONY: all
 
 step0: $(POS_FILE) $(NEG_FILE)
-	@echo $(CONF_PREFIX)
 	python /projects/bhandare/workspace/scripts/convertToUpper.py $(POS_FILE)
 	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
 
@@ -27,8 +26,12 @@ step1: $(POS_FILE) $(NEG_FILE) seq_counter.py
 	python seq_counter.py $(POS_FILE) $(NEG_FILE)
 
 step2:
+	@echo $(CONF_PREFIX)$(EXTENSION)
+	$(shell touch $(CONF_PREFIX)$(EXTENSION))
+	$(eval CONF_YML := $(shell ls *.yml))
 	$(eval COMBINED_FILE_NAME := $(shell ls *.txt))
-	@echo "*** COMBINED FILE: ***: $(COMBINED_FILE_NAME)"
+	
+	@echo "*** COMBINED FILE: ***: $(COMBINED_FILE_NAME), $(CONF_YML)"
 	python $(CREATE_CONF_SCRIPT) $(COMBINED_FILE_NAME) $(CONF_PREFIX) $(CONF_YML)
 
 step3:

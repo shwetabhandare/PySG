@@ -45,10 +45,10 @@ def getUpdatedCounts(maxKmerLen, kmerDictList):
 			elif value == 'G':
 				gList[key] = gList[key] + 1;
 
-	print aList
-	print cList
-	print gList
-	print tList
+	#print aList
+	#print cList
+	#print gList
+	#print tList
 
 	return aList, tList, gList, cList;
 
@@ -58,10 +58,10 @@ def createNormalizedLists(aList, tList, gList, cList, numKmers):
 	gList[:] = [round(float(x)/numKmers, 3) for x in gList]
 	cList[:] = [round(float(x)/numKmers, 3) for x in cList]
 
-	print aList
-	print cList
-	print gList
-	print tList
+	#print aList
+	#print cList
+	#print gList
+	#print tList
 
 	return aList, tList, gList, cList;
 
@@ -72,7 +72,7 @@ def createPwm(aList, tList, gList, cList):
 		vals = [float(aList[i]), float(cList[i]), float(gList[i]), float(tList[i])]
 		pwm.append(vals)
 
-	print pwm
+	#print pwm
 	return pwm;
 
 def GetKspectrumPWM(kmerFile):

@@ -155,6 +155,16 @@ def getRealKmerDetails(realKmerDict, seqid):
 	else:
 		return "", 0, 0
 
+def getKmerFromPWM(pwm, seq):
+	kmerReToSearchFor = "("
+	bestSeqKmerTuple = TAMO_Motif.GetKmerFromMotifFromPWM(pwm, seq);
+	kmer = bestSeqKmerTuple[1]
+	kmerReToSearchFor = kmerReToSearchFor + kmer
+	kmerReToSearchFor = kmerReToSearchFor + '|'
+	kmerReToSearchFor = kmerReToSearchFor[:-1]
+	kmerReToSearchFor = kmerReToSearchFor + ")"
+	return kmerReToSearchFor;
+
 def getKmerFromPSSM(pssmList, seq):
 	kmerReToSearchFor = "("
 	for pssmLines in pssmList:
@@ -189,17 +199,19 @@ def getTotalsForSeq(realKmer, realStart, realEnd, kmerREString, seq):
 
 	return numTP, numFP, numFN;
 
-def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, predictedMotifs):
+def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, pwm, predictedMotifs):
 
 	numTotalTP = numTotalFP = numTotalFN = 0;
 
 	for seqid, seq in SeqDict.iteritems():
 		realKmer, realStart, realEnd = getRealKmerDetails(realKmerDict, seqid);
 		
-		if predictedMotifs == None:
+		if predictedMotifs != None:
+			kmerREString = getKmerRE(predictedMotifs, seq)
+		elif pssmList != None:
 			kmerREString = getKmerFromPSSM(pssmList, seq)
 		else:
-			kmerREString = getKmerRE(predictedMotifs, seq)
+			kmerREString = getKmerFromPWM(pwm, seq)
 
 		numTP, numFP, numFN = getTotalsForSeq(realKmer, realStart, realEnd, kmerREString, seq);
 		#print seqid, ": TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
@@ -210,19 +222,20 @@ def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, predictedMotifs):
 	
 	return numTotalTP, numTotalFP, numTotalFN;
 
-def GetTotalNumbers(realKmerDict, pssmList, posFile, negFile, predictedMotifs):
+def GetTotalNumbers(realKmerDict, posFile, negFile, pssmList, pwm, predictedMotifs):
 	PosSeqDict = SeqGenUtils.fasta_read(posFile);
 	NegSeqDict = SeqGenUtils.fasta_read(negFile);
 
 	numPosTP = 	numPosFP = 	numPosFN = 0;	
 	numNegTP = 	numNegFP = 	numNegFP = 0;	
 
-	numPosTP, numPosFP, numPosFN = getTotalNumbersForSeqDict(PosSeqDict, realKmerDict, pssmList, predictedMotifs);
-	numNegTP, numNegFP, numNegFN = getTotalNumbersForSeqDict(NegSeqDict, realKmerDict, pssmList, predictedMotifs);
+	numPosTP, numPosFP, numPosFN = getTotalNumbersForSeqDict(PosSeqDict, realKmerDict, pssmList, pwm, predictedMotifs);
+	numNegTP, numNegFP, numNegFN = getTotalNumbersForSeqDict(NegSeqDict, realKmerDict, pssmList, pwm, predictedMotifs);
 
 	print "Pos File: TP: ", str(numPosTP), ", FP: ", numPosFP, ", FN: ", numPosFN
 	print "Neg File: TP: ", str(numNegTP), ", FP: ", numNegFP, ", FN: ", numNegFN
-	return numPosTP, numPosFP, numPosFN;
+	return (numPosTP + numNegTP), (numPosFP + numNegFP) , (numPosFN + numNegFN);
+
 
 def getTotalFNKmerNotFound(realKmerDict):
 	totalFN = 0
@@ -231,13 +244,13 @@ def getTotalFNKmerNotFound(realKmerDict):
 		totalFN = totalFN + len(kmer)
 	return totalFN;
 
-def ComparePWMKmers(realKmerDict, predictedKspectrumFile, posFile, negFile):
+def ComparePWMKmers(realKmerDict, predictedKspectrumFile, posFile, negFile, pssmList):
 	numFP = numTP = numFN = 0	
-	pssmList = splitKmerDict.GetKspectrumPWM(predictedKspectrumFile);
-	if len(pssmList) == 0:
+	pwm = splitKmerInDict.GetKspectrumPWM(predictedKspectrumFile);
+	if len(pwm) == 0:
 		numFP = getTotalFNKmerNotFound(realKmerDict);		
 	else:
-		numTP, numFP, numFN = GetTotalNumbers(realKmerDict, pssmList, posFile, negFile, None)
+		numTP, numFP, numFN = GetTotalNumbers(realKmerDict, posFile, negFile, None, pwm, None)
 
 	return numTP, numFP, numFN;
 
@@ -249,7 +262,7 @@ def ComparePSSMKmers(realKmerDict, predictedDremeFile, posFile, negFile, pssmLis
 	if len(pssmList) == 0:
 		numFP = getTotalFNKmerNotFound(realKmerDict);		
 	else:
-		numTP, numFP, numFN = GetTotalNumbers(realKmerDict, pssmList, posFile, negFile, None)
+		numTP, numFP, numFN = GetTotalNumbers(realKmerDict, posFile, negFile, pssmList, None, None)
 
 	return numTP, numFP, numFN;
 
@@ -258,7 +271,7 @@ def CompareTextMotifKmers(realKmerDict, predictedKmers, posFile, negFile):
 	if len(predictedKmers) == 0:
 		numFN = getTotalFNKmerNotFound(realKmerDict);
 	else:
-		numTP, numFP, numFN = GetTotalNumbers(realKmerDict, None, posFile, negFile, predictedKmers)
+		numTP, numFP, numFN = GetTotalNumbers(realKmerDict,  posFile, negFile, None, None, predictedKmers)
 	return numTP, numFP, numFN;
 
 
@@ -269,12 +282,12 @@ def CompareKspectrumKmers(realCsvFile, predictedKspectrumFile, posFile, negFile)
 	numFP = 0
 	numFN = 0
 
-	pssmList = splitKmerInDict.GetKspectrumPWM(predictedKspectrumFile);
+	pssmList	= splitKmerInDict.GetKspectrumPWM(predictedKspectrumFile);
 	numTP, numFP, numFN = ComparePWMKmers(realKmerDict, predictedKspectrumFile, posFile, negFile, pssmList);
 	
 	return numTP, numFP, numFN;
 
-def CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMotif=0):
+def CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMotif):
 
 	realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);
 
