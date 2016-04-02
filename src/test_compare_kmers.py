@@ -351,7 +351,7 @@ class TestCompareKmers(unittest.TestCase):
 		pwm = splitKmerInDict.GetKspectrumPWM(predictedKspectrumKmers);
 		seq = "GATCTCCCCGTATTTATTTCCTCGACTACCCCCTCTCGCTAAGTTGCAACACAACAACCCGACCCGTTATAACTATGAGAGAAACAAATCGCTCGGACCC"
 		kmerRE = compareKmers.getKmerFromPWM(pwm, seq);
-		self.assertEqual(kmerRE, "(TATTTATTT)");
+		self.assertEqual(kmerRE, "(CAACACAACAACC)");
 
 	def test_compareKspectrumKmers(self):
 		predictedKspectrumKmers = "/projects/bhandare/workspace/PySG/src/resources/Signal90_Features.dat"
@@ -361,6 +361,6 @@ class TestCompareKmers(unittest.TestCase):
 
 		numTP, numFP, numFN = compareKmers.CompareKspectrumKmers(realCsvFile, predictedKspectrumKmers,  posFile, negFile);
 
-		self.assertEqual(numTP, 50)
-		self.assertEqual(numFP, (63 + 180))
-		self.assertEqual(numFN, 112)
+		self.assertEqual(numTP, 81)
+		self.assertEqual(numFP, 338)
+		self.assertEqual(numFN, 81)

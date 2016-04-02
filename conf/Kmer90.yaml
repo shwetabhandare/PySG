@@ -1,0 +1,16 @@
+sequence:
+  nosignal:
+    alpha: 1000
+    numSeq: 50
+    outNoSignalFastaFile: /projects/bhandare/workspace/PySG/conf/NoSignal90.fa
+    seqBackGround:
+      A: 0.27
+      C: 0.3
+      G: 0.21
+      T: 0.22
+    seqLen: 100
+  signal:
+    locationFromStart: 10
+    outSignalFile: /projects/bhandare/workspace/PySG/conf/Signal90.fa
+    textMotif: "TATTTATTT"
+    seqWithSignal: 45

@@ -14,7 +14,8 @@ def findKmers(file_contents):
 		kmer_score = match2.group(1);
 		kmer = match2.group(2);
 
-		if kmerCount <= 20:
+		# Take all the positive k-mers.
+		if float(kmer_score) > 0.0:
 			#print "%s:%s" %(match2.group(1), match2.group(2))
 			kmerDict[kmer] = kmer_score;
 			kmerCount = kmerCount + 1;
