@@ -13,6 +13,17 @@ import sys;
 import glob, os
 import subprocess
 
+def RunKspectrumKernel(signalFile, noSignalFile):
+	baseNameOfSignalFile = os.path.splitext(os.path.basename(signalFile))[0]
+	outDir = baseNameOfSignalFile + "_kspectrum"
+	makeFile = "/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline/Makefile.BasicKspectrum"
+	posFileArg = "pos_file=" + signalFile;
+	negFileArg = "neg_file=" + noSignalFile;
+	prefixArg = "conf_prefix=" + baseNameOfSignalFile 
+	resultDirArg = "result_dir=" + outDir
+	subprocess.call(["make", "-f", makeFile, posFileArg, negFileArg, prefixArg, resultDirArg])
+
+
 
 def RunDreme(signalFile, noSignalFile):
 	dremeDir = signalFile + "_DremeOut"
@@ -26,8 +37,8 @@ def RunDreme(signalFile, noSignalFile):
 
 def ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile):
 
-	numTP, numFP, numFN = compareKmers.CompareKmers(realKmersCsvFile, predictedDremeFile,
-		signalFile, noSignalFile)
+	numTP, numFP, numFN = compareKmers.CompareDremeKmers(realKmersCsvFile, predictedDremeFile,
+		signalFile, noSignalFile, None)
 
 	sensitivity = numTP / (numTP + numFN)
 	ppv = numTP / (numTP + numFP)
@@ -53,17 +64,19 @@ def RunComputationalTools(directory):
 		noSignalFile = "No" + signalFile;
 		resultFile = signalFile + ".results"
 
-		predictedDremeFile, realKmersCsvFile = RunDreme(signalFile, noSignalFile);
-		sensitivity, ppv = ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile);
-		WriteResults(sensitivity, ppv, resultFile)
+		#predictedDremeFile, realKmersCsvFile = RunDreme(signalFile, noSignalFile);
+		#sensitivity, ppv = ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile);
+		#WriteResults(sensitivity, ppv, resultFile)
+
+		RunKspectrumKernel(signalFile, noSignalFile)
+
 
 if __name__ == "__main__":
 	import sys
 	directory = sys.argv[1]
-	#CreateConfFiles(directory, 'dirichlet');
-	#GenerateFastaFiles(directory);
-	#RunComputationalTools(directory);
-	TestKspectrumResults(sys.argv[2])
+	CreateConfFiles(directory, 'dirichlet');
+	GenerateFastaFiles(directory);
+	RunComputationalTools(directory);
 
 
 
