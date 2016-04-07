@@ -1,5 +1,7 @@
 import unittest
 import compareKmers
+import compareKmerCommon
+
 import parseDreme
 import TAMO_Motif
 import splitKmerInDict
@@ -12,7 +14,7 @@ class TestCompareKmers(unittest.TestCase):
 		realEnd = 20;
 		predKmer = "ATTTA"
 
-		startIndex, numFP, numFN = compareKmers.getStartIndexAndUpdateNumbers(predictedStart, 
+		startIndex, numFP, numFN = compareKmerCommon.getStartIndexAndUpdateNumbers(predictedStart, 
 			predictedEnd, realStart, realEnd, predKmer)
 		self.assertEqual(startIndex, realStart)
 		self.assertEqual(numFP, 5)
@@ -25,7 +27,7 @@ class TestCompareKmers(unittest.TestCase):
 		realEnd = 20;
 		predKmer = "ATTTA"
 
-		startIndex, numFP, numFN = compareKmers.getStartIndexAndUpdateNumbers(predictedStart, 
+		startIndex, numFP, numFN = compareKmerCommon.getStartIndexAndUpdateNumbers(predictedStart, 
 			predictedEnd, realStart, realEnd, predKmer)
 		self.assertEqual(startIndex, realEnd)
 		self.assertEqual(numFP, 5)
@@ -38,7 +40,7 @@ class TestCompareKmers(unittest.TestCase):
 		realEnd = 30;
 		predKmer = "ATTTA"
 
-		startIndex, numFP, numFN = compareKmers.getStartIndexAndUpdateNumbers(predictedStart, 
+		startIndex, numFP, numFN = compareKmerCommon.getStartIndexAndUpdateNumbers(predictedStart, 
 			predictedEnd, realStart, realEnd, predKmer)
 		self.assertEqual(startIndex, realStart)
 		self.assertEqual(numFP, (realStart - predictedStart))
@@ -51,7 +53,7 @@ class TestCompareKmers(unittest.TestCase):
 		realEnd = 30;
 		predKmer = "ATTTA"
 
-		startIndex, numFP, numFN = compareKmers.getStartIndexAndUpdateNumbers(predictedStart, 
+		startIndex, numFP, numFN = compareKmerCommon.getStartIndexAndUpdateNumbers(predictedStart, 
 			predictedEnd, realStart, realEnd, predKmer)
 		self.assertEqual(startIndex, realStart)
 		self.assertEqual(numFP, (realStart - predictedStart))
@@ -64,7 +66,7 @@ class TestCompareKmers(unittest.TestCase):
 		realEnd = 30;
 		predKmer = "ATTTA"
 
-		startIndex, numFP, numFN = compareKmers.getStartIndexAndUpdateNumbers(predictedStart, 
+		startIndex, numFP, numFN = compareKmerCommon.getStartIndexAndUpdateNumbers(predictedStart, 
 			predictedEnd, realStart, realEnd, predKmer)
 		self.assertEqual(startIndex, predictedStart)
 		self.assertEqual(numFN, (predictedStart - realStart))
@@ -77,7 +79,7 @@ class TestCompareKmers(unittest.TestCase):
 		realEnd = 30;
 		predKmer = "ATTTA"
 
-		startIndex, numFP, numFN = compareKmers.getStartIndexAndUpdateNumbers(predictedStart, 
+		startIndex, numFP, numFN = compareKmerCommon.getStartIndexAndUpdateNumbers(predictedStart, 
 			predictedEnd, realStart, realEnd, predKmer)
 		self.assertEqual(startIndex, predictedStart)
 		self.assertEqual(numFN, (predictedStart - realStart))
@@ -87,14 +89,14 @@ class TestCompareKmers(unittest.TestCase):
 		predictedEnd = 10;
 		realEnd = 20;
 
-		endIndex = compareKmers.getEndIndex(predictedEnd, realEnd);
+		endIndex = compareKmerCommon.getEndIndex(predictedEnd, realEnd);
 		self.assertEqual(endIndex, predictedEnd)		
 	
 	def testPredictedEndEqualRealEnd(self):
 		predictedEnd = 30;
 		realEnd = 30;
 
-		endIndex = compareKmers.getEndIndex(predictedEnd, realEnd);
+		endIndex = compareKmerCommon.getEndIndex(predictedEnd, realEnd);
 		self.assertEqual(endIndex, realEnd)	
 
 	def testGetRealKmerDetails(self):
@@ -104,19 +106,19 @@ class TestCompareKmers(unittest.TestCase):
 		realKmerDict["2"] = ["ATTAAAA", 20]
 		realKmerDict["3"] = ["ATTAAAAATTTT", 30]
 
-		realKmer, realStart, realEnd = compareKmers.getRealKmerDetails(realKmerDict, "1")
+		realKmer, realStart, realEnd = compareKmerCommon.getRealKmerDetails(realKmerDict, "1")
 
 		self.assertEqual(realKmer, "ATTA")
 		self.assertEqual(realStart, 10)
 		self.assertEqual(realEnd, (10 + len("ATTA")))
 
-		realKmer, realStart, realEnd = compareKmers.getRealKmerDetails(realKmerDict, "2")
+		realKmer, realStart, realEnd = compareKmerCommon.getRealKmerDetails(realKmerDict, "2")
 
 		self.assertEqual(realKmer, "ATTAAAA")
 		self.assertEqual(realStart, 20)
 		self.assertEqual(realEnd, (20 + len("ATTAAAA")))
 
-		realKmer, realStart, realEnd = compareKmers.getRealKmerDetails(realKmerDict, "3")
+		realKmer, realStart, realEnd = compareKmerCommon.getRealKmerDetails(realKmerDict, "3")
 
 
 		self.assertEqual(realKmer, "ATTAAAAATTTT")
@@ -127,7 +129,7 @@ class TestCompareKmers(unittest.TestCase):
 		predictedEnd = 30;
 		realEnd = 20;
 
-		endIndex = compareKmers.getEndIndex(predictedEnd, realEnd);
+		endIndex = compareKmerCommon.getEndIndex(predictedEnd, realEnd);
 		self.assertEqual(endIndex, realEnd)	
 
 
@@ -138,7 +140,7 @@ class TestCompareKmers(unittest.TestCase):
 		startIndex = seq.find(predKmer)
 		endIndex = startIndex + len(predKmer)
 
-		numTP, numFP = compareKmers.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
 		self.assertEqual(numTP, len(predKmer))
 		self.assertEqual(numFP, 0)		
 
@@ -149,7 +151,7 @@ class TestCompareKmers(unittest.TestCase):
 		startIndex = 27
 		endIndex = startIndex + len(predKmer)
 
-		numTP, numFP = compareKmers.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
 		self.assertEqual(numTP, len(predKmer) - 1)
 		self.assertEqual(numFP, 1)		
 
@@ -160,7 +162,7 @@ class TestCompareKmers(unittest.TestCase):
 		startIndex = 27
 		endIndex = startIndex + len(predKmer)
 
-		numTP, numFP = compareKmers.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
 		self.assertEqual(numTP, len(predKmer) - 1)
 		self.assertEqual(numFP, 1)		
 
@@ -171,14 +173,14 @@ class TestCompareKmers(unittest.TestCase):
 		startIndex = 27
 		endIndex = startIndex + len(predKmer)
 
-		numTP, numFP = compareKmers.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
 		self.assertEqual(numTP, len(predKmer) - 3)
 		self.assertEqual(numFP, 3)		
 
 	def test_kmerREString(self):
 		seq = "GGAACCGCGTTCGGGGGGGGGGGGGCCGAACCCTTCCAGCATTGAGCTCCTGCCGCTAGCTTATGCGGCCTCCCATCCAGTCGGCCGAGACGCACGACTT"
 		predictedMotifs = ['MCCCGA', 'AAAAAA']
-		kmerReString = compareKmers.getKmerRE(predictedMotifs, seq)
+		kmerReString = compareKmerCommon.getKmerRE(predictedMotifs, seq)
 		self.assertEqual(kmerReString, '(TCGGGG|CTTATG)')
 
 	def test_getNumbersForSeqOneKmer(self):
@@ -189,7 +191,7 @@ class TestCompareKmers(unittest.TestCase):
 		realEnd = 44
 		kmerREString = "(XXXXXX)"
 
-		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		numTP, numFP, numFN = compareKmerCommon.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		self.assertEqual(numTP, 12)
 		self.assertEqual(numFP, 0)
 		self.assertEqual(numFN, 28)
@@ -202,7 +204,7 @@ class TestCompareKmers(unittest.TestCase):
 
 		kmerREString = "(XXXXXX|YYYYYY)"
 
-		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		numTP, numFP, numFN = compareKmerCommon.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		self.assertEqual(numTP, 12)
 		self.assertEqual(numFP, 0)
 		self.assertEqual(numFN, 28)
@@ -210,7 +212,7 @@ class TestCompareKmers(unittest.TestCase):
 	def test_getLengthOfKmersFromKmerREString(self):
 		kmerREString = "(XXXXXX|YYYYYY)"
 
-		kmerStringLen = compareKmers.getKmerLengthFromREString(kmerREString);
+		kmerStringLen = compareKmerCommon.getKmerLengthFromREString(kmerREString);
 		self.assertEqual(kmerStringLen, len(kmerREString) - 3)
 
 	def test_getNumbersForSeqKmerNotFound(self):
@@ -221,7 +223,7 @@ class TestCompareKmers(unittest.TestCase):
 
 		kmerREString = "(ABCDEF|XYZFFF)"
 
-		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		numTP, numFP, numFN = compareKmerCommon.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		self.assertEqual(numTP, 0)
 		self.assertEqual(numFP, 12)
 		self.assertEqual(numFN, 40)
@@ -234,7 +236,7 @@ class TestCompareKmers(unittest.TestCase):
 
 		kmerREString = "(CCCCGA|AAAAAA)"
 
-		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		numTP, numFP, numFN = compareKmerCommon.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		
 		#self.assertEqual(numTP, 0)
 		#self.assertEqual(numFP, 12)
@@ -247,7 +249,7 @@ class TestCompareKmers(unittest.TestCase):
 		realStart = 10
 		realEnd = realStart + len(realKmer)
 
-		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		numTP, numFP, numFN = compareKmerCommon.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		self.assertEqual(numTP, 6)
 		self.assertEqual(numFP, 6)
 		self.assertEqual(numFN, 13)
@@ -258,7 +260,7 @@ class TestCompareKmers(unittest.TestCase):
 		realKmer = "TCGGGTTTTTTTTTTCCGA"
 		realStart = 10;
 		realEnd = realStart + len(realKmer)
-		numTP, numFP, numFN = compareKmers.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
+		numTP, numFP, numFN = compareKmerCommon.getNumbersForSeq(kmerREString, realStart, realEnd, seq);
 		self.assertEqual(numTP, 12)
 		self.assertEqual(numFP, 0)
 		self.assertEqual(numFN, 7)
@@ -267,7 +269,7 @@ class TestCompareKmers(unittest.TestCase):
 		predictedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
 		seq = "CTGTCCCTTTTCGGGTTTTTTTTTTCCGAGCGGCCTCGGTGGGTGAAATGAACGACACTCATGCGAGCGACACTAGGGCGCCGTTCGTTCTGTGCACCCA"
 		pssmList = parseDreme.getPSSMListFromDremeFile(predictedDremeFile);
-		kmerREString = compareKmers.getKmerFromPSSM(pssmList, seq)
+		kmerREString = compareKmerCommon.getKmerFromPSSM(pssmList, seq)
 
 		self.assertEqual(kmerREString, '(TCGGGT|TTTTTT)')
 
@@ -324,13 +326,13 @@ class TestCompareKmers(unittest.TestCase):
 		realKmerDict['2'] = ['ATTTTTA', 10]
 		realKmerDict['3'] = ['ATTTAAAA', 10]
 
-		realKmer, realStart, realEnd = compareKmers.getRealKmerDetails(realKmerDict, '0')
+		realKmer, realStart, realEnd = compareKmerCommon.getRealKmerDetails(realKmerDict, '0')
 		self.assertEqual(realKmer, 'ATTTA');
 		self.assertEqual(realStart, 10);
 		self.assertEqual(realEnd, 15)
 
 		# does not exist.
-		realKmer, realStart, realEnd = compareKmers.getRealKmerDetails(realKmerDict, '4')
+		realKmer, realStart, realEnd = compareKmerCommon.getRealKmerDetails(realKmerDict, '4')
 		self.assertEqual(realKmer, '');
 		self.assertEqual(realStart, 0);
 		self.assertEqual(realEnd, 0)
@@ -343,14 +345,14 @@ class TestCompareKmers(unittest.TestCase):
 		realKmerDict['2'] = ['ATTTTTA', 10]
 		realKmerDict['3'] = ['ATTTAAAA', 10]
 
-		totalFN = compareKmers.getTotalFNKmerNotFound(realKmerDict);
+		totalFN = compareKmerCommon.getTotalFNKmerNotFound(realKmerDict);
 		self.assertEqual(totalFN, 26);
 		
 	def test_getKmerFromPWM(self):
 		predictedKspectrumKmers = "/projects/bhandare/workspace/PySG/src/resources/Signal90_Features.dat"
 		pwm = splitKmerInDict.GetKspectrumPWM(predictedKspectrumKmers);
 		seq = "GATCTCCCCGTATTTATTTCCTCGACTACCCCCTCTCGCTAAGTTGCAACACAACAACCCGACCCGTTATAACTATGAGAGAAACAAATCGCTCGGACCC"
-		kmerRE = compareKmers.getKmerFromPWM(pwm, seq);
+		kmerRE = compareKmerCommon.getKmerFromPWM(pwm, seq);
 		self.assertEqual(kmerRE, "(CAACACAACAACC)");
 
 	def test_compareKspectrumKmers(self):

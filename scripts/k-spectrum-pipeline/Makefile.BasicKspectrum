@@ -3,7 +3,8 @@ NEG_FILE=$(neg_file)
 CONF_PREFIX=$(conf_prefix)
 RESULT_DIR=$(result_dir)
 
-EXTENSION=".yml"
+EXTENSION=.yml
+CONF_YML=$(CONF_PREFIX)$(EXTENSION)
 
 RESULT_YML=$(CONF_PREFIX)_Results.yml
 
@@ -19,7 +20,7 @@ SEQ_COUNTER_SCRIPT=/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline
 $(shell cd $(RESULT_DIR))
 
 #all: step0 step1 step2 step3 step4 step5
-all: step0 step1 step2 step3
+all: step1 step2 step3
 
 .PHONY: all
 
@@ -30,17 +31,13 @@ step0: $(POS_FILE) $(NEG_FILE)
 	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
 
 step1: $(POS_FILE) $(NEG_FILE) $(SEQ_COUNTER_SCRIPT) 
-	cd $(RESULT_DIR) && python $(SEQ_COUNTER_SCRIPT) ../$(POS_FILE) ../$(NEG_FILE)
-
+	cd $(RESULT_DIR); python $(SEQ_COUNTER_SCRIPT) ../$(POS_FILE) ../$(NEG_FILE); echo "I am in " `pwd` "directory"
 
 step2:
-	@echo "CONF PREFIX",$(CONF_PREFIX)
-	$(shell touch $(RESULT_DIR)/$(CONF_PREFIX)$(EXTENSION))
-	$(shell CONF_YML=$(CONF_PREFIX)$(EXTENSION))
-	$(eval COMBINED_FILE_NAME := $(shell ls $(RESULT_DIR)/*.txt))
-	@echo $(COMBINED_FILE_NAME), $(CONF_YML)
-	python $(CREATE_CONF_SCRIPT) $(RESULT_DIR)/$(COMBINED_FILE_NAME) $(CONF_PREFIX) $(RESULT_DIR)/$(CONF_YML)
 
+	$(eval COMBINED_FILE_NAME := $(shell cd $(RESULT_DIR); ls *.txt))
+	@echo $(CONF_YML), $(COMBINED_FILE_NAME)
+	cd $(RESULT_DIR) && python $(CREATE_CONF_SCRIPT) $(COMBINED_FILE_NAME) $(CONF_PREFIX) $(CONF_YML)
 step3:
 	cd $(RESULT_DIR) && python $(BASIC_KSPECTRUM_SCRIPT) $(CONF_YML)
 

@@ -23,6 +23,10 @@ def RunKspectrumKernel(signalFile, noSignalFile):
 	resultDirArg = "result_dir=" + outDir
 	subprocess.call(["make", "-f", makeFile, posFileArg, negFileArg, prefixArg, resultDirArg])
 
+	predictedKspectrumFile = outDir + "/" + baseNameOfSignalFile + "_Features.dat"
+	realKmersCsvFile = os.path.splitext(signalFile)[0] + ".kmers"
+
+	return predictedKspectrumFile, realKmersCsvFile;
 
 
 def RunDreme(signalFile, noSignalFile):
@@ -39,6 +43,15 @@ def ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSign
 
 	numTP, numFP, numFN = compareKmers.CompareDremeKmers(realKmersCsvFile, predictedDremeFile,
 		signalFile, noSignalFile, None)
+
+	sensitivity = numTP / (numTP + numFN)
+	ppv = numTP / (numTP + numFP)
+
+	return sensitivity, ppv;
+
+def ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile):
+	numTP, numFP, numFN = compareKmers.CompareKspectrumKmers(realKmersCsvFile, predictedKspectrumFile,
+		signalFile, noSignalFile)
 
 	sensitivity = numTP / (numTP + numFN)
 	ppv = numTP / (numTP + numFP)
@@ -64,12 +77,14 @@ def RunComputationalTools(directory):
 		noSignalFile = "No" + signalFile;
 		resultFile = signalFile + ".results"
 
-		#predictedDremeFile, realKmersCsvFile = RunDreme(signalFile, noSignalFile);
-		#sensitivity, ppv = ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile);
-		#WriteResults(sensitivity, ppv, resultFile)
+		predictedDremeFile, realKmersCsvFile = RunDreme(signalFile, noSignalFile);
+		sensitivity, ppv = ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile);
+		print "DREME: ", str(sensitivity), str(ppv);
+		WriteResults(sensitivity, ppv, resultFile)
 
-		RunKspectrumKernel(signalFile, noSignalFile)
-
+		predictedKspectrumFile, realKmersCsvFile = RunKspectrumKernel(signalFile, noSignalFile)
+		sensitivity, ppv = ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile);
+		print "K_SPECTRUM: ", str(sensitivity), str(ppv);
 
 if __name__ == "__main__":
 	import sys
