@@ -12,6 +12,7 @@ import compareKmers;
 import sys;
 import glob, os
 import subprocess
+import shutil
 
 def RunKspectrumKernel(signalFile, noSignalFile):
 	baseNameOfSignalFile = os.path.splitext(os.path.basename(signalFile))[0]
@@ -26,7 +27,7 @@ def RunKspectrumKernel(signalFile, noSignalFile):
 	predictedKspectrumFile = outDir + "/" + baseNameOfSignalFile + "_Features.dat"
 	realKmersCsvFile = os.path.splitext(signalFile)[0] + ".kmers"
 
-	return predictedKspectrumFile, realKmersCsvFile;
+	return predictedKspectrumFile, realKmersCsvFile, outDir;
 
 
 def RunDreme(signalFile, noSignalFile):
@@ -37,7 +38,7 @@ def RunDreme(signalFile, noSignalFile):
 	predictedDremeFile = dremeDir + "/" + "dreme.txt";
 	realKmersCsvFile = os.path.splitext(signalFile)[0] + ".kmers"
 
-	return predictedDremeFile, realKmersCsvFile;
+	return predictedDremeFile, realKmersCsvFile, dremeDir;
 
 def ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile):
 
@@ -58,7 +59,7 @@ def ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile
 
 	return sensitivity, ppv;
 
-def WriteResults(sensitivity, ppv, resultFile):
+def WriteResults(sensitivity, ppv, signalFile, resultFile):
 	target = open(resultFile, 'w')
 	resultStr = "Sensitivity:" + str(sensitivity) + ",PPV:" + str(ppv);
 	target.write(resultStr)
@@ -71,20 +72,55 @@ def GenerateFastaFiles(directory):
 		CreateNoSignalFastaFile(confFile);
 		CreateFastaWithSignal(confFile)
 
+def RunDremeAndGetResults(signalFile, noSignalFile):
+
+	predictedDremeFile, realKmersCsvFile, dremeResultDir = RunDreme(signalFile, noSignalFile);
+	sensitivity, ppv = ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile);
+	print "DREME: ", str(sensitivity), str(ppv);
+	dremeResultFile = dremeResultDir + "/" + signalFile + "_dreme.results"
+	WriteResults(sensitivity, ppv, signalFile, dremeResultFile)
+
+	return dremeResultDir, realKmersCsvFile;
+
+def RunKspectrumAndGetResults(signalFile, noSignalFile):
+
+	predictedKspectrumFile, realKmersCsvFile, kspectrumResultDir = RunKspectrumKernel(signalFile, noSignalFile)
+	sensitivity, ppv = ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile);
+	kSpectrumResultFile = kspectrumResultDir + "/" + signalFile + "_kspectrum.results"
+	WriteResults(sensitivity, ppv, signalFile, kSpectrumResultFile)
+	print "K_SPECTRUM: ", str(sensitivity), str(ppv);
+
+	return kspectrumResultDir, realKmersCsvFile;
+
+def CopyResults(signalFile, noSignalFile, realKmersCsvFile, dremeResultDir, kspectrumResultDir):
+	# Create an enclosing directory for the signal/nosignal file
+	baseNameOfSignalFile = os.path.splitext(os.path.basename(signalFile))[0]
+	baseNameOfNoSignalFile = os.path.splitext(os.path.basename(noSignalFile))[0]
+
+	enclosingDir = baseNameOfSignalFile + "_" + baseNameOfNoSignalFile;
+	if not os.path.exists(enclosingDir):
+		os.makedirs(enclosingDir)
+
+		shutil.move(signalFile, enclosingDir)
+		shutil.move(noSignalFile, enclosingDir)
+		shutil.move(kspectrumResultDir, enclosingDir)
+		shutil.move(dremeResultDir, enclosingDir)
+		shutil.move(realKmersCsvFile, enclosingDir)
+
+
 def RunComputationalTools(directory):
 	os.chdir(directory)
 	for signalFile in glob.glob("Signal*90.fa"):
 		noSignalFile = "No" + signalFile;
-		resultFile = signalFile + ".results"
 
-		predictedDremeFile, realKmersCsvFile = RunDreme(signalFile, noSignalFile);
-		sensitivity, ppv = ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile);
-		print "DREME: ", str(sensitivity), str(ppv);
-		WriteResults(sensitivity, ppv, resultFile)
+		dremeResultDir, realKmersCsvFile = RunDremeAndGetResults(signalFile, noSignalFile);
+		kspectrumResultDir, realKmersCsvFile = RunKspectrumAndGetResults(signalFile, noSignalFile);
 
-		predictedKspectrumFile, realKmersCsvFile = RunKspectrumKernel(signalFile, noSignalFile)
-		sensitivity, ppv = ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile);
-		print "K_SPECTRUM: ", str(sensitivity), str(ppv);
+		CopyResults(signalFile, noSignalFile, realKmersCsvFile, dremeResultDir, kspectrumResultDir)
+
+
+
+
 
 if __name__ == "__main__":
 	import sys

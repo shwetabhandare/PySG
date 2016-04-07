@@ -31,6 +31,7 @@ step0: $(POS_FILE) $(NEG_FILE)
 	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
 
 step1: $(POS_FILE) $(NEG_FILE) $(SEQ_COUNTER_SCRIPT) 
+	mkdir -p $(RESULT_DIR)
 	cd $(RESULT_DIR); python $(SEQ_COUNTER_SCRIPT) ../$(POS_FILE) ../$(NEG_FILE); echo "I am in " `pwd` "directory"
 
 step2:
