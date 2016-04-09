@@ -1,3 +1,5 @@
+from __future__ import division
+
 import glob, os
 import subprocess
 import shutil
@@ -35,7 +37,7 @@ def ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSign
 		signalFile, noSignalFile, None)
 
 	sensitivity = numTP / (numTP + numFN)
-	ppv = numTP / (numTP + numFP)
+	ppv =  numTP / (numTP + numFP)
 
 	return sensitivity, ppv;
 

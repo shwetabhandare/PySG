@@ -1,4 +1,3 @@
-from __future__ import division
 
 from generateYaml import *;
 from SeqGenUtils import *;
@@ -17,14 +16,14 @@ import glob;
 
 
 def GenerateFastaFiles(directory):
-	for confFile in findFiles(directory, 'Kmer90.yaml'):
+	for confFile in findFiles(directory, '*.yml'):
 		print "Generating sequences for : ", confFile;
 		CreateNoSignalFastaFile(confFile);
 		CreateFastaWithSignal(confFile)
 
 def RunComputationalTools(directory):
 	os.chdir(directory)
-	for signalFile in glob.glob("Signal*90.fa"):
+	for signalFile in glob.glob("Signal*.fa"):
 		noSignalFile = "No" + signalFile;
 
 		dremeResultDir, realKmersCsvFile = RunComputationalMethods.RunDremeAndGetResults(signalFile, noSignalFile);
@@ -37,8 +36,10 @@ def RunComputationalTools(directory):
 
 if __name__ == "__main__":
 	import sys
+
 	directory = sys.argv[1]
-	CreateConfFiles(directory, 'dirichlet');
+	randomType = sys.argv[2];
+	CreateConfFiles(directory, randomType);
 	GenerateFastaFiles(directory);
 	RunComputationalTools(directory);
 
