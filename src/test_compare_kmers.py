@@ -3,6 +3,8 @@ import compareKmers
 import compareKmerCommon
 
 import parseDreme
+import parseKspectrum
+import parseRealKmers
 import TAMO_Motif
 import splitKmerInDict
 
@@ -366,3 +368,37 @@ class TestCompareKmers(unittest.TestCase):
 		self.assertEqual(numTP, 81)
 		self.assertEqual(numFP, 338)
 		self.assertEqual(numFN, 81)
+	
+	def test_simpleKmerExample(self):
+		simpleKmersFile = "/projects/bhandare/workspace/PySG/src/resources/testkmers.dat"
+		print "RUnning simple test"
+		pwm = splitKmerInDict.GetKspectrumPWM(simpleKmersFile)
+
+	def test_getUniqueEntries(self):
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.kmers"
+		realDict = parseRealKmers.GetRealKmerDict(realCsvFile);
+		uniqueRealKmers = parseKspectrum.GetUniqueRealKmers(realDict);
+		self.assertEqual(len(uniqueRealKmers), 3);
+		self.assertEqual(['ACAAACAAA', 'TATTTATTT', 'GTGGGTGGG'], uniqueRealKmers);
+
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal.kmers"
+		realDict = parseRealKmers.GetRealKmerDict(realCsvFile);
+		uniqueRealKmers = parseKspectrum.GetUniqueRealKmers(realDict);
+		self.assertEqual(len(uniqueRealKmers), 7);
+
+	def test_getNumPredictedKmersFound(self):
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.kmers"
+		
+		realDict = parseRealKmers.GetRealKmerDict(realCsvFile);
+		predictedDict = {"TATTTATTT":0.12, "GTGGG":0.12, "ACAAACAAA":0.12, "TTTATTT":0.12};
+		numPredictedFound = parseKspectrum.GetNumPredictedKmersFoundInReal(predictedDict, realDict);
+		self.assertEqual(numPredictedFound, 4);
+
+		predictedDict = {"TATTT":0.12, "XXXXXX":0.12, "TTTATTT":0.12};
+		numPredictedFound = parseKspectrum.GetNumPredictedKmersFoundInReal(predictedDict, realDict);
+		self.assertEqual(numPredictedFound, 2);
+
+	def test_findKmers(self):
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/testKmers.csv"
+		realDict = parseKspectrum.FindKspectrumKmers(realCsvFile);
+		self.assertEqual(len(realDict), 14)
