@@ -20,7 +20,7 @@ def getNumbersAfterKmerComparison(startIndex, endIndex, predictedStart, seq, pre
 	numFP = 0;
 
 	if predictedStart > startIndex:
-		predictedStart - startIndex;
+		predKmerIndex = predictedStart - startIndex;
 	else:
 		predKmerIndex = startIndex - predictedStart;
 	print "Start Index: ", str(startIndex), ", End Index: ", str(endIndex)
@@ -43,6 +43,7 @@ def getNumbersForKmerNotAddedToSeq(kmerREString, seq):
 
 	for m in re.finditer(kmerREString, seq):
 		predictedStart, predictedEnd, predKmer  = getPredictedInfo(m);
+		print "KMER NOT ADDED. PREDICTED KMER: ", predKmer, ", : ", str(predictedStart), str(predictedEnd)
 		numFP = numFP + (predictedEnd - predictedStart);
 	return numFP;
 
@@ -94,7 +95,7 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 		numFN = numFN + startFN;
 		numFP = numFP + startFP;
 
-		#print "Based on Start Location: FP: " , str(startFP), ", FN: ", str(startFN)
+		print "Based on Start Location: FP: " , str(startFP), ", FN: ", str(startFN)
 		endIndex = getEndIndex(predictedEnd, realEnd)	
 
 		# This can happen if the predicted kmer ends before the real kmer starts.
@@ -102,7 +103,7 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 			endIndex = startIndex;
 	
 		kmerTP, kmerFP = getNumbersAfterKmerComparison(startIndex, endIndex, predictedStart, seq, predKmer)
-		#print "After KMER TP: ", str(kmerTP), str(kmerFP)
+		print "After KMER TP: ", str(kmerTP), str(kmerFP)
 		
 		numTP = numTP + kmerTP
 		numFP = numFP + kmerFP

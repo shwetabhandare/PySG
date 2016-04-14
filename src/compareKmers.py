@@ -58,6 +58,8 @@ def CompareKspectrumPredictedKmers(realCsvFile, predictedKspectrumFile, posFile,
 	else:
 		numTP, numFP, numFN = compareKmerCommon.GetTotalNumbers(realKmerDict, posFile, negFile, None, None, None, predictedKmerDict)
 
+	return numTP, numFP, numFN
+
 def CompareKspectrumKmers(realCsvFile, predictedKspectrumFile, posFile, negFile):
 
 	realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);

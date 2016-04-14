@@ -142,7 +142,7 @@ class TestCompareKmers(unittest.TestCase):
 		startIndex = seq.find(predKmer)
 		endIndex = startIndex + len(predKmer)
 
-		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, startIndex, seq, predKmer)
 		self.assertEqual(numTP, len(predKmer))
 		self.assertEqual(numFP, 0)		
 
@@ -153,7 +153,7 @@ class TestCompareKmers(unittest.TestCase):
 		startIndex = 27
 		endIndex = startIndex + len(predKmer)
 
-		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, startIndex, seq, predKmer)
 		self.assertEqual(numTP, len(predKmer) - 1)
 		self.assertEqual(numFP, 1)		
 
@@ -164,7 +164,7 @@ class TestCompareKmers(unittest.TestCase):
 		startIndex = 27
 		endIndex = startIndex + len(predKmer)
 
-		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, startIndex, seq, predKmer)
 		self.assertEqual(numTP, len(predKmer) - 1)
 		self.assertEqual(numFP, 1)		
 
@@ -175,7 +175,7 @@ class TestCompareKmers(unittest.TestCase):
 		startIndex = 27
 		endIndex = startIndex + len(predKmer)
 
-		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		numTP, numFP = compareKmerCommon.getNumbersAfterKmerComparison(startIndex, endIndex, startIndex, seq, predKmer)
 		self.assertEqual(numTP, len(predKmer) - 3)
 		self.assertEqual(numFP, 3)		
 
@@ -282,8 +282,8 @@ class TestCompareKmers(unittest.TestCase):
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal.fa"
 
 		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
-		self.assertEqual(numTP, 170)
-		self.assertEqual(numFP, 304)
+		self.assertEqual(numTP, 173)
+		self.assertEqual(numFP, 301)
 		self.assertEqual(numFN, 207)
 
 	def test_compareKmersTextMotifNotAllSeqContainKmer(self):
@@ -293,9 +293,9 @@ class TestCompareKmers(unittest.TestCase):
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal90.fa"
 
 		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 1);
-		self.assertEqual(numTP, 0)
-		self.assertEqual(numFP, 490)
-		self.assertEqual(numFN, 0)
+		self.assertEqual(numTP, 300)
+		self.assertEqual(numFP, 190)
+		self.assertEqual(numFN, 105)
 
 	def test_compareKmersPSSM(self):
 		predictedDremeFile = "/projects/bhandare/workspace/PySG/src/resources/dreme.txt"
@@ -315,9 +315,9 @@ class TestCompareKmers(unittest.TestCase):
 		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal90.fa"
 
 		numTP, numFP, numFN = compareKmers.CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, 0);
-		self.assertEqual(numTP, 0)
-		self.assertEqual(numFP, 490)
-		self.assertEqual(numFN, 0)
+		self.assertEqual(numTP, 300)
+		self.assertEqual(numFP, 190)
+		self.assertEqual(numFN, 105)
 
 
 	def test_getRealKmerDetailsKeyDoesNotExists(self):
@@ -365,9 +365,11 @@ class TestCompareKmers(unittest.TestCase):
 
 		numTP, numFP, numFN = compareKmers.CompareKspectrumPredictedKmers(realCsvFile, predictedKspectrumKmers,  posFile, negFile);
 
-		#self.assertEqual(numTP, 81)
-		#self.assertEqual(numFP, 338)
-		#self.assertEqual(numFN, 81)
+		#Pos File: TP:  344 , FP:  408 , FN:  61
+		self.assertEqual(numTP, 344)
+		self.assertEqual(numFP, 408)
+		self.assertEqual(numFN, 61)
+
 	def test_compareKspectrumKmers(self):
 		predictedKspectrumKmers = "/projects/bhandare/workspace/PySG/src/resources/Signal90_Features.dat"
 		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.kmers"
@@ -376,9 +378,9 @@ class TestCompareKmers(unittest.TestCase):
 
 		numTP, numFP, numFN = compareKmers.CompareKspectrumKmers(realCsvFile, predictedKspectrumKmers,  posFile, negFile);
 
-		self.assertEqual(numTP, 81)
-		self.assertEqual(numFP, 338)
-		self.assertEqual(numFN, 81)
+		self.assertEqual(numTP, 75)
+		self.assertEqual(numFP, 351)
+		self.assertEqual(numFN, 87)
 	
 	def test_simpleKmerExample(self):
 		simpleKmersFile = "/projects/bhandare/workspace/PySG/src/resources/testkmers.dat"
