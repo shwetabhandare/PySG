@@ -42,8 +42,10 @@ def ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSign
 	return sensitivity, ppv;
 
 def ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile):
-	numTP, numFP, numFN = compareKmers.CompareKspectrumKmers(realKmersCsvFile, predictedKspectrumFile,
-		signalFile, noSignalFile)
+	#numTP, numFP, numFN = compareKmers.CompareKspectrumKmers(realKmersCsvFile, predictedKspectrumFile,
+		#signalFile, noSignalFile)
+	numTP, numFP, numFN = compareKmers.CompareKspectrumPredictedKmers(realKmersCsvFile, predictedKspectrumFile, 
+	signalFile, noSignalFile)
 
 	sensitivity = numTP / (numTP + numFN)
 	ppv = numTP / (numTP + numFP)

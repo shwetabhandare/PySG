@@ -357,6 +357,17 @@ class TestCompareKmers(unittest.TestCase):
 		kmerRE = compareKmerCommon.getKmerFromPWM(pwm, seq);
 		self.assertEqual(kmerRE, "(CAACACAACAACC)");
 
+	def test_compareKspectrumPredictedKmers(self):
+		predictedKspectrumKmers = "/projects/bhandare/workspace/PySG/src/resources/Signal90_Features.dat"
+		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.kmers"
+		posFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.fa"
+		negFile = "/projects/bhandare/workspace/PySG/src/resources/NoSignal90.fa"
+
+		numTP, numFP, numFN = compareKmers.CompareKspectrumPredictedKmers(realCsvFile, predictedKspectrumKmers,  posFile, negFile);
+
+		#self.assertEqual(numTP, 81)
+		#self.assertEqual(numFP, 338)
+		#self.assertEqual(numFN, 81)
 	def test_compareKspectrumKmers(self):
 		predictedKspectrumKmers = "/projects/bhandare/workspace/PySG/src/resources/Signal90_Features.dat"
 		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/Signal90.kmers"
@@ -402,3 +413,9 @@ class TestCompareKmers(unittest.TestCase):
 		realCsvFile = "/projects/bhandare/workspace/PySG/src/resources/testKmers.csv"
 		realDict = parseKspectrum.FindKspectrumKmers(realCsvFile);
 		self.assertEqual(len(realDict), 14)
+
+	def test_getPredictedKmerRE(self):
+		predictedKmers = "/projects/bhandare/workspace/PySG/src/resources/Signal90_Features.dat"
+		predictedDict = parseKspectrum.FindKspectrumKmers(predictedKmers, 5);
+		predictedRE = compareKmerCommon.getPredictedKmerRE(predictedDict);
+		self.assertEqual(predictedRE, "(TATTTATT|ATTTATTT|TTTATTTA|TATTTATTT|TATTTATTTA)");

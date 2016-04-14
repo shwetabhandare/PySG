@@ -15,19 +15,23 @@ def getKmerLengthFromREString(kmerREString):
 	kmerStr = kmerStr[1:-1]
 	return len(kmerStr);
 
-def getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer):
+def getNumbersAfterKmerComparison(startIndex, endIndex, predictedStart, seq, predKmer):
 	numTP = 0;
 	numFP = 0;
 
-	predKmerIndex = 0;
-	#print "Start Index: ", str(startIndex), ", End Index: ", str(endIndex)
+	if predictedStart > startIndex:
+		predictedStart - startIndex;
+	else:
+		predKmerIndex = startIndex - predictedStart;
+	print "Start Index: ", str(startIndex), ", End Index: ", str(endIndex)
 	for index in range(startIndex, endIndex):
+		print seq[index], predKmer[predKmerIndex]
 		if seq[index] == predKmer[predKmerIndex]:
 			numTP = numTP + 1;
 		else:
 			numFP = numFP + 1;
 		predKmerIndex = predKmerIndex + 1;
-	#print "After KMER: TP: ", str(numTP), ", FP: " , str(numFP)
+	print "After KMER: TP: ", str(numTP), ", FP: " , str(numFP)
 
 	return numTP, numFP;
 
@@ -84,7 +88,7 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 
 		predictedStart, predictedEnd, predKmer  = getPredictedInfo(m);
 
-		#print "Predicted Kmer: ", predKmer, ", Predicted Start: ", str(predictedStart), ", End: ", str(predictedEnd)
+		print "Predicted Kmer: ", predKmer, ", Predicted Start: ", str(predictedStart), ", End: ", str(predictedEnd), ", Real Start: ", str(realStart), ", Real End:", str(realEnd)
 		startIndex, startFP, startFN = getStartIndexAndUpdateNumbers(predictedStart, predictedEnd, realStart, realEnd, predKmer);
 
 		numFN = numFN + startFN;
@@ -97,7 +101,7 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 		if endIndex < startIndex:
 			endIndex = startIndex;
 	
-		kmerTP, kmerFP = getNumbersAfterKmerComparison(startIndex, endIndex, seq, predKmer)
+		kmerTP, kmerFP = getNumbersAfterKmerComparison(startIndex, endIndex, predictedStart, seq, predKmer)
 		#print "After KMER TP: ", str(kmerTP), str(kmerFP)
 		
 		numTP = numTP + kmerTP
@@ -151,6 +155,17 @@ def getKmerFromPSSM(pssmList, seq):
 	#print "PSSM RE: ", kmerReToSearchFor
 	return kmerReToSearchFor;
 
+def getPredictedKmerRE(predictedKmerDict):
+	predictedKmers = predictedKmerDict.keys();
+	#print predictedKmers
+	kmerRE = "("
+	for kmer in predictedKmers:
+		kmerRE = kmerRE + kmer + '|'
+	kmerRE = kmerRE[:-1]
+	kmerRE = kmerRE + ")"
+
+	return kmerRE;
+
 def getKmerRE(predictedMotifs, seq):
 	kmerReToSearchFor = "("
 	for motif in predictedMotifs:
@@ -179,7 +194,7 @@ def getTotalsForSeq(realKmer, realStart, realEnd, kmerREString, seq):
 
 	return numTP, numFP, numFN;
 
-def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, pwm, predictedMotifs):
+def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, pwm, predictedMotifs, predictedKmerDict=None):
 
 	numTotalTP = numTotalFP = numTotalFN = 0;
 
@@ -190,8 +205,10 @@ def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, pwm, predictedMot
 			kmerREString = getKmerRE(predictedMotifs, seq)
 		elif pssmList != None:
 			kmerREString = getKmerFromPSSM(pssmList, seq)
-		else:
+		elif pwm != None:
 			kmerREString = getKmerFromPWM(pwm, seq)
+		else:
+			kmerREString = getPredictedKmerRE(predictedKmerDict)
 
 		print "SEQ ID: ", seqid, "REAL KMER: ", realKmer, ", KMER RE: ", kmerREString;
 		numTP, numFP, numFN = getTotalsForSeq(realKmer, realStart, realEnd, kmerREString, seq);
@@ -203,15 +220,15 @@ def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, pwm, predictedMot
 	
 	return numTotalTP, numTotalFP, numTotalFN;
 
-def GetTotalNumbers(realKmerDict, posFile, negFile, pssmList, pwm, predictedMotifs):
+def GetTotalNumbers(realKmerDict, posFile, negFile, pssmList, pwm, predictedMotifs, predictedKmers=None):
 	PosSeqDict = SeqGenUtils.fasta_read(posFile);
 	NegSeqDict = SeqGenUtils.fasta_read(negFile);
 
 	numPosTP = 	numPosFP = 	numPosFN = 0;	
 	numNegTP = 	numNegFP = 	numNegFP = 0;	
 
-	numPosTP, numPosFP, numPosFN = getTotalNumbersForSeqDict(PosSeqDict, realKmerDict, pssmList, pwm, predictedMotifs);
-	numNegTP, numNegFP, numNegFN = getTotalNumbersForSeqDict(NegSeqDict, realKmerDict, pssmList, pwm, predictedMotifs);
+	numPosTP, numPosFP, numPosFN = getTotalNumbersForSeqDict(PosSeqDict, realKmerDict, pssmList, pwm, predictedMotifs, predictedKmers);
+	numNegTP, numNegFP, numNegFN = getTotalNumbersForSeqDict(NegSeqDict, realKmerDict, pssmList, pwm, predictedMotifs, predictedKmers);
 
 	print "Pos File: TP: ", str(numPosTP), ", FP: ", numPosFP, ", FN: ", numPosFN
 	print "Neg File: TP: ", str(numNegTP), ", FP: ", numNegFP, ", FN: ", numNegFN

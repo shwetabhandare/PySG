@@ -1,6 +1,7 @@
 #import re, ahocorasick,random,time
 import parseDreme
 import parseRealKmers
+import parseKspectrum
 import fasta
 
 import splitKmerInDict;
@@ -45,6 +46,17 @@ def CompareTextMotifKmers(realKmerDict, predictedKmers, posFile, negFile):
 		numTP, numFP, numFN = compareKmerCommon.GetTotalNumbers(realKmerDict,  posFile, negFile, None, None, predictedKmers)
 	return numTP, numFP, numFN;
 
+def CompareKspectrumPredictedKmers(realCsvFile, predictedKspectrumFile, posFile, negFile):
+	realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);
+	predictedKmerDict	= parseKspectrum.FindKspectrumKmers(predictedKspectrumFile, 20);
+	numTP = 0
+	numFP = 0
+	numFN = 0
+
+	if len(predictedKmerDict) == 0:
+		numFP = compareKmerCommon.getTotalFNKmerNotFound(realKmerDict);		
+	else:
+		numTP, numFP, numFN = compareKmerCommon.GetTotalNumbers(realKmerDict, posFile, negFile, None, None, None, predictedKmerDict)
 
 def CompareKspectrumKmers(realCsvFile, predictedKspectrumFile, posFile, negFile):
 

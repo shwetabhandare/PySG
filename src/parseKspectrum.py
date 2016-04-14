@@ -7,7 +7,7 @@ def read_file(dreme_file):
 		data=myfile.readlines()
 	return data;
 
-def findKmers(file_contents):
+def findKmers(file_contents, maxKmers=None):
 	kmerDict = dict();
 	pattern2 = re.compile('[^-](\d+\.\d+)\,([ATGC]+)');
 	kmerCount = 0;
@@ -16,8 +16,10 @@ def findKmers(file_contents):
 		kmer = match2.group(2);
 
 		# Take all the positive k-mers.
-		#if float(kmer_score) > 0.0 and kmerCount < 20:
-		if float(kmer_score) > 0.0:
+		if maxKmers == None:
+			maxKmers = sys.maxint;
+		if float(kmer_score) > 0.0 and kmerCount < maxKmers:
+		#if float(kmer_score) > 0.0:
 			#print "%s:%s" %(match2.group(1), match2.group(2))
 			kmerDict[kmer] = kmer_score;
 			kmerCount = kmerCount + 1;
@@ -25,9 +27,9 @@ def findKmers(file_contents):
 	return kmerDict;
 
 
-def FindKspectrumKmers(kspectrumFeatureFile):
+def FindKspectrumKmers(kspectrumFeatureFile, maxKmers=None):
 	fileContents = str(read_file(kspectrumFeatureFile))
-	return findKmers(fileContents);
+	return findKmers(fileContents, maxKmers);
 
 def GetUniqueRealKmers(realDict):
 	realKmers = list();
@@ -53,6 +55,7 @@ def GetNumPredictedKmersFoundInReal(predictedDict, realDict):
 if __name__ == "__main__":
 	import sys
 	kmerDict = FindKspectrumKmers(sys.argv[1]);
+	#print kmerDict;
 	realDict = parseRealKmers.GetRealKmerDict(sys.argv[2]);
 	numPredictedKmersFound = GetNumPredictedKmersFoundInReal(kmerDict, realDict);
 	print "Total Predicted Kmers: ", str(len(kmerDict)), ", found : ", str(numPredictedKmersFound);
