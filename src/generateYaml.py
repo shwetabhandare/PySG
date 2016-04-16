@@ -7,7 +7,7 @@ from os import path
 #seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
 alpha = [100, 1000]
 numSeq = [100, 200]
-seqLen = [200, 300]
+seqLen = [500, 600]
 seqWithSignalPercent = [90]
 pwmFileDirectory = "/projects/bhandare/workspace/PySG/data/pwm"
 utrDist = dict(
@@ -44,7 +44,7 @@ def getNoSignalDictWithAlpha(location, numberSeq, seqLength, alphaValue, fileId)
 	outFileName = "NoSignal_" + fileId
 	data = dict(
 		  seqLen = seqLength,
-		  numSeq = numberSeq,
+			 numSeq = numberSeq,
 		  outNoSignalFastaFile = location + "/" + outFileName + ".fa",
 		  seqBackGround = utrDist,
 		  alpha = alphaValue,
@@ -73,7 +73,7 @@ def getMotifDict(location, numberSeq, seqLength, signalSeq, pwmFileName, fileId)
 			locationFromStart = signalLocation,
 			pwmFile = pwmFileToAdd,
 		)
-	yamlFileName = str(numberSeq) + "_" + str(seqLength) + "_" + str(signalSeq) + "_" + str(signalLocation) + "_" + pwmFileName + ".yml"
+	yamlFileName = fileId + ".yml"
 	return yamlFileName, data;
 
 def writeYamlFile(location, yamlFileName, noSignalDict, motifDict):
@@ -103,12 +103,19 @@ def getPwmFiles(pwmDir):
 def GenerateNoSignalWithDirichlet(location):
 	pwmFiles = getPwmFiles(pwmFileDirectory);	
 	for numSeqIdx, i in enumerate(numSeq):
+		print str(numSeqIdx), str(i)
 		for numSeqLenIdx, j in enumerate(seqLen):
+			print str(numSeqLenIdx),  str(j)
 			for a in alpha:
+				print "ALPHA: ", str(a)
 				for signalPercent in seqWithSignalPercent:
+					print "signal percent: ", str(signalPercent)
 					for pwmFile in pwmFiles:
+						print "PWM: ", pwmFile
 						fileId = str(i) + "_" + str(j) + "_" + str(signalPercent) + "_" + str(a) + "_" + pwmFile;
+						print "FILE ID:", fileId;
 						yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile, fileId);
+						print "YAML FILE:", yamlFileName;
 						noSignalDict = getNoSignalDictWithAlpha(location, i, j, a, fileId);
 						writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
 
