@@ -59,23 +59,20 @@ def graphResults():
 	#plt.plot(data1)
 
 
-	label = getColumn("resultsToGraph.csv", 0)
+	labels = getColumn("resultsToGraph.csv", 0)
 	sensitivity = getColumn("resultsToGraph.csv", 1)
-	label = label[1:]
-	sensitivity = sensitivity[1:]
-	print label, sensitivity
 	ppv = getColumn("resultsToGraph.csv", 2)
+
+	labels = labels[1:]
+	sensitivity = sensitivity[1:]
 	ppv = ppv[1:]
 
-	axes = matplotlib.pyplot.gca()
-	axes.set_xlabel('x')
-	axes.set_ylabel('y')
-
-	#plt.figure("sensitivity/ppv")
-	#plt.xlabel("filename")
-	#plt.ylabel("sensitivity/ppv")
-	plt.plot(label, sensitivity);
-	plt.show();
+	plt.ion()
+	plt.figure()
+	plt.plot(sensitivity)
+	plt.plot(ppv)
+	plt.xticks(range(len(sensitivity)), labels)
+	plt.savefig('fig.png')
 
 
 def parseDirectory(resultDir):
