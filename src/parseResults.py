@@ -61,13 +61,21 @@ def graphResults():
 
 	label = getColumn("resultsToGraph.csv", 0)
 	sensitivity = getColumn("resultsToGraph.csv", 1)
-	#ppv = getColumn("resultsToGraph.csv", 2)
+	label = label[1:]
+	sensitivity = sensitivity[1:]
+	print label, sensitivity
+	ppv = getColumn("resultsToGraph.csv", 2)
+	ppv = ppv[1:]
 
-	plt.figure("sensitivity/ppv")
-	plt.xlabel("filename")
-	plt.ylabel("sensitivity/ppv")
-	plt.plot(label, sensitivity)
-	#plt.plot(label, sensitivity)
+	axes = matplotlib.pyplot.gca()
+	axes.set_xlabel('x')
+	axes.set_ylabel('y')
+
+	#plt.figure("sensitivity/ppv")
+	#plt.xlabel("filename")
+	#plt.ylabel("sensitivity/ppv")
+	plt.plot(label, sensitivity);
+	plt.show();
 
 
 def parseDirectory(resultDir):
@@ -88,5 +96,5 @@ def parseDirectory(resultDir):
 if __name__ == "__main__":
 	resultDir = sys.argv[1]
 	parseDirectory(resultDir)
-	#graphResults();
-	simple();
+	graphResults();
+	#simple();
