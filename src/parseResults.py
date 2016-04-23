@@ -50,7 +50,7 @@ def getResultsFromFile(filepath, label):
 		for row in reader:
 			sensitivity = row[0].split(":")[1]
 			ppv = row[1].split(":")[1]
-			print label, sensitivity, ppv
+			#print label, sensitivity, ppv
 			appendResult(label, sensitivity, ppv)
 
 def graphResults():
@@ -67,11 +67,16 @@ def graphResults():
 	sensitivity = sensitivity[1:]
 	ppv = ppv[1:]
 
+	labels = ["100_500_90_100_Cgd2_3490_kspectrum", "100_500_90_100_Cgd2_3490_dreme", "100_500_90_100_Gal4_dreme", "100_500_90_100_Gal4_kspectrum"]
+	print labels
+	print sensitivity
+	print ppv
+
 	plt.ion()
 	plt.figure()
 	plt.plot(sensitivity)
 	plt.plot(ppv)
-	plt.xticks(range(len(sensitivity)), labels)
+	plt.xticks(range(len(sensitivity)), labels, rotation=90)
 	plt.savefig('fig.png')
 
 
@@ -86,7 +91,7 @@ def parseDirectory(resultDir):
 	            #print (filepath)
 	            fileNameWithoutPath = os.path.basename(filepath);
 	            fileNameToGraph =  os.path.splitext(fileNameWithoutPath)[0]
-	            print fileNameToGraph
+	            #print fileNameToGraph
 	            getResultsFromFile(filepath, fileNameToGraph)
 
 

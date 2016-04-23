@@ -2,13 +2,10 @@ import yaml
 import os
 from os import path
 
-#alpha = [0.1, 1, 10, 100, 1000]
-#numSeq = [1000, 2000, 3000, 4000, 5000]
-#seqLen = [200, 300, 400, 500, 600, 700, 800, 900, 1000]
-alpha = [100]
-numSeq = [100]
-seqLen = [500]
-seqWithSignalPercent = [90]
+alpha = [1, 10, 100, 1000]
+numSeq = [1000, 2000]
+seqLen = [500, 600, 700, 800, 900, 1000]
+seqWithSignalPercent = [10, 75, 90]
 pwmFileDirectory = "/projects/bhandare/workspace/PySG/data/pwm"
 utrDist = dict(
 	A = 0.27,
@@ -98,6 +95,8 @@ def getPwmFiles(pwmDir):
 	for f in os.listdir(pwmDir):
 		if f.lower().endswith(('.pwm')):
 			pwmFiles.append(f)
+	print "PWM FILE: ", pwmFiles
+
 	return pwmFiles;
 
 def GenerateNoSignalWithDirichlet(location):
