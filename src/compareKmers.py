@@ -31,6 +31,7 @@ def GetDremePSSM(predictedDremeFile):
 	return pssmList;
 
 def ComparePSSMKmers(realKmerDict, predictedDremeFile, posFile, negFile, pssmList):
+	numTP = numFP = numFN = 0;
 	if len(pssmList) == 0:
 		numFP = compareKmerCommon.getTotalFNKmerNotFound(realKmerDict);		
 	else:

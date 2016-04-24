@@ -31,13 +31,25 @@ def RunDreme(signalFile, noSignalFile):
 
 	return predictedDremeFile, realKmersCsvFile, dremeDir;
 
+def GetSensitivityAndPPV(numTP, numFP, numFN):
+	if ((numTP + numFN) == 0):
+		sensitivity = 0;
+	else:
+		sensitivity = numTP / (numTP + numFN)
+	
+	if ((numTP + numFP) == 0):
+		ppv = 0;
+	else:
+		ppv =  numTP / (numTP + numFP)
+
+	return sensitivity, ppv;
+
 def ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile):
 
 	numTP, numFP, numFN = compareKmers.CompareDremeKmers(realKmersCsvFile, predictedDremeFile,
 		signalFile, noSignalFile, None)
 
-	sensitivity = numTP / (numTP + numFN)
-	ppv =  numTP / (numTP + numFP)
+	sensitivity, ppv = GetSensitivityAndPPV(numTP, numFP, numFN);
 
 	return sensitivity, ppv;
 
@@ -47,8 +59,7 @@ def ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile
 	numTP, numFP, numFN = compareKmers.CompareKspectrumPredictedKmers(realKmersCsvFile, predictedKspectrumFile, 
 	signalFile, noSignalFile)
 
-	sensitivity = numTP / (numTP + numFN)
-	ppv = numTP / (numTP + numFP)
+	sensitivity, ppv = GetSensitivityAndPPV(numTP, numFP, numFN);
 
 	return sensitivity, ppv;
 

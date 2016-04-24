@@ -35,8 +35,8 @@ if __name__ == "__main__":
 
 	directory = sys.argv[1]
 	randomType = sys.argv[2];
-	CreateConfFiles(directory, randomType);
-	GenerateFastaFiles(directory);
+	#CreateConfFiles(directory, randomType);
+	#GenerateFastaFiles(directory);
 	RunComputationalTools(directory);
 
 
