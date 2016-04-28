@@ -48,7 +48,7 @@ class YamlFastaGenerator():
 	def __init__(self, confFile):
 		self.confMap = SeqGenUtils.GetConf(confFile)
 		self.SetupTargetDir()
-		#setupVariables(self.confMap)
+		self.setupVariables()
 
 	def GetAlpha(self):
 		return self.alpha;
@@ -59,7 +59,7 @@ class YamlFastaGenerator():
 	def GetPwmFilesList(self):
 		return self.pwmFiles;
 	def GetSignalPercentList(self):
-		return self.seqWithSignal;
+		return self.seqWithSignalPercent;
 	def GetNoSignalType(self):
 		return self.noSignalType;
 	def GetSignalType(self):
@@ -67,7 +67,7 @@ class YamlFastaGenerator():
 	def GetUtrDistDict(self):
 		return self.utrDist;
 	def GetPwmDir(self):
-		return pwmFileDirectory;
+		return self.pwmFileDirectory;
 	def GetTargetDir(self):
 		print "Target DIR: ", self.targetDir;
 		return self.targetDir;
@@ -84,7 +84,6 @@ class YamlFastaGenerator():
 		else:
 			self.deleteFiles()
 
-		print "Target DIR: ", self.targetDir;
 
 	def deleteFiles(self):
 		for the_file in os.listdir(self.targetDir):
@@ -97,6 +96,59 @@ class YamlFastaGenerator():
 			except Exception as e:
 				print(e)
 
+	def getSignalType(self):
+
+		if self.confMap["signal"].get("type"):
+			self.signalType = self.confMap["signal"]["type"]
+
+			if self.signalType == 'pwmFiles':
+				self.pwmFiles = self.confMap["signal"]["pwmFiles"]
+			elif self.signalType == "pwmDir":
+				self.pwmFileDirectory =  self.confMap["signal"]["pwmDir"]
+				self.pwmFiles = self.getPwmFiles();
+			elif self.signalType == "textMotif":
+				self.textMotifs = self.confMap["signal"]["textMotif"]
+			elif self.signalType == "kmers":
+				self.kmers = confMap["signal"]["kmers"]
+			else:
+				print "Invalid signal Type:", self.signalType;
+
+	def setupSignalVariables(self):
+		self.getSignalType();
+
+		if self.confMap["signal"].get("location"):
+			self.signalLocation = self.confMap["signal"]["location"]
+		else:
+			self.signalLocation = [0]
+		
+		if self.confMap["signal"].get("signalPercent"):
+			self.seqWithSignalPercent = self.confMap["signal"]["signalPercent"]		
+		else:
+			self.seqWithSignalPercent = [100]
+
+	def getPwmFiles(self):
+		for f in os.listdir(self.pwmFileDirectory):
+			if f.lower().endswith(('.pwm')):
+				self.pwmFiles.append(f)
+		print "PWM FILE: ", self.pwmFiles
+
+
+	def setupVariables(self):
+		self.numSeq = self.confMap["numSeq"]
+		self.seqLen = self.confMap["seqLen"]
+		self.setupSignalVariables()
+		self.setupNoSignalVariables()
+
+	def setupNoSignalVariables(self):
+		if self.confMap["nosignal"].get("type"):
+			self.noSignalType = self.confMap["nosignal"]["type"]
+			if self.noSignalType == "dirichlet":
+				self.alpha = self.confMap["nosignal"]["alpha"]
+			elif self.noSignalType == "shuffle":
+				self.noSignalFastaFile = self.confMap["nosignal"]["fastaFile"]
+			else:
+				print "Did not specify nosignal type"
+				return;
 
 	# def getNoSignalDictWithAlpha(location, numberSeq, seqLength, alphaValue, fileId):
 	# 	outFileName = "NoSignal_" + fileId
@@ -151,14 +203,7 @@ class YamlFastaGenerator():
 	# 	with open(location + "/" + yamlFileName, 'w') as outfile:
 	# 		 outfile.write(yaml.dump(data, default_flow_style=False, Dumper=noalias_dumper))
 
-	# def getPwmFiles(pwmDir):
-	# 	global pwmFiles;
-	# 	for f in os.listdir(pwmDir):
-	# 		if f.lower().endswith(('.pwm')):
-	# 			pwmFiles.append(f)
-	# 	print "PWM FILE: ", pwmFiles
 
-	# 	return pwmFiles;
 
 	# def GenerateNoSignalWithDirichlet(location):
 	# 	pwmFiles = getPwmFiles(pwmFileDirectory);	
@@ -203,62 +248,9 @@ class YamlFastaGenerator():
 	# 	else:
 	# 		print "Invalid No Signal type", noSignalType;
 
-	# def setupNoSignalVariables(confMap):
-	# 	global noSignalType, alpha, noSignalFastaFile;
-	# 	if confMap["nosignal"].get("type"):
-	# 		noSignalType = confMap["nosignal"]["type"]
-	# 		if noSignalType == "dirichlet":
-	# 			alpha = confMap["nosignal"]["alpha"]
-	# 		elif noSignalType == "shuffle":
-	# 			noSignalFastaFile = confMap["nosignal"]["fastaFile"]
-	# 		else:
-	# 			print "Did not specify nosignal type"
-	# 			return;
-	# 	return noSignalType;
-
-	# def getSignalType(confMap):
-	# 	global signalType;
-
-	# 	if confMap["signal"].get("type"):
-	# 		signalType = confMap["signal"]["type"]
-	# 		if signalType == 'pwmFiles':
-	# 			pwmFiles = confMap["signal"]["pwmFiles"]
-	# 		elif signalType == "pwmDir":
-	# 			pwmDir =  confMap["signal"]["pwmDir"]
-	# 			pwmFiles = getPwmFiles(pwmDir);
-	# 		elif signalType == "textMotif":
-	# 			textMotifs = confMap["signal"]["textMotif"]
-	# 		elif signalType == "kmers":
-	# 			kmers = confMap["signal"]["kmers"]
-	# 		else:
-	# 			print "Invalid signal Type:", signalType;
-	# 	return signalType;
-
-	# def setupSignalVariables(confMap):
-	# 	global signalType, signalLocation, seqWithSignalPercent, pwmFiles;
-
-	# 	signalType = getSignalType(confMap)
-
-	# 	if confMap["signal"].get("location"):
-	# 		signalLocation = confMap["signal"]["location"]
-	# 	else:
-	# 		signalLocation = [0]
-		
-	# 	if confMap["signal"].get("signalPercent"):
-	# 		seqWithSignalPercent = confMap["signal"]["signalPercent"]		
-	# 	else:
-	# 		seqWithSignalPercent = [100]
 
 
-	# 	return signalType;
 
-
-	# def setupVariables(confMap):
-	# 	numSeq = confMap["numSeq"]
-	# 	seqLen = confMap["seqLen"]
-	# 	signalType = setupSignalVariables(confMap)
-	# 	noSignalType = setupNoSignalVariables(confMap)
-	# 	return signalType, noSignalType;
 
 
 
