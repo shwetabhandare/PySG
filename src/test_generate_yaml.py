@@ -1,7 +1,7 @@
 import unittest
 import generateYaml
 import glob
-import os
+import os, fnmatch
 import yaml
 import SeqGenUtils
 
@@ -25,7 +25,6 @@ class TestGenerateYaml(unittest.TestCase):
 	def test_ConstructObject_experiment1(self):
 		confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments1.yaml"
 		generator = generateYaml.YamlFastaGenerator(confFile);
-
 		targetDir = generator.GetTargetDir();
 
 		self.assertEqual(targetDir, "/projects/bhandare/workspace/PySG/src/resources/tmp")
@@ -37,6 +36,19 @@ class TestGenerateYaml(unittest.TestCase):
 		self.assertEqual(generator.GetAlpha(), []);
 		self.assertEqual(generator.GetSignalType(), "pwmDir");
 		self.assertEqual(generator.GetSignalPercentList(), [75, 90]);
+		self.assertEqual(generator.GetNoSignalFastaFile(), "/my/tmp/fasta.file");
+
+	def test_CreateConfFilesExpt(self):
+		confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments.yaml"
+		generator = generateYaml.YamlFastaGenerator(confFile);
+		targetDir = generator.GetTargetDir();
+		generator.CreateConfFiles();
+		self.assertTrue(os.path.isdir(targetDir))
+		numFiles = 0;
+		for root, dirs, files in os.walk(targetDir):
+			for file in fnmatch.filter(files, "*.yml"):
+				numFiles = numFiles + 1;
+		self.assertEqual(numFiles, 4);
 
 	# def test_setupVariables_PwmFileDir(self):
 	# 	confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments1.yaml"

@@ -113,4 +113,5 @@ if __name__ == "__main__":
 	resultDir = sys.argv[1]
 	parseDirectory(resultDir)
 	graphResults(dremeResultsFile);
+	
 	graphResults(kspectrumResultsFile)

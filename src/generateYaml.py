@@ -44,6 +44,7 @@ class YamlFastaGenerator():
 	)
 	confMap = {}
 	targetDir = ""
+	noSignalFastaFile = ""
 
 	def __init__(self, confFile):
 		self.confMap = SeqGenUtils.GetConf(confFile)
@@ -69,8 +70,9 @@ class YamlFastaGenerator():
 	def GetPwmDir(self):
 		return self.pwmFileDirectory;
 	def GetTargetDir(self):
-		print "Target DIR: ", self.targetDir;
 		return self.targetDir;
+	def GetNoSignalFastaFile(self):
+		return self.noSignalFastaFile;
 
 	def SetupTargetDir(self):
 		if self.confMap.get("targetDir"):
@@ -130,8 +132,6 @@ class YamlFastaGenerator():
 		for f in os.listdir(self.pwmFileDirectory):
 			if f.lower().endswith(('.pwm')):
 				self.pwmFiles.append(f)
-		print "PWM FILE: ", self.pwmFiles
-
 
 	def setupVariables(self):
 		self.numSeq = self.confMap["numSeq"]
@@ -150,16 +150,90 @@ class YamlFastaGenerator():
 				print "Did not specify nosignal type"
 				return;
 
-	# def getNoSignalDictWithAlpha(location, numberSeq, seqLength, alphaValue, fileId):
-	# 	outFileName = "NoSignal_" + fileId
-	# 	data = dict(
-	# 		  seqLen = seqLength,
-	# 			 numSeq = numberSeq,
-	# 		  outNoSignalFastaFile = location + "/" + outFileName + ".fa",
-	# 		  seqBackGround = utrDist,
-	# 		  alpha = alphaValue,
-	# 	)
-	# 	return data;
+	## Program stats here.
+	def CreateConfFiles(self):
+		if self.noSignalType == 'shuffle':
+			print "Shuffle type";
+			#GenerateNoSignalWithFasta(targetDir);
+		elif self.noSignalType == 'dirichlet':
+			self.GenerateNoSignalWithDirichlet();
+		else:
+			print "Invalid No Signal type", self.noSignalType;
+
+
+	def GenerateNoSignalWithDirichlet(self):
+		location = self.targetDir;
+		pwmFiles = self.pwmFiles;
+		numSeq = self.GetNumSeqList();
+		seqLen = self.GetNumSeqLenList();
+		alpha = self.GetAlpha();
+		seqWithSignalPercent = self.GetSignalPercentList();
+
+		for numSeqIdx, i in enumerate(numSeq):
+			print str(numSeqIdx), str(i)
+			for numSeqLenIdx, j in enumerate(seqLen):
+				print str(numSeqLenIdx),  str(j)
+				for a in alpha:
+					#print "ALPHA: ", str(a)
+					for signalPercent in seqWithSignalPercent:
+						#print "signal percent: ", str(signalPercent)
+						for pwmFile in pwmFiles:
+							#print "PWM: ", pwmFile
+							if os.path.isabs(pwmFile) == True:
+								self.pwmFileDirectory = os.path.dirname(pwmFile);
+								pwmFile = os.path.basename(pwmFile);
+
+							fileId = str(i) + "_" + str(j) + "_" + str(a) + "_" + str(signalPercent) + "_" + pwmFile;
+							#print "FILE ID:", fileId;
+							yamlFileName, motifDict = self.getMotifDict(location, i, j, signalPercent, pwmFile, fileId);
+							#print "YAML FILE:", yamlFileName;
+							noSignalDict = self.getNoSignalDictWithAlpha(location, i, j, a, fileId);
+							self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+
+	def getMotifDict(self, location, numberSeq, seqLength, signalSeq, pwmFileName, fileId):
+		signalLocation = 10;
+		outFileName = "Signal_" + fileId;
+		#print "PWM FILENAME: ", pwmFileName;
+
+		pwmFileToAdd = self.pwmFileDirectory + "/" + pwmFileName;	
+		data = dict(
+				outSignalFile = location + "/" + outFileName + ".fa",
+				seqBackGround = self.utrDist,
+				seqWithSignal = signalSeq,
+				locationFromStart = signalLocation,
+				pwmFile = pwmFileToAdd,
+			)
+		yamlFileName = fileId + ".yml"
+		return yamlFileName, data;
+
+	def getNoSignalDictWithAlpha(self, location, numberSeq, seqLength, alphaValue, fileId):
+		outFileName = "NoSignal_" + fileId
+		data = dict(
+			seqLen = seqLength,
+			numSeq = numberSeq,
+			outNoSignalFastaFile = location + "/" + outFileName + ".fa",
+			seqBackGround = self.utrDist,
+			alpha = alphaValue,
+		)
+		return data;
+
+	def writeYamlFile(self, location, yamlFileName, noSignalDict, motifDict):
+		from yaml.representer import Representer
+		import collections;
+		import sys
+		yaml.add_representer(collections.defaultdict, Representer.represent_dict)
+		data = dict(
+			sequence = dict(
+				nosignal = noSignalDict,
+				signal = motifDict,
+			)
+		)
+		noalias_dumper = yaml.dumper.SafeDumper
+		noalias_dumper.ignore_aliases = lambda self, data: True
+
+		with open(location + "/" + yamlFileName, 'w') as outfile:
+			 outfile.write(yaml.dump(data, default_flow_style=False, Dumper=noalias_dumper))
+
 
 	# def getNoSignalDict(location, numberSeq, seqLength, inpFastaFile, fileId):
 	# 	outFileName = "NoSignal_" + fileId
@@ -172,57 +246,12 @@ class YamlFastaGenerator():
 
 	# 	return data;
 
-	# def getMotifDict(location, numberSeq, seqLength, signalSeq, pwmFileName, fileId):
-	# 	signalLocation = 10;
-	# 	outFileName = "Signal_" + fileId;
-	# 	pwmFileToAdd = pwmFileDirectory + "/" + pwmFileName;
-	# 	data = dict(
-	# 			outSignalFile = location + "/" + outFileName + ".fa",
-	# 			seqBackGround = utrDist,
-	# 			seqWithSignal = signalSeq,
-	# 			locationFromStart = signalLocation,
-	# 			pwmFile = pwmFileToAdd,
-	# 		)
-	# 	yamlFileName = fileId + ".yml"
-	# 	return yamlFileName, data;
-
-	# def writeYamlFile(location, yamlFileName, noSignalDict, motifDict):
-	# 	from yaml.representer import Representer
-	# 	import collections;
-	# 	import sys
-	# 	yaml.add_representer(collections.defaultdict, Representer.represent_dict)
-	# 	data = dict(
-	# 		sequence = dict(
-	# 			nosignal = noSignalDict,
-	# 			signal = motifDict,
-	# 		)
-	# 	)
-	# 	noalias_dumper = yaml.dumper.SafeDumper
-	# 	noalias_dumper.ignore_aliases = lambda self, data: True
-
-	# 	with open(location + "/" + yamlFileName, 'w') as outfile:
-	# 		 outfile.write(yaml.dump(data, default_flow_style=False, Dumper=noalias_dumper))
 
 
 
-	# def GenerateNoSignalWithDirichlet(location):
-	# 	pwmFiles = getPwmFiles(pwmFileDirectory);	
-	# 	for numSeqIdx, i in enumerate(numSeq):
-	# 		print str(numSeqIdx), str(i)
-	# 		for numSeqLenIdx, j in enumerate(seqLen):
-	# 			print str(numSeqLenIdx),  str(j)
-	# 			for a in alpha:
-	# 				print "ALPHA: ", str(a)
-	# 				for signalPercent in seqWithSignalPercent:
-	# 					print "signal percent: ", str(signalPercent)
-	# 					for pwmFile in pwmFiles:
-	# 						print "PWM: ", pwmFile
-	# 						fileId = str(i) + "_" + str(j) + "_" + str(signalPercent) + "_" + str(a) + "_" + pwmFile;
-	# 						print "FILE ID:", fileId;
-	# 						yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile, fileId);
-	# 						print "YAML FILE:", yamlFileName;
-	# 						noSignalDict = getNoSignalDictWithAlpha(location, i, j, a, fileId);
-	# 						writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+
+
+
 
 	# def GenerateNoSignalWithFasta(location):
 	# 	inpFastaFile = "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
@@ -236,17 +265,6 @@ class YamlFastaGenerator():
 	# 					noSignalDict = getNoSignalDict(location, i, j, inpFastaFile, fileId);
 	# 					writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
 
-	# ## Program stats here.
-	# def CreateConfFiles(targetDir, noSignalType):
-	# 	print "NO SIGNAL TYPE:", noSignalType
-	# 	if noSignalType == 'shuffle':
-	# 		print "Shuffle type";
-	# 		#GenerateNoSignalWithFasta(targetDir);
-	# 	elif noSignalType == 'dirichlet':
-	# 		print "dirichlet"
-	# 		GenerateNoSignalWithDirichlet(targetDir);
-	# 	else:
-	# 		print "Invalid No Signal type", noSignalType;
 
 
 
