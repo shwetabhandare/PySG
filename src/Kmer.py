@@ -12,8 +12,8 @@ def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
 	motifBackGround = ""
 
 	if type == "pwm" or type == "motif":
-		if confMap['sequence']['signal'].get('motifBackGround'):
-			motifBackGround = confMap["sequence"]["signal"]["motifBackGround"]
+		if confMap['sequence']['signal'].get('seqBackGround'):
+			motifBackGround = confMap["sequence"]["signal"]["seqBackGround"]
 
 	if type == 'pwm':
 		motiffile = confMap["sequence"]['signal']["pwmFile"]

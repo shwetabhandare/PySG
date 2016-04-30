@@ -33,11 +33,12 @@ def RunComputationalTools(directory):
 if __name__ == "__main__":
 	import sys
 
-	directory = sys.argv[1]
-	randomType = sys.argv[2];
-	#CreateConfFiles(directory, randomType);
-	#GenerateFastaFiles(directory);
-	RunComputationalTools(directory);
+	confFile = sys.argv[1];
+	generator = YamlFastaGenerator(confFile);
+	targetDir = generator.GetTargetDir();
+	generator.CreateConfFiles();
+	GenerateFastaFiles(targetDir);
+	RunComputationalTools(targetDir);
 
 
 

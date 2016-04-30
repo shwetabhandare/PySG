@@ -14,7 +14,7 @@ class TestGenerateYaml(unittest.TestCase):
 
 		self.assertEqual(targetDir, "/projects/bhandare/workspace/PySG/src/resources/tmp")
 		self.assertTrue(os.path.isdir(targetDir))
-		self.assertEqual(generator.GetNumSeqList(), [10])
+		self.assertEqual(generator.GetNumSeqList(), [100])
 		self.assertEqual(generator.GetNumSeqLenList(), [50])
 		self.assertEqual(generator.GetPwmFilesList(), ["/projects/bhandare/workspace/PySG/data/pwm/Nhp6b.pwm"])
 		self.assertEqual(generator.GetNoSignalType(), "dirichlet");
@@ -29,7 +29,7 @@ class TestGenerateYaml(unittest.TestCase):
 
 		self.assertEqual(targetDir, "/projects/bhandare/workspace/PySG/src/resources/tmp")
 		self.assertTrue(os.path.isdir(targetDir))
-		self.assertEqual(generator.GetNumSeqList(), [10])
+		self.assertEqual(generator.GetNumSeqList(), [100])
 		self.assertEqual(generator.GetNumSeqLenList(), [50])
 		self.assertEqual(generator.GetPwmDir(), '/projects/bhandare/workspace/PySG/data/pwm')
 		self.assertEqual(generator.GetNoSignalType(), "shuffle");

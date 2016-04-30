@@ -1,5 +1,5 @@
 targetDir: "/projects/bhandare/workspace/PySG/src/resources/tmp"
-numSeq: [10]
+numSeq: [100]
 seqLen: [50]
 signal:
    type: "pwmDir"

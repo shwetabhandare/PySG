@@ -102,8 +102,6 @@ class YamlFastaGenerator():
 
 		if self.confMap["signal"].get("type"):
 			self.signalType = self.confMap["signal"]["type"]
-			print "SIGNAL TYPE: ", self.signalType.strip();
-
 
 			if self.signalType == 'pwmFiles':
 				self.pwmFiles = self.confMap["signal"]["pwmFiles"]
@@ -160,34 +158,37 @@ class YamlFastaGenerator():
 		fileNameStr = fileNameStr + "_" + signalValue;
 		return fileNameStr;
 
+	def UseParamsAndWriteYamlFile(self, location, numSeq, seqLen, alpha, signalPercent, signalValue):
+		fileId = self.GetFileNameStr(numSeq, seqLen, alpha, signalValue, signalPercent);
+		if alpha == -1:
+			noSignalDict = self.getNoSignalDict(location, numSeq, seqLen, fileId);
+		else:
+			noSignalDict = self.getNoSignalDictWithAlpha(location, numSeq, seqLen, alpha, fileId);
+				
+		yamlFileName, motifDict = self.getMotifDict(location, numSeq, seqLen, signalPercent, signalValue, fileId);
+		self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+
+	def GetPwmFileToAdd(self, pwmFile):
+		if os.path.abspath(pwmFile):
+			self.pwmFileDirectory = os.path.dirname(pwmFile);
+			pwmFile = os.path.basename(pwmFile);
+		return pwmFile;
 
 	def IterateThroughSignalAndWriteYaml(self, location, numSeq, seqLen, alpha=-1):
 		seqWithSignalPercentList = self.GetSignalPercentList();
 		for signalPercent in seqWithSignalPercentList:
-			print "signal type:", self.signalType;
 			if self.signalType == 'pwmDir' or self.signalType == 'pwmFiles':
 				for pwmFile in self.pwmFiles:
-					if os.path.abspath(pwmFile):
-						self.pwmFileDirectory = os.path.dirname(pwmFile);
-						pwmFile = os.path.basename(pwmFile);
+					pwmFileToAdd = self.GetPwmFileToAdd(pwmFile);
+					self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, pwmFileToAdd);
 
-					fileId = self.GetFileNameStr(numSeq, seqLen, alpha, pwmFile, signalPercent);
-					noSignalDict = self.getNoSignalDictWithAlpha(location, numSeq, seqLen, alpha, fileId);
-					yamlFileName, motifDict = self.getMotifDict(location, numSeq, seqLen, signalPercent, pwmFile, fileId);
-					self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
 			elif self.signalType == "textMotif":
 				for motif in self.textMotifs:
-					fileId = self.GetFileNameStr(numSeq, seqLen, alpha, motif, signalPercent);
-					noSignalDict = self.getNoSignalDict(location, numSeq, seqLen, fileId);
-					yamlFileName, motifDict = self.getMotifDict(location, numSeq, seqLen, signalPercent, motif, fileId);
-					self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+					self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, motif);
 
 			elif self.signalType == "kmers":
 				for kmer in self.kmers:
-					fileId = self.GetFileNameStr(numSeq, seqLen, alpha, kmer, signalPercent);
-					noSignalDict = self.getNoSignalDict(location, numSeq, seqLen, fileId);
-					yamlFileName, motifDict = self.getMotifDict(location, numSeq, seqLen, signalPercent, kmer, fileId);
-					self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+					self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, kmer);
 			else:
 				print __func__, ": Invalid Signal Type: ", self.signalType;
 
