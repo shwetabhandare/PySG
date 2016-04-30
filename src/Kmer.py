@@ -70,6 +70,7 @@ def GetMotifType(confMap):
 	elif confMap['sequence']['signal'].get('pwmFile'):
 		motifFile = confMap['sequence']['signal'].get('pwmFile');
 		motifType = "pwm"
+		print "MOTIF FILE:", motifFile
 	elif confMap['sequence']['signal'].get('textMotif'):
 		textMotif = confMap['sequence']['signal'].get('textMotif');
 		motifType = "motif"

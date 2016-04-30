@@ -169,8 +169,9 @@ class YamlFastaGenerator():
 		self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
 
 	def GetPwmFileToAdd(self, pwmFile):
-		if os.path.abspath(pwmFile):
+		if os.path.isabs(pwmFile):
 			self.pwmFileDirectory = os.path.dirname(pwmFile);
+
 			pwmFile = os.path.basename(pwmFile);
 		return pwmFile;
 
@@ -224,7 +225,7 @@ class YamlFastaGenerator():
 		signalLocation = 10;
 		outFileName = "Signal_" + fileId;
 		#print "FILE ID: ", fileId;
-		#print "PWM FILENAME: ", signalValue;
+		print "PWM dir: ", self.pwmFileDirectory;
 
 		data = dict(
 				outSignalFile = location + "/" + outFileName + ".fa",
