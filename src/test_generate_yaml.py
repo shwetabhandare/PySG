@@ -36,7 +36,7 @@ class TestGenerateYaml(unittest.TestCase):
 		self.assertEqual(generator.GetAlpha(), []);
 		self.assertEqual(generator.GetSignalType(), "pwmDir");
 		self.assertEqual(generator.GetSignalPercentList(), [75, 90]);
-		self.assertEqual(generator.GetNoSignalFastaFile(), "/my/tmp/fasta.file");
+		self.assertEqual(generator.GetNoSignalFastaFile(), "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt");
 
 	def test_CreateConfFilesExpt(self):
 		confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments.yaml"
@@ -50,21 +50,42 @@ class TestGenerateYaml(unittest.TestCase):
 				numFiles = numFiles + 1;
 		self.assertEqual(numFiles, 4);
 
-	# def test_setupVariables_PwmFileDir(self):
-	# 	confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments1.yaml"
-	# 	confMap = SeqGenUtils.GetConf(confFile);
-	# 	targetDir = generateYaml.getTargetDir(confMap);	
-	# 	signalType, noSignalType = generateYaml.setupVariables(confMap)
-	# 	self.assertEqual(signalType, "pwmDir");
-	# 	self.assertEqual(noSignalType, "shuffle");
+	def test_CreateConfFilesExpt1(self):
+		confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments1.yaml"
+		generator = generateYaml.YamlFastaGenerator(confFile);
+		targetDir = generator.GetTargetDir();
+		generator.CreateConfFiles();
+		self.assertTrue(os.path.isdir(targetDir))
+		numFiles = 0;
+		for root, dirs, files in os.walk(targetDir):
+			for file in fnmatch.filter(files, "*.yml"):
+				numFiles = numFiles + 1;
+		print "Num Files: ", str(numFiles)
+		self.assertEqual(numFiles, 14);
 
-	# def test_createConfFiles_Dirichlet_PwmFile(self):
-	# 	confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments.yaml"
+	def test_CreateConfFilesExpt2(self):
+		confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments2.yaml"
+		generator = generateYaml.YamlFastaGenerator(confFile);
+		targetDir = generator.GetTargetDir();
+		generator.CreateConfFiles();
+		self.assertTrue(os.path.isdir(targetDir))
+		numFiles = 0;
+		for root, dirs, files in os.walk(targetDir):
+			for file in fnmatch.filter(files, "*.yml"):
+				numFiles = numFiles + 1;
+		print "Num Files: ", str(numFiles)
+		self.assertEqual(numFiles, 8);
 
-	# 	confMap = SeqGenUtils.GetConf(confFile);
-	# 	targetDir = generateYaml.getTargetDir(confMap);	
-	# 	signalType, noSignalType = generateYaml.setupVariables(confMap)
-	# 	self.assertEqual(signalType, "pwmFiles");
-	# 	self.assertEqual(noSignalType, "dirichlet");
 
-	# 	generateYaml.CreateConfFiles(targetDir, noSignalType);
+	def test_CreateConfFilesExpt3(self):
+		confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments3.yaml"
+		generator = generateYaml.YamlFastaGenerator(confFile);
+		targetDir = generator.GetTargetDir();
+		generator.CreateConfFiles();
+		self.assertTrue(os.path.isdir(targetDir))
+		numFiles = 0;
+		for root, dirs, files in os.walk(targetDir):
+			for file in fnmatch.filter(files, "*.yml"):
+				numFiles = numFiles + 1;
+		print "Num Files: ", str(numFiles)
+		#self.assertEqual(numFiles, 8);

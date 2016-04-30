@@ -102,16 +102,18 @@ class YamlFastaGenerator():
 
 		if self.confMap["signal"].get("type"):
 			self.signalType = self.confMap["signal"]["type"]
+			print "SIGNAL TYPE: ", self.signalType.strip();
+
 
 			if self.signalType == 'pwmFiles':
 				self.pwmFiles = self.confMap["signal"]["pwmFiles"]
 			elif self.signalType == "pwmDir":
 				self.pwmFileDirectory =  self.confMap["signal"]["pwmDir"]
-				self.pwmFiles = self.getPwmFiles();
+				self.getPwmFiles();
 			elif self.signalType == "textMotif":
 				self.textMotifs = self.confMap["signal"]["textMotif"]
 			elif self.signalType == "kmers":
-				self.kmers = confMap["signal"]["kmers"]
+				self.kmers = self.confMap["signal"]["kmers"]
 			else:
 				print "Invalid signal Type:", self.signalType;
 
@@ -150,60 +152,98 @@ class YamlFastaGenerator():
 				print "Did not specify nosignal type"
 				return;
 
-	## Program stats here.
+	def GetFileNameStr(self, numSeq, seqLen, alpha, signalValue, signalPercent):
+		fileNameStr = str(numSeq) + "_" + str(seqLen) + "_" + str(signalPercent);
+		if alpha != -1:
+			fileNameStr = fileNameStr + "_" + str(alpha);
+
+		fileNameStr = fileNameStr + "_" + signalValue;
+		return fileNameStr;
+
+
+	def IterateThroughSignalAndWriteYaml(self, location, numSeq, seqLen, alpha=-1):
+		seqWithSignalPercentList = self.GetSignalPercentList();
+		for signalPercent in seqWithSignalPercentList:
+			print "signal type:", self.signalType;
+			if self.signalType == 'pwmDir' or self.signalType == 'pwmFiles':
+				for pwmFile in self.pwmFiles:
+					if os.path.abspath(pwmFile):
+						self.pwmFileDirectory = os.path.dirname(pwmFile);
+						pwmFile = os.path.basename(pwmFile);
+
+					fileId = self.GetFileNameStr(numSeq, seqLen, alpha, pwmFile, signalPercent);
+					noSignalDict = self.getNoSignalDictWithAlpha(location, numSeq, seqLen, alpha, fileId);
+					yamlFileName, motifDict = self.getMotifDict(location, numSeq, seqLen, signalPercent, pwmFile, fileId);
+					self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+			elif self.signalType == "textMotif":
+				for motif in self.textMotifs:
+					fileId = self.GetFileNameStr(numSeq, seqLen, alpha, motif, signalPercent);
+					noSignalDict = self.getNoSignalDict(location, numSeq, seqLen, fileId);
+					yamlFileName, motifDict = self.getMotifDict(location, numSeq, seqLen, signalPercent, motif, fileId);
+					self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+
+			elif self.signalType == "kmers":
+				for kmer in self.kmers:
+					fileId = self.GetFileNameStr(numSeq, seqLen, alpha, kmer, signalPercent);
+					noSignalDict = self.getNoSignalDict(location, numSeq, seqLen, fileId);
+					yamlFileName, motifDict = self.getMotifDict(location, numSeq, seqLen, signalPercent, kmer, fileId);
+					self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+			else:
+				print __func__, ": Invalid Signal Type: ", self.signalType;
+
+											
 	def CreateConfFiles(self):
-		if self.noSignalType == 'shuffle':
-			print "Shuffle type";
-			#GenerateNoSignalWithFasta(targetDir);
-		elif self.noSignalType == 'dirichlet':
-			self.GenerateNoSignalWithDirichlet();
-		else:
-			print "Invalid No Signal type", self.noSignalType;
-
-
-	def GenerateNoSignalWithDirichlet(self):
 		location = self.targetDir;
-		pwmFiles = self.pwmFiles;
-		numSeq = self.GetNumSeqList();
-		seqLen = self.GetNumSeqLenList();
-		alpha = self.GetAlpha();
-		seqWithSignalPercent = self.GetSignalPercentList();
+		numSeqList = self.GetNumSeqList();
+		seqLenList = self.GetNumSeqLenList();
+		alphaList = self.GetAlpha();
 
-		for numSeqIdx, i in enumerate(numSeq):
-			print str(numSeqIdx), str(i)
-			for numSeqLenIdx, j in enumerate(seqLen):
-				print str(numSeqLenIdx),  str(j)
-				for a in alpha:
-					#print "ALPHA: ", str(a)
-					for signalPercent in seqWithSignalPercent:
-						#print "signal percent: ", str(signalPercent)
-						for pwmFile in pwmFiles:
-							#print "PWM: ", pwmFile
-							if os.path.isabs(pwmFile) == True:
-								self.pwmFileDirectory = os.path.dirname(pwmFile);
-								pwmFile = os.path.basename(pwmFile);
+		for numSeq in numSeqList:
+			for seqLen in seqLenList:
+				if self.noSignalType == "dirichlet":
+					for alpha in alphaList:
+						self.IterateThroughSignalAndWriteYaml(location, numSeq, seqLen, alpha);
+				else:
+					inpFastaFile = self.noSignalFastaFile;
+					self.IterateThroughSignalAndWriteYaml(location, numSeq, seqLen);
 
-							fileId = str(i) + "_" + str(j) + "_" + str(a) + "_" + str(signalPercent) + "_" + pwmFile;
-							#print "FILE ID:", fileId;
-							yamlFileName, motifDict = self.getMotifDict(location, i, j, signalPercent, pwmFile, fileId);
-							#print "YAML FILE:", yamlFileName;
-							noSignalDict = self.getNoSignalDictWithAlpha(location, i, j, a, fileId);
-							self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+	def getNoSignalDict(self, location, numberSeq, seqLength, fileId):
+		outFileName = "NoSignal_" + fileId
+		inpFastaFile = self.noSignalFastaFile;
+		data = dict(
+			  seqLen = seqLength,
+			  numSeq = numberSeq,
+			  fastaFile = inpFastaFile,
+			  outNoSignalFastaFile = location + "/" + outFileName + ".fa",
+		)
 
-	def getMotifDict(self, location, numberSeq, seqLength, signalSeq, pwmFileName, fileId):
+		return data;
+
+	def getMotifDict(self, location, numberSeq, seqLength, signalSeq, signalValue, fileId):
 		signalLocation = 10;
 		outFileName = "Signal_" + fileId;
-		#print "PWM FILENAME: ", pwmFileName;
+		#print "FILE ID: ", fileId;
+		#print "PWM FILENAME: ", signalValue;
 
-		pwmFileToAdd = self.pwmFileDirectory + "/" + pwmFileName;	
 		data = dict(
 				outSignalFile = location + "/" + outFileName + ".fa",
 				seqBackGround = self.utrDist,
 				seqWithSignal = signalSeq,
 				locationFromStart = signalLocation,
-				pwmFile = pwmFileToAdd,
 			)
+		if self.signalType == "pwmDir" or self.signalType == "pwmFiles":
+			pwmFileToAdd = self.pwmFileDirectory + "/" + signalValue;
+			data["pwmFile"] = pwmFileToAdd;
+		elif self.signalType == "textMotif":
+			data["textMotif"] = signalValue;
+		elif self.signalType == "kmers":
+			data["kmer"] = signalValue;
+		else:
+			print "Invalid signal type: ", self.signalType;
+			
+			
 		yamlFileName = fileId + ".yml"
+		#print "YAML FILENAME: ", yamlFileName;
 		return yamlFileName, data;
 
 	def getNoSignalDictWithAlpha(self, location, numberSeq, seqLength, alphaValue, fileId):
@@ -233,54 +273,6 @@ class YamlFastaGenerator():
 
 		with open(location + "/" + yamlFileName, 'w') as outfile:
 			 outfile.write(yaml.dump(data, default_flow_style=False, Dumper=noalias_dumper))
-
-
-	# def getNoSignalDict(location, numberSeq, seqLength, inpFastaFile, fileId):
-	# 	outFileName = "NoSignal_" + fileId
-	# 	data = dict(
-	# 		  seqLen = seqLength,
-	# 		  numSeq = numberSeq,
-	# 		  fastaFile = inpFastaFile,
-	# 		  outNoSignalFastaFile = location + "/" + outFileName + ".fa",
-	# 	)
-
-	# 	return data;
-
-
-
-
-
-
-
-
-	# def GenerateNoSignalWithFasta(location):
-	# 	inpFastaFile = "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
-	# 	pwmFiles = getPwmFiles(pwmFileDirectory);	
-	# 	for numSeqIdx, i in enumerate(numSeq):
-	# 		for numSeqLenIdx, j in enumerate(seqLen):
-	# 			for signalPercent in seqWithSignalPercent:
-	# 				for pwmFile in pwmFiles:
-	# 					fileId = str(i) + "_" + str(j) + "_" + str(signalPercent) + pwmFile;
-	# 					yamlFileName, motifDict = getMotifDict(location, i, j, signalPercent, pwmFile, fileId);
-	# 					noSignalDict = getNoSignalDict(location, i, j, inpFastaFile, fileId);
-	# 					writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
-
-
-
-
-
-
-
-
-
-
-	# def main():
-	# 	import sys
-	# 	confFile = sys.argv[1]
-	# 	confMap = SeqGenUtils.GetConf(confFile)
-	# 	targetDir = getTargetDir(confMap)
-	# 	signalType, noSignalType = setupVariables(confMap)
-	# 	CreateConfFiles(targetDir, noSignalType)
 
 if __name__ == "__main__":
 	main();

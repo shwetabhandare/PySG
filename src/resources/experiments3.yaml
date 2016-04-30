@@ -2,10 +2,10 @@ targetDir: "/projects/bhandare/workspace/PySG/src/resources/tmp"
 numSeq: [10]
 seqLen: [50]
 signal:
-   type: "pwmDir"
-   pwmDir: "/projects/bhandare/workspace/PySG/data/pwm"
+   type: "kmers"
+   kmers: ["ATTTA", "ATTTACGTTA", "CGGAAACCC"]
    location: [10]
-   signalPercent: [75, 90]
+   signalPercent: [25, 50, 75]
 nosignal:
    type: "shuffle"
    fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
