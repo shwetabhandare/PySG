@@ -158,15 +158,26 @@ class YamlFastaGenerator():
 		fileNameStr = fileNameStr + "_" + signalValue;
 		return fileNameStr;
 
-	def UseParamsAndWriteYamlFile(self, location, numSeq, seqLen, alpha, signalPercent, signalValue):
+	def UseParamsAndWriteYamlFile(self, location, numSeq, seqLen, alpha, signalPercent, signalValue, folderCreated):
 		fileId = self.GetFileNameStr(numSeq, seqLen, alpha, signalValue, signalPercent);
+
 		if alpha == -1:
-			noSignalDict = self.getNoSignalDict(location, numSeq, seqLen, fileId);
+			folderName = str(numSeq) + "_" + str(seqLen) + "_" + str(signalPercent);
+			folderPath = location + "/" + folderName;
+			noSignalDict = self.getNoSignalDict(folderPath, numSeq, seqLen, fileId);
 		else:
-			noSignalDict = self.getNoSignalDictWithAlpha(location, numSeq, seqLen, alpha, fileId);
+			folderName = str(numSeq) + "_" + str(seqLen) + "_" + str(alpha) + "_" + str(signalPercent);
+			folderPath = location + "/" + folderName;
+			noSignalDict = self.getNoSignalDictWithAlpha(folderPath, numSeq, seqLen, alpha, fileId);
 				
-		yamlFileName, motifDict = self.getMotifDict(location, numSeq, seqLen, signalPercent, signalValue, fileId);
-		self.writeYamlFile(location, yamlFileName, noSignalDict, motifDict);
+		yamlFileName, motifDict = self.getMotifDict(folderPath, numSeq, seqLen, signalPercent, signalValue, fileId);
+		if folderCreated == False:
+			os.makedirs(folderPath);
+			folderCreated = True;
+
+		self.writeYamlFile(folderPath, yamlFileName, noSignalDict, motifDict);
+		return folderCreated;
+
 
 	def GetPwmFileToAdd(self, pwmFile):
 		if os.path.isabs(pwmFile):
@@ -178,18 +189,20 @@ class YamlFastaGenerator():
 	def IterateThroughSignalAndWriteYaml(self, location, numSeq, seqLen, alpha=-1):
 		seqWithSignalPercentList = self.GetSignalPercentList();
 		for signalPercent in seqWithSignalPercentList:
+			folderCreated = False;
 			if self.signalType == 'pwmDir' or self.signalType == 'pwmFiles':
+				
 				for pwmFile in self.pwmFiles:
 					pwmFileToAdd = self.GetPwmFileToAdd(pwmFile);
-					self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, pwmFileToAdd);
+					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, pwmFileToAdd, folderCreated);
 
 			elif self.signalType == "textMotif":
 				for motif in self.textMotifs:
-					self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, motif);
+					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, motif, folderCreated);
 
 			elif self.signalType == "kmers":
 				for kmer in self.kmers:
-					self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, kmer);
+					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, kmer, folderCreated);
 			else:
 				print __func__, ": Invalid Signal Type: ", self.signalType;
 
@@ -225,7 +238,6 @@ class YamlFastaGenerator():
 		signalLocation = 10;
 		outFileName = "Signal_" + fileId;
 		#print "FILE ID: ", fileId;
-		print "PWM dir: ", self.pwmFileDirectory;
 
 		data = dict(
 				outSignalFile = location + "/" + outFileName + ".fa",

@@ -23,12 +23,13 @@ def GenerateFastaFiles(directory):
 
 def RunComputationalTools(directory):
 	os.chdir(directory)
-	for signalFile in glob.glob("Signal*.fa"):
-		noSignalFile = "No" + signalFile;
-
+	for signalFile in findFiles(directory, "Signal*.fa"):
+		dirName = os.path.dirname(signalFile);
+		signalFileName = os.path.basename(signalFile);
+		noSignalFile = dirName + "/No" + signalFileName;
 		dremeResultDir, realKmersCsvFile = RunComputationalMethods.RunDremeAndGetResults(signalFile, noSignalFile);
 		kspectrumResultDir, realKmersCsvFile = RunComputationalMethods.RunKspectrumAndGetResults(signalFile, noSignalFile);
-		RunComputationalMethods.CopyResults(signalFile, noSignalFile, realKmersCsvFile, dremeResultDir, kspectrumResultDir)
+		#RunComputationalMethods.CopyResults(signalFile, noSignalFile, realKmersCsvFile, dremeResultDir, kspectrumResultDir)
 
 if __name__ == "__main__":
 	import sys

@@ -6,28 +6,43 @@ import shutil
 import compareKmers
 
 def RunKspectrumKernel(signalFile, noSignalFile):
-	baseNameOfSignalFile = os.path.splitext(os.path.basename(signalFile))[0]
-	outDir = baseNameOfSignalFile + "_kspectrum"
+
+	signalDirName, signalFileName, outDir = GetResultDirName(signalFile, "_kspectrum");
+	noSignalDirName, noSignalFileName, noSignalOut = GetResultDirName(noSignalFile, "_kspectrum");
+
+	print "PRED: ", signalDirName, ", Signal: ", signalFileName, ", OUT: ", outDir;
+
+	baseNameOfSignalFile = os.path.splitext(os.path.basename(signalFileName))[0]
+
 	makeFile = "/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline/Makefile.BasicKspectrum"
-	posFileArg = "pos_file=" + signalFile;
-	negFileArg = "neg_file=" + noSignalFile;
+	posFileArg = "pos_file=" +  signalFileName;
+	negFileArg = "neg_file="  + noSignalFileName;
 	prefixArg = "conf_prefix=" + baseNameOfSignalFile 
 	resultDirArg = "result_dir=" + outDir
 	subprocess.call(["make", "-f", makeFile, posFileArg, negFileArg, prefixArg, resultDirArg])
 
+
 	predictedKspectrumFile = outDir + "/" + baseNameOfSignalFile + "_Features.dat"
-	realKmersCsvFile = os.path.splitext(signalFile)[0] + ".kmers"
+	realKmersCsvFile = signalDirName + "/" + os.path.splitext(signalFileName)[0] + ".kmers"
 
 	return predictedKspectrumFile, realKmersCsvFile, outDir;
 
+def GetResultDirName(signalFile, suffixStr):
+	signalDirName = os.path.dirname(signalFile);
+	signalFileName =  os.path.basename(signalFile);
+
+	resultDir =  signalDirName + "/" + signalFileName + suffixStr;
+
+	return signalDirName, signalFileName, resultDir;
 
 def RunDreme(signalFile, noSignalFile):
-	dremeDir = signalFile + "_DremeOut"
-	print "Calling DREME for ", signalFile, ", ", noSignalFile;
+	signalDirName, signalFileName, dremeDir =  GetResultDirName(signalFile, "_DremeOut");
+	print "Calling DREME for ", signalFile, ", ", noSignalFile, ", ", dremeDir;
+	
 	subprocess.call(["dreme", "-p", signalFile, "-n", noSignalFile, "-oc", dremeDir])
 
 	predictedDremeFile = dremeDir + "/" + "dreme.txt";
-	realKmersCsvFile = os.path.splitext(signalFile)[0] + ".kmers"
+	realKmersCsvFile = signalDirName + "/" + os.path.splitext(signalFileName)[0] + ".kmers"
 
 	return predictedDremeFile, realKmersCsvFile, dremeDir;
 
@@ -75,7 +90,7 @@ def RunDremeAndGetResults(signalFile, noSignalFile):
 	predictedDremeFile, realKmersCsvFile, dremeResultDir = RunDreme(signalFile, noSignalFile);
 	sensitivity, ppv = ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile);
 	print "DREME: ", str(sensitivity), str(ppv);
-	dremeResultFile = dremeResultDir + "/" + signalFile + "_dreme.results"
+	dremeResultFile = dremeResultDir + "/" + os.path.basename(signalFile) + "_dreme.results"
 	WriteResults(sensitivity, ppv, signalFile, dremeResultFile)
 
 	return dremeResultDir, realKmersCsvFile;
@@ -84,7 +99,7 @@ def RunKspectrumAndGetResults(signalFile, noSignalFile):
 
 	predictedKspectrumFile, realKmersCsvFile, kspectrumResultDir = RunKspectrumKernel(signalFile, noSignalFile)
 	sensitivity, ppv = ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile);
-	kSpectrumResultFile = kspectrumResultDir + "/" + signalFile + "_kspectrum.results"
+	kSpectrumResultFile = kspectrumResultDir + "/" + os.path.basename(signalFile) + "_kspectrum.results"
 	WriteResults(sensitivity, ppv, signalFile, kSpectrumResultFile)
 	print "K_SPECTRUM: ", str(sensitivity), str(ppv);
 
@@ -92,15 +107,16 @@ def RunKspectrumAndGetResults(signalFile, noSignalFile):
 
 def CopyResults(signalFile, noSignalFile, realKmersCsvFile, dremeResultDir, kspectrumResultDir):
 	# Create an enclosing directory for the signal/nosignal file
-	baseNameOfSignalFile = os.path.splitext(os.path.basename(signalFile))[0]
-	baseNameOfNoSignalFile = os.path.splitext(os.path.basename(noSignalFile))[0]
+	signalDirName, signalFileName, outDir = GetResultDirName(signalFile, "");
+	noSignalDirName, noSignalFileName, outDir = GetResultDirName(noSignalFile, "");
 
-	enclosingDir = baseNameOfSignalFile + "_" + baseNameOfNoSignalFile;
-	if not os.path.exists(enclosingDir):
+	enclosingDir = signalFileName + "_" + signalFileName;
+	if not os.path.exists(signalDirName + "/" + enclosingDir):
 		os.makedirs(enclosingDir)
-
-		shutil.move(signalFile, enclosingDir)
-		shutil.move(noSignalFile, enclosingDir)
+		yamlFile = signalFileName[7:-3] + ".yml"
+		shutil.move(signalDirName + "/" + yamlFile, enclosingDir)
+		shutil.move(signalDirName + "/" + signalFileName, enclosingDir)
+		shutil.move(signalDirName + "/" + noSignalFileName, enclosingDir)
 		shutil.move(kspectrumResultDir, enclosingDir)
 		shutil.move(dremeResultDir, enclosingDir)
 		shutil.move(realKmersCsvFile, enclosingDir)

@@ -30,13 +30,14 @@ step0: $(POS_FILE) $(NEG_FILE)
 	python /projects/bhandare/workspace/scripts/convertToUpper.py $(POS_FILE) 
 	python /projects/bhandare/workspace/scripts/convertToUpper.py $(NEG_FILE)
 
-step1: $(POS_FILE) $(NEG_FILE) $(SEQ_COUNTER_SCRIPT) 
-	mkdir -p $(RESULT_DIR)
-	cd $(RESULT_DIR); python $(SEQ_COUNTER_SCRIPT) ../$(POS_FILE) ../$(NEG_FILE); echo "I am in " `pwd` "directory"
+step1: $(SEQ_COUNTER_SCRIPT) 
+	@echo "Result Dir: "$(RESULT_DIR)
+	mkdir -p $(RESULT_DIR) 
+	cd $(RESULT_DIR) && python $(SEQ_COUNTER_SCRIPT) ../$(POS_FILE) ../$(NEG_FILE); 
 
 step2:
 
-	$(eval COMBINED_FILE_NAME := $(shell cd $(RESULT_DIR); ls *.txt))
+	$(eval COMBINED_FILE_NAME := $(shell cd $(RESULT_DIR) && ls *.txt))
 	@echo $(CONF_YML), $(COMBINED_FILE_NAME)
 	cd $(RESULT_DIR) && python $(CREATE_CONF_SCRIPT) $(COMBINED_FILE_NAME) $(CONF_PREFIX) $(CONF_YML)
 step3:
