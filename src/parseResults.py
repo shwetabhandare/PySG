@@ -1,17 +1,12 @@
 import sys
 import os
 import csv
-import matplotlib
-from matplotlib import pyplot as plt
+
 import numpy as np;
 import math;
 
 writeTitleDreme = False;
 writeTitleKspectrum = False;
-
-dremeResultsFile = "dremeResultsToGraph.csv"
-kspectrumResultsFile="kspectrumResultsToGraph.csv"
-
 
 def getColumn(filename, column):
 	results = csv.reader(open(filename), delimiter=",")
@@ -27,11 +22,9 @@ def appendResult(fileName, label, sensitivity, ppv):
 		spamwriter = csv.writer(csvfile, delimiter=',');
 		spamwriter.writerow([label, sensitivity, ppv])
 
-def getResultFile(filepath, label):
+def getResultFile(filepath, label, dremeResultsFile, kspectrumResultsFile):
 	global writeTitleDreme;
 	global writeTitleKspectrum;
-	global dremeResultsFile;
-	global kspectrumResultsFile;
 
 	if label.find("dreme") != -1:
 		fileName = dremeResultsFile;
@@ -49,10 +42,8 @@ def getResultFile(filepath, label):
 	return fileName;
 
 
-def getResultsFromFile(filepath, label):
-
-
-	fileName = getResultFile(filepath, label);
+def appendResultsToGraphFile(filepath, label, dremeResultsFile, kspectrumResultsFile):
+	fileName = getResultFile(filepath, label, dremeResultsFile, kspectrumResultsFile);
 
 	with open(filepath, 'rb') as csvfile:
 		reader = csv.reader(csvfile)
@@ -79,39 +70,73 @@ def graphResults(fileName):
 	print labels
 	print sensitivity
 	print ppv
+	import matplotlib
+	matplotlib.use('Agg')
 	
-	matplotlib.rcParams.update({'font.size': 12})
-
-	plt.ion()
-	#plt.figure()
-	plt.figure(figsize=(20,30))
-
+	from matplotlib import pyplot as plt	
+	matplotlib.rcParams.update({'font.size': 18})
+	
+	#plt.ion()
+	fig = plt.figure()
+	#fig = plt.figure(figsize=(20,30))
 	plt.plot(sensitivity)
 	plt.plot(ppv)
 	plt.xticks(range(len(sensitivity)), labels, rotation=90)
 	figureName = os.path.splitext(fileName)[0] + ".png"
 	plt.savefig(figureName);
+	plt.close(fig)
 
+def splitall(path):
+	allparts = []
+	while 1:
+		parts = os.path.split(path)
+		if parts[0] == path:  # sentinel for absolute paths
+			allparts.insert(0, parts[0])
+			break
+		elif parts[1] == path: # sentinel for relative paths
+			allparts.insert(0, parts[1])
+			break
+		else:
+			path = parts[0]
+			allparts.insert(0, parts[1])
+	return allparts
+
+def getFileNameAndPrefixToGraph(filepath, subdir):
+	fileNameToGraph =  os.path.splitext(os.path.basename(filepath))[0]
+	fileNameToGraph = fileNameToGraph[7:]; # remove Signal_
+
+	allparts = splitall(subdir)
+	graphPrefix = allparts[-2]	
+
+	return fileNameToGraph, graphPrefix;
 
 def parseDirectory(resultDir):
 
 	for subdir, dirs, files in os.walk(resultDir):
-	    for file in files:
-	        #print os.path.join(subdir, file)
-	        filepath = subdir + os.sep + file
-	        if filepath.endswith(".results"):
-	            #print "RESULTS FILE: ", filepath
-	            fileNameWithoutPath = os.path.basename(filepath);
-	            fileNameToGraph =  os.path.splitext(fileNameWithoutPath)[0]
-	            fileNameToGraph = fileNameToGraph[7:]; # remove Signal_
-	            getResultsFromFile(filepath, fileNameToGraph)
+		graphFlag = False;
+		# if subdir != resultDir:
+		# 	print "Sub dir: ", subdir;
 
+		for file in files:
+			#print os.path.join(subdir, file)
+			filepath = subdir + os.sep + file
+			if filepath.endswith(".results"):
+				graphFlag = True;
+				print "Result file: ", filepath;
+				fileNameToGraph, graphPrefix = getFileNameAndPrefixToGraph(filepath, subdir)
+				dremeResultsFile = graphPrefix + "_dreme_graph.csv";
+				kspectrumResultsFile  = graphPrefix + "_kspectrum_graph.csv"
+				appendResultsToGraphFile(filepath, fileNameToGraph, dremeResultsFile, kspectrumResultsFile)
+
+		if graphFlag:
+			if os.path.isfile(dremeResultsFile):  
+				graphResults(dremeResultsFile)
+			if os.path.isfile(kspectrumResultsFile): 
+				graphResults(kspectrumResultsFile)
+			graphFlag = False;
 
 if __name__ == "__main__":
-	global dremeResultsFile;
-	global kspectrumResultsFile;
 	resultDir = sys.argv[1]
 	parseDirectory(resultDir)
-	graphResults(dremeResultsFile);
-	
-	graphResults(kspectrumResultsFile)
+	#graphResults(dremeResultsFile);
+	#graphResults(kspectrumResultsFile)
