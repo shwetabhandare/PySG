@@ -1,6 +1,7 @@
 import sys
 import os
 import csv
+import glob
 
 import numpy as np;
 import math;
@@ -51,7 +52,30 @@ def appendResultsToGraphFile(filepath, label, dremeResultsFile, kspectrumResults
 			sensitivity = row[0].split(":")[1]
 			ppv = row[1].split(":")[1]
 			label = os.path.splitext(label)[0];
+			#print "Label ", label;
 			appendResult(fileName, label, sensitivity, ppv)
+
+def createTitle(label):
+	print "Label: ", label;
+	x = label.split("_");
+	seqLen = x[0]
+	numSeq = x[1]
+
+	title = "";
+
+	title = "Number of Sequences: ", x[0], ", Sequence Length: ", x[1];
+	if len(x) == 5:
+		alpha = x[2]
+		signalPercent = x[3]
+		signal = x[4]
+		title = title + ", Signal Percent: ", signalPercent, ", Signal: ", signal
+	else:
+		signalPercent = x[2]
+		signal = x[3]	
+		title = title + ", Signal Percent: ", signalPercent, ", Signal: ", signal	
+
+	
+	return title;
 
 def graphResults(fileName):
 
@@ -64,23 +88,34 @@ def graphResults(fileName):
 	ppv = getColumn(fileName, 2)
 
 	labels = labels[1:]
+	title = createTitle(labels[0]);
+	#print "before: ", labels;
+	labels[:] = [l.split("_")[-1] for l in labels]
+	#print "after: ", labels;
+
 	sensitivity = sensitivity[1:]
 	ppv = ppv[1:]
 
-	print labels
-	print sensitivity
-	print ppv
+	#print "Title: ", title;
+	#print labels
+	#print sensitivity
+	#print ppv
 	import matplotlib
 	matplotlib.use('Agg')
 	
 	from matplotlib import pyplot as plt	
-	matplotlib.rcParams.update({'font.size': 18})
+	#matplotlib.rcParams.update({'font.size': 8})
 	
 	#plt.ion()
 	fig = plt.figure()
-	#fig = plt.figure(figsize=(20,30))
+	#yerr = 0.1 + 0.2*np.sqrt(sensitivity)
+	#yerr = 0.1 + 0.2*np.sqrt(sensitivity)
+
+	plt.ylabel('Sensitivity/PPV');
+	plt.title(title);
 	plt.plot(sensitivity)
 	plt.plot(ppv)
+
 	plt.xticks(range(len(sensitivity)), labels, rotation=90)
 	figureName = os.path.splitext(fileName)[0] + ".png"
 	plt.savefig(figureName);
@@ -106,16 +141,34 @@ def getFileNameAndPrefixToGraph(filepath, subdir):
 	fileNameToGraph = fileNameToGraph[7:]; # remove Signal_
 
 	allparts = splitall(subdir)
-	graphPrefix = allparts[-2]	
+	graphPrefix = allparts[-2]	 #Get second to last directory.
 
 	return fileNameToGraph, graphPrefix;
 
 def parseDirectory(resultDir):
 
+	global writeTitleDreme;
+	global writeTitleKspectrum;
+
 	for subdir, dirs, files in os.walk(resultDir):
-		graphFlag = False;
+		
 		# if subdir != resultDir:
 		# 	print "Sub dir: ", subdir;
+
+		#print "Files: ", files;
+		if subdir == resultDir or subdir.find("Signal") == -1:
+			print "Sub-Dir: ", subdir;
+			writeTitleDreme=False;
+			writeTitleKspectrum=False;
+
+			# if graphFlag:
+			# 	print "Graph Flag: ", graphFlag;
+			# 	if os.path.isfile(dremeResultsFile):  
+			# 		graphResults(dremeResultsFile)
+			# 	if os.path.isfile(kspectrumResultsFile): 
+			# 		graphResults(kspectrumResultsFile)
+			# 	graphFlag = False;
+
 
 		for file in files:
 			#print os.path.join(subdir, file)
@@ -128,12 +181,12 @@ def parseDirectory(resultDir):
 				kspectrumResultsFile  = graphPrefix + "_kspectrum_graph.csv"
 				appendResultsToGraphFile(filepath, fileNameToGraph, dremeResultsFile, kspectrumResultsFile)
 
-		if graphFlag:
-			if os.path.isfile(dremeResultsFile):  
-				graphResults(dremeResultsFile)
-			if os.path.isfile(kspectrumResultsFile): 
-				graphResults(kspectrumResultsFile)
-			graphFlag = False;
+
+	for resultFile in glob.glob("*graph*.csv"):
+		print "File to graph: ", resultFile;
+		graphResults(resultFile)
+
+
 
 if __name__ == "__main__":
 	resultDir = sys.argv[1]
