@@ -68,20 +68,16 @@ def createTitle(label):
 		alpha = x[2]
 		signalPercent = x[3]
 		signal = x[4]
-		title = title + ", Signal Percent: ", signalPercent, ", Signal: ", signal
+		#title = title + ", Signal Percent: ", signalPercent, ", Signal: ", signal
 	else:
 		signalPercent = x[2]
 		signal = x[3]	
-		title = title + ", Signal Percent: ", signalPercent, ", Signal: ", signal	
+		#title = title + ", Signal Percent: ", signalPercent, ", Signal: ", signal	
 
 	
 	return title;
 
 def graphResults(fileName):
-
-	#data1=np.genfromtxt('data1.csv', skip_header=1) 
-	#plt.plot(data1)
-
 
 	labels = getColumn(fileName, 0)
 	sensitivity = getColumn(fileName, 1)
@@ -97,8 +93,8 @@ def graphResults(fileName):
 	ppv = ppv[1:]
 
 	#print "Title: ", title;
-	#print labels
-	#print sensitivity
+	print labels
+	print sensitivity
 	#print ppv
 	import matplotlib
 	matplotlib.use('Agg')
@@ -160,15 +156,6 @@ def parseDirectory(resultDir):
 			print "Sub-Dir: ", subdir;
 			writeTitleDreme=False;
 			writeTitleKspectrum=False;
-
-			# if graphFlag:
-			# 	print "Graph Flag: ", graphFlag;
-			# 	if os.path.isfile(dremeResultsFile):  
-			# 		graphResults(dremeResultsFile)
-			# 	if os.path.isfile(kspectrumResultsFile): 
-			# 		graphResults(kspectrumResultsFile)
-			# 	graphFlag = False;
-
 
 		for file in files:
 			#print os.path.join(subdir, file)
