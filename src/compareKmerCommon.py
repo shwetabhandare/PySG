@@ -1,3 +1,4 @@
+from __future__ import division
 import SeqGenUtils
 import re
 import TAMO_Motif;
@@ -153,7 +154,7 @@ def getKmerFromPSSM(pssmList, seq):
 		kmerReToSearchFor = kmerReToSearchFor + '|'
 	kmerReToSearchFor = kmerReToSearchFor[:-1]
 	kmerReToSearchFor = kmerReToSearchFor + ")"
-	#print "PSSM RE: ", kmerReToSearchFor
+	print "PSSM RE: ", kmerReToSearchFor
 	return kmerReToSearchFor;
 
 def getPredictedKmerRE(predictedKmerDict):

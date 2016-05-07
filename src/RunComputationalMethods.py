@@ -62,7 +62,7 @@ def GetSensitivityAndPPV(numTP, numFP, numFN):
 def ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSignalFile):
 
 	numTP, numFP, numFN = compareKmers.CompareDremeKmers(realKmersCsvFile, predictedDremeFile,
-		signalFile, noSignalFile, None)
+		signalFile, noSignalFile, 0)
 
 	sensitivity, ppv = GetSensitivityAndPPV(numTP, numFP, numFN);
 

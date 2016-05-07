@@ -1,4 +1,5 @@
 #import re, ahocorasick,random,time
+from __future__ import division
 import parseDreme
 import parseRealKmers
 import parseKspectrum
@@ -91,6 +92,19 @@ def CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMot
 	return numTP, numFP, numFN;
 
 
+def GetSensitivityAndPPV(numTP, numFP, numFN):
+	if ((numTP + numFN) == 0):
+		sensitivity = 0;
+	else:
+		sensitivity = numTP / (numTP + numFN)
+	
+	if ((numTP + numFP) == 0):
+		ppv = 0;
+	else:
+		ppv =  numTP / (numTP + numFP)
+
+	return sensitivity, ppv;
+
 if __name__ == "__main__":
 	import sys
 	realCsvFile = sys.argv[1]
@@ -99,4 +113,7 @@ if __name__ == "__main__":
 	negFile = sys.argv[4]
 	textMotif = int(sys.argv[5])
 
-	numTP, numFP, numFN = CompareKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMotif)
+	numTP, numFP, numFN = CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMotif)
+	print "Num TP: ", str(numTP), ", Num FP: ", str(numFP), ", Num FN: ", str(numFN)
+	sensitivity, ppv = GetSensitivityAndPPV(numTP, numFP, numFN);
+	print sensitivity, ppv

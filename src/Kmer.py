@@ -34,10 +34,15 @@ def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
 		kmers.append(kmerToEmbed);
 	return kmers;
 
-def EmbedMotif(SeqDict, kmerList, numSeqsWithSignal, locationFromStart):
+def EmbedMotif(SeqDict, kmerList, SignalSeqInfo):
 	generateKmer = False;
 	motifBackGround = ""
 	embeddedKmerDict = dict();
+
+	signalPercent = SignalSeqInfo['seqWithSignal']
+	locationFromStart = SignalSeqInfo['locationFromStart'];
+	totalSeq = SignalSeqInfo['numSeq'];
+	numSeqsWithSignal = (signalPercent * totalSeq)/100
 
 	#print "Num Sequences with Signal", str(numSeqsWithSignal)
 	keysToReplace = random.sample(SeqDict, numSeqsWithSignal)
@@ -96,6 +101,10 @@ def GetSignalSeqInfo(confMap, SeqLength):
 		SignalSeqInfo['motifType'] = motifType;
 		SignalSeqInfo['locationFromStart'] = locationFromStart;
 		SignalSeqInfo['seqWithSignal'] = numSeqsWithSignal;
+
+	SignalSeqInfo['numSeq'] = int(confMap['sequence']['nosignal']['numSeq'])
+
+
 	return SignalSeqInfo;
 
 def WriteKmersToFile(embeddedKmerDict, OutputFileName):
@@ -124,7 +133,8 @@ def CreateFastaWithSignal(configFile):
 		SeqDict = NoSignal.CreateNoSignalDict(confMap, True);
 
 		# Embed motif into the sequences.
-		SeqDict, embeddedKmerDict = EmbedMotif(SeqDict, kmerList, SignalSeqInfo['seqWithSignal'], SignalSeqInfo['locationFromStart']);
+		SeqDict, embeddedKmerDict = EmbedMotif(SeqDict, kmerList, SignalSeqInfo);
+
 
 		MotifOutFileName = confMap["sequence"]["signal"]["outSignalFile"]
 

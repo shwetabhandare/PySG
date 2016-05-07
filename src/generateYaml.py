@@ -75,13 +75,14 @@ class YamlFastaGenerator():
 		return self.noSignalFastaFile;
 
 	def SetupTargetDir(self):
+		print self.confMap;
 		if self.confMap.get("targetDir"):
 			self.targetDir = self.confMap["targetDir"]
 		else:
 			self.targetDir = os.os.getcwd() + "/" + "tmp";
 
 		if not os.path.exists(self.targetDir):
-			print "Creating directory: ", targetDir
+			print "Creating directory: ", self.targetDir
 			os.makedirs(self.targetDir)
 		else:
 			self.deleteFiles()
