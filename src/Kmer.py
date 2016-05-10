@@ -6,10 +6,20 @@ import SeqGenUtils
 import TAMO_Motif
 import os
 
-def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
+def GetSequencesWithSignal(SignalSeqInfo):
+	signalPercent = SignalSeqInfo['seqWithSignal']
+	locationFromStart = SignalSeqInfo['locationFromStart'];
+	totalSeq = SignalSeqInfo['numSeq'];
+	numSeqsWithSignal = (signalPercent * totalSeq)/100
+
+	return numSeqsWithSignal;
+
+def GetKmersToEmbed(SignalSeqInfo, confMap):
 	kmers = list();
 	generateKmer = False;
 	motifBackGround = ""
+
+	type = SignalSeqInfo['motifType'];
 
 	if type == "pwm" or type == "motif":
 		if confMap['sequence']['signal'].get('seqBackGround'):
@@ -26,6 +36,8 @@ def GetKmersToEmbed(type, numSeqsWithSignal, confMap):
 	else:
 		kmerToEmbed = confMap["sequence"]['signal']["kmer"]
 
+	numSeqsWithSignal = GetSequencesWithSignal(SignalSeqInfo)
+
 	for i in range(numSeqsWithSignal):
 		if generateKmer:
 			kmerToEmbed = motif.emit();
@@ -39,14 +51,14 @@ def EmbedMotif(SeqDict, kmerList, SignalSeqInfo):
 	motifBackGround = ""
 	embeddedKmerDict = dict();
 
-	signalPercent = SignalSeqInfo['seqWithSignal']
+	numSeqsWithSignal = GetSequencesWithSignal(SignalSeqInfo);
 	locationFromStart = SignalSeqInfo['locationFromStart'];
-	totalSeq = SignalSeqInfo['numSeq'];
-	numSeqsWithSignal = (signalPercent * totalSeq)/100
 
-	#print "Num Sequences with Signal", str(numSeqsWithSignal)
+	print "Num Sequences with Signal", str(numSeqsWithSignal)
 	keysToReplace = random.sample(SeqDict, numSeqsWithSignal)
-	#print len(keysToReplace)
+	print len(keysToReplace)
+	print len(kmerList)
+
 	for idx, key in enumerate(keysToReplace):
 		kmerToEmbed = kmerList[idx];
 
@@ -127,7 +139,7 @@ def CreateFastaWithSignal(configFile):
 		print "Did not find any signal data in the yaml file: ", configFile;
 	else:
 		# Get the list of k-mers to embed in sequences.
-		kmerList = GetKmersToEmbed(SignalSeqInfo['motifType'], SignalSeqInfo['seqWithSignal'], confMap);
+		kmerList = GetKmersToEmbed(SignalSeqInfo, confMap);
 
 		# Get no signal sequences to embed the kmers into.
 		SeqDict = NoSignal.CreateNoSignalDict(confMap, True);

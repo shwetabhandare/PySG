@@ -10,7 +10,7 @@ def RunKspectrumKernel(signalFile, noSignalFile):
 	signalDirName, signalFileName, outDir = GetResultDirName(signalFile, "_kspectrum");
 	noSignalDirName, noSignalFileName, noSignalOut = GetResultDirName(noSignalFile, "_kspectrum");
 
-	print "PRED: ", signalDirName, ", Signal: ", signalFileName, ", OUT: ", outDir;
+	#print "PRED: ", signalDirName, ", Signal: ", signalFileName, ", OUT: ", outDir;
 
 	baseNameOfSignalFile = os.path.splitext(os.path.basename(signalFileName))[0]
 
