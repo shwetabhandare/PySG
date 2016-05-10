@@ -56,7 +56,7 @@ def Read_PWM(filename):
 	
 	#print "PWM:"
 	#for v in pwm:
-	#	print "\t",v
+		#print "\t",v
 		
 	return name, pwm
 #end Read_PWM
@@ -69,14 +69,14 @@ def Make_PWM_Motif(filename, motifBackGround=""):
 	#print "# Reading PWM from: [%s]"%filename
 	name, pwm = Read_PWM(filename)
 	
-	#print "Building motif:", name
 	m = MotifTools.toDict(pwm)
 	#print m
 	#print "Motif BackGround: ", motifBackGround
 	if motifBackGround != "":
-		motif = MotifTools.Motif_from_counts(m, bg=motifBackGround)
+		motif = MotifTools.Motif_from_ll(m);
 	else:
-		motif = MotifTools.Motif_from_counts(m)
+		motif = MotifTools.Motif_from_ll(m);
+
 	motif.source = name
 	
 	#print "Motif:", motif.source
@@ -97,3 +97,11 @@ if __name__ == "__main__":
 	pssmList = parseDreme.getPSSMListFromDremeFile(dremeFile);
 	for pssmLines in pssmList:
 		Read_Dreme_PSSM(pssmLines);
+
+if __name__ == "__main__":
+	import sys
+	pwmFile = sys.argv[1]
+	motif = Make_PWM_Motif(pwmFile)
+	print motif;
+
+

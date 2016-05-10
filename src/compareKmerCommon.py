@@ -154,7 +154,7 @@ def getKmerFromPSSM(pssmList, seq):
 		kmerReToSearchFor = kmerReToSearchFor + '|'
 	kmerReToSearchFor = kmerReToSearchFor[:-1]
 	kmerReToSearchFor = kmerReToSearchFor + ")"
-	print "PSSM RE: ", kmerReToSearchFor
+	#print "PSSM RE: ", kmerReToSearchFor
 	return kmerReToSearchFor;
 
 def getPredictedKmerRE(predictedKmerDict):
@@ -189,7 +189,7 @@ def getTotalsForSeq(realKmer, realStart, realEnd, kmerREString, seq):
 	numTP = numFP = numFN = 0;
 	
 	if realKmer == "" and realStart == 0 and realEnd == 0:
-		print "Sequence does not contain kmer."
+		#print "Sequence does not contain kmer."
 		numFP = getNumbersForKmerNotAddedToSeq(kmerREString, seq);
 	else:
 		numTP, numFP, numFN = getNumbersForSeq(kmerREString, realStart, realEnd, seq);
@@ -212,9 +212,9 @@ def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, pwm, predictedMot
 		else:
 			kmerREString = getPredictedKmerRE(predictedKmerDict)
 
-		print "SEQ ID: ", seqid, "REAL KMER: ", realKmer, ", KMER RE: ", kmerREString;
+		#print "SEQ ID: ", seqid, "REAL KMER: ", realKmer, ", KMER RE: ", kmerREString;
 		numTP, numFP, numFN = getTotalsForSeq(realKmer, realStart, realEnd, kmerREString, seq);
-		print seqid, ": TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
+		#print seqid, ": TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
 
 		numTotalTP = numTotalTP + numTP;
 		numTotalFP = numTotalFP + numFP;
@@ -232,8 +232,8 @@ def GetTotalNumbers(realKmerDict, posFile, negFile, pssmList, pwm, predictedMoti
 	numPosTP, numPosFP, numPosFN = getTotalNumbersForSeqDict(PosSeqDict, realKmerDict, pssmList, pwm, predictedMotifs, predictedKmers);
 	numNegTP, numNegFP, numNegFN = getTotalNumbersForSeqDict(NegSeqDict, realKmerDict, pssmList, pwm, predictedMotifs, predictedKmers);
 
-	print "Pos File: TP: ", str(numPosTP), ", FP: ", numPosFP, ", FN: ", numPosFN
-	print "Neg File: TP: ", str(numNegTP), ", FP: ", numNegFP, ", FN: ", numNegFN
+	#print "Pos File: TP: ", str(numPosTP), ", FP: ", numPosFP, ", FN: ", numPosFN
+	#print "Neg File: TP: ", str(numNegTP), ", FP: ", numNegFP, ", FN: ", numNegFN
 	return (numPosTP + numNegTP), (numPosFP + numNegFP) , (numPosFN + numNegFN);
 
 

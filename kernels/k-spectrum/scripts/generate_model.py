@@ -108,13 +108,13 @@ def get_normalized_array(a_repeated_count):
 
 	sqrt_a_repeated = numpy.sqrt(var_a_repeated);
 
-	print "Mean: " + str(mean_a_repeated)
-	print "Varianece: " + str(var_a_repeated)
-	print "SQRT: " + str(sqrt_a_repeated)
+	#print "Mean: " + str(mean_a_repeated)
+	#print "Varianece: " + str(var_a_repeated)
+	#print "SQRT: " + str(sqrt_a_repeated)
 
-	print "COUNT: ", a_repeated_count
+	#print "COUNT: ", a_repeated_count
 	normalized_a_repeated = (a_repeated_count - mean_a_repeated) / sqrt_a_repeated;
-	print "Normalized: ", normalized_a_repeated
+	#print "Normalized: ", normalized_a_repeated
 
 
 	return normalized_a_repeated;
@@ -165,6 +165,6 @@ def get_spectrum_data (fasta_file, k1, k2, pos_data_len, neg_data_len, normalize
 	if normalize:
 		total_data.normalize();
 
-	print total_data
+	#print total_data
 	return total_data;
 
