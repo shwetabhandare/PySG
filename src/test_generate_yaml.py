@@ -4,6 +4,7 @@ import glob
 import os, fnmatch
 import yaml
 import SeqGenUtils
+import parseResults
 
 class TestGenerateYaml(unittest.TestCase):
 	def test_ConstructObject_experiment(self):
@@ -88,4 +89,5 @@ class TestGenerateYaml(unittest.TestCase):
 			for file in fnmatch.filter(files, "*.yml"):
 				numFiles = numFiles + 1;
 		print "Num Files: ", str(numFiles)
+
 		#self.assertEqual(numFiles, 8);

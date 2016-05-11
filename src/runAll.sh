@@ -28,4 +28,4 @@
 
 echo "The job has begun"
 cd /projects/bhandare/workspace/PySG/src/
-python main.py resources/HuR_Lengths.yml
+python main.py resources/TTP_Test.yml

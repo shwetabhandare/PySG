@@ -16,106 +16,129 @@ def getColumn(filename, column):
 def appendTitle(fileName):
 	with open(fileName, 'wb') as csvfile:	
 		spamwriter = csv.writer(csvfile, delimiter=',');
-		spamwriter.writerow(["label", "sensitivity", "ppv"]);
+		spamwriter.writerow(["label", "value"]);
 
-def appendResult(fileName, label, sensitivity, ppv):
+def appendResult(fileName, label, value):
 	with open(fileName, 'a') as csvfile:	
 		spamwriter = csv.writer(csvfile, delimiter=',');
-		spamwriter.writerow([label, sensitivity, ppv])
+		spamwriter.writerow([label, value])
 
-def getResultFile(filepath, label, dremeResultsFile, kspectrumResultsFile):
+def writeTitle(filepath, label, sensitivityResultFile, ppvResultFile):
 	global writeTitleDreme;
 	global writeTitleKspectrum;
 
-	if label.find("dreme") != -1:
-		fileName = dremeResultsFile;
-		if writeTitleDreme == False:
-			appendTitle(fileName);
-			writeTitleDreme = True;
-	elif label.find("kspectrum") != -1:
-		fileName = kspectrumResultsFile;
-		if writeTitleKspectrum == False:
-			appendTitle(fileName);
-			writeTitleKspectrum = True;
+
+	if writeTitleDreme == False:
+		#print "Appending title sensitivity: ", sensitivityResultFile;
+		appendTitle(sensitivityResultFile);
+		writeTitleDreme = True;
+
+	if writeTitleKspectrum == False:
+		#print "Appending title ppv: ", ppvResultFile;
+		appendTitle(ppvResultFile);
+		writeTitleKspectrum = True;
+
+
+def appendResultsToGraphFile(filepath, label, sensitivityResultFile, ppvResultFile):
+	writeTitle(filepath, label, sensitivityResultFile, ppvResultFile);
+
+	if filepath.find("dreme") != -1:
+		suffix = "dreme";
+	elif filepath.find("kspectrum") != -1:
+		suffix = "kspectrum";
 	else:
-		fileName = "resultsToGraph.csv"
-
-	return fileName;
-
-
-def appendResultsToGraphFile(filepath, label, dremeResultsFile, kspectrumResultsFile):
-	fileName = getResultFile(filepath, label, dremeResultsFile, kspectrumResultsFile);
+		suffix = "";
 
 	with open(filepath, 'rb') as csvfile:
 		reader = csv.reader(csvfile)
 		for row in reader:
 			sensitivity = row[0].split(":")[1]
 			ppv = row[1].split(":")[1]
-			label = os.path.splitext(label)[0];
-			#print "Label ", label;
-			appendResult(fileName, label, sensitivity, ppv)
+			label = os.path.splitext(label)[0] + "_" + suffix;
+
+			appendResult(sensitivityResultFile, label, sensitivity);
+			appendResult(ppvResultFile, label, ppv);
 
 def createTitle(label):
-	print "Label: ", label;
-	x = label.split("_");
-	seqLen = x[0]
-	numSeq = x[1]
+	tokens= label.split("_");
+	seqLen = tokens[0]
+	numSeq = tokens[1]
 
 	title = "";
-
-	title = "Number of Sequences: ", x[0], ", Sequence Length: ", x[1];
-	if len(x) == 5:
-		alpha = x[2]
-		signalPercent = x[3]
-		signal = x[4]
-		#title = title + ", Signal Percent: ", signalPercent, ", Signal: ", signal
+	title = "Number of Sequences: " + tokens[0] + ", Sequence Length: " + tokens[1];
+	if len(tokens) == 5:
+	 	alpha = tokens[2]
+	 	signalPercent = tokens[3]
+	 	signal = tokens[4]
+	 	title = title + ", Signal Percent: " + signalPercent + ", Signal: " + signal
 	else:
-		signalPercent = x[2]
-		signal = x[3]	
-		#title = title + ", Signal Percent: ", signalPercent, ", Signal: ", signal	
-
+	 	signalPercent = tokens[2]
+	 	signal = tokens[3]	
+	 	title = title + ", Signal Percent: " + signalPercent + " Signal: " + signal	
 	
 	return title;
 
-def graphResults(fileName):
+def getToolArray(labels, value):
+	dremeDict = {}
+	kspectrumDict = {}
 
-	labels = getColumn(fileName, 0)
-	sensitivity = getColumn(fileName, 1)
-	ppv = getColumn(fileName, 2)
+	for idx, label in enumerate(labels):
+		if label.find("dreme") != -1:
+			newLabel = label.split("_")[1]
+			dremeDict[newLabel] = value[idx]
+		elif label.find("kspectrum") != -1:
+			newLabel = label.split("_")[1]
 
-	labels = labels[1:]
-	title = createTitle(labels[0]);
-	#print "before: ", labels;
-	labels[:] = [l.split("_")[-1] for l in labels]
-	#print "after: ", labels;
+			kspectrumDict[newLabel] = value[idx]
 
-	sensitivity = sensitivity[1:]
-	ppv = ppv[1:]
+	print "DREME values: ", dremeDict.values()
+	print "kspectrum values: ", kspectrumDict.values()
+	return dremeDict, kspectrumDict;
 
-	#print "Title: ", title;
-	print labels
-	print sensitivity
-	#print ppv
+def writeAndSavePlot(fileName, title, uniqueLabels, dremeValues, kspectrumValues):
 	import matplotlib
 	matplotlib.use('Agg')
 	
 	from matplotlib import pyplot as plt	
-	#matplotlib.rcParams.update({'font.size': 8})
+	matplotlib.rcParams.update({'font.size': 8})
 	
-	#plt.ion()
 	fig = plt.figure()
-	#yerr = 0.1 + 0.2*np.sqrt(sensitivity)
-	#yerr = 0.1 + 0.2*np.sqrt(sensitivity)
 
-	plt.ylabel('Sensitivity/PPV');
+	if fileName.find("sensitivity_graph") != -1:
+		title = "Effect of sequence length on Sensitivity"
+		plt.ylabel('Sensitivity');	
+	else:
+		title = "Effect of sequence length on PPV"
+		plt.ylabel('PPV');	
+
 	plt.title(title);
-	plt.plot(sensitivity)
-	plt.plot(ppv)
+	line_up, = plt.plot(dremeValues, label="Dreme")
+	line_down, = plt.plot(kspectrumValues, label = "k-spectrum")
+	plt.legend([line_up, line_down], ['Dreme', 'k-spectrum'])
 
-	plt.xticks(range(len(sensitivity)), labels, rotation=90)
+	plt.xticks(range(len(dremeValues)), list(uniqueLabels), rotation=90)
 	figureName = os.path.splitext(fileName)[0] + ".png"
 	plt.savefig(figureName);
 	plt.close(fig)
+
+def graphResults(fileName):
+
+	labels = getColumn(fileName, 0)
+	value = getColumn(fileName, 1)
+
+	labels = labels[1:]
+	value = value[1:]
+
+	dremeDict, kspectrumDict = getToolArray(labels, value);
+	uniqueLabels = createUniqueLabels(labels)
+
+	dremeKeys = sorted(dremeDict)
+	print "Type: ", type(dremeDict)
+	print dremeDict
+	title = createTitle(labels[0]);
+
+	writeAndSavePlot(fileName, title, list(dremeKeys), list(dremeDict.values()), list(kspectrumDict.values()))
+
 
 def splitall(path):
 	allparts = []
@@ -132,9 +155,36 @@ def splitall(path):
 			allparts.insert(0, parts[1])
 	return allparts
 
+def sortResultFile(resultFile):
+	f = open(resultFile,'r')
+	lines = f.readlines()[1:]
+	f.close()
+	lines = sorted(lines)
+
+	f = open(resultFile, "w");
+	f.write("label, value\n");
+	for line in lines:
+		f.write(line)
+	f.close();
+
+def createUniqueLabels(labels):
+	uniqueLabels = set();
+
+	for label in labels:
+		newLabel = label[:label.rfind("_")]
+		uniqueLabels.add(newLabel)
+	newLabels = [s.split("_")[1] for s in uniqueLabels]
+		
+	print newLabels;
+	return newLabels
+
 def getFileNameAndPrefixToGraph(filepath, subdir):
+
 	fileNameToGraph =  os.path.splitext(os.path.basename(filepath))[0]
+
+
 	fileNameToGraph = fileNameToGraph[7:]; # remove Signal_
+	fileNameToGraph = os.path.splitext(fileNameToGraph)[0]
 
 	allparts = splitall(subdir)
 	graphPrefix = allparts[-2]	 #Get second to last directory.
@@ -146,30 +196,26 @@ def parseDirectory(resultDir):
 	global writeTitleDreme;
 	global writeTitleKspectrum;
 
+	#print resultDir;
+
+	sensitivityResultFile = resultDir + "/sensitivity_graph.csv"
+	ppvResultFile = resultDir + "/ppv_graph.csv"
+
+	writeTitleKspectrum = writeTitleDreme = False;
+
 	for subdir, dirs, files in os.walk(resultDir):
-		
-		# if subdir != resultDir:
-		# 	print "Sub dir: ", subdir;
-
-		#print "Files: ", files;
-		if subdir == resultDir or subdir.find("Signal") == -1:
-			print "Sub-Dir: ", subdir;
-			writeTitleDreme=False;
-			writeTitleKspectrum=False;
-
+	
 		for file in files:
-			#print os.path.join(subdir, file)
 			filepath = subdir + os.sep + file
 			if filepath.endswith(".results"):
-				graphFlag = True;
-				print "Result file: ", filepath;
-				fileNameToGraph, graphPrefix = getFileNameAndPrefixToGraph(filepath, subdir)
-				dremeResultsFile = graphPrefix + "_dreme_graph.csv";
-				kspectrumResultsFile  = graphPrefix + "_kspectrum_graph.csv"
-				appendResultsToGraphFile(filepath, fileNameToGraph, dremeResultsFile, kspectrumResultsFile)
+	 			fileNameToGraph, graphPrefix = getFileNameAndPrefixToGraph(filepath, subdir)
+	 			appendResultsToGraphFile(filepath, fileNameToGraph, sensitivityResultFile, ppvResultFile)
 
+	sortResultFile(sensitivityResultFile)
+	sortResultFile(ppvResultFile)
 
-	for resultFile in glob.glob("*graph*.csv"):
+	searchStr = resultDir + "/*graph.csv"
+	for resultFile in glob.glob(searchStr):
 		print "File to graph: ", resultFile;
 		graphResults(resultFile)
 
@@ -177,6 +223,7 @@ def parseDirectory(resultDir):
 
 if __name__ == "__main__":
 	resultDir = sys.argv[1]
+	
 	parseDirectory(resultDir)
 	#graphResults(dremeResultsFile);
 	#graphResults(kspectrumResultsFile)

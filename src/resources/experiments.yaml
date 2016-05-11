@@ -1,6 +1,6 @@
 targetDir: "/projects/bhandare/workspace/PySG/src/resources/tmp"
-numSeq: [100]
-seqLen: [50]
+numSeq: [100, 200]
+seqLen: [50, 100]
 signal:
    type: "pwmFiles"
    pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/Nhp6b.pwm"]
