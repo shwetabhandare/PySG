@@ -5,6 +5,7 @@ import glob
 
 import numpy as np;
 import math;
+import collections;
 
 writeTitleDreme = False;
 writeTitleKspectrum = False;
@@ -85,15 +86,18 @@ def getToolArray(labels, value):
 	for idx, label in enumerate(labels):
 		if label.find("dreme") != -1:
 			newLabel = label.split("_")[1]
-			dremeDict[newLabel] = value[idx]
+			dremeDict[int(newLabel)] = value[idx]
 		elif label.find("kspectrum") != -1:
 			newLabel = label.split("_")[1]
 
-			kspectrumDict[newLabel] = value[idx]
+			kspectrumDict[int(newLabel)] = value[idx]
 
-	print "DREME values: ", dremeDict.values()
-	print "kspectrum values: ", kspectrumDict.values()
-	return dremeDict, kspectrumDict;
+	#print "DREME values: ", dremeDict.values()
+	#print "kspectrum values: ", kspectrumDict.values()
+	dremeOd = collections.OrderedDict(sorted(dremeDict.items()))
+	kspectrumOd = collections.OrderedDict(sorted(kspectrumDict.items()))
+
+	return dremeOd, kspectrumOd;
 
 def writeAndSavePlot(fileName, title, uniqueLabels, dremeValues, kspectrumValues):
 	import matplotlib
@@ -111,10 +115,11 @@ def writeAndSavePlot(fileName, title, uniqueLabels, dremeValues, kspectrumValues
 		title = "Effect of sequence length on PPV"
 		plt.ylabel('PPV');	
 
+	plt.xlabel("Sequence Length");
 	plt.title(title);
 	line_up, = plt.plot(dremeValues, label="Dreme")
 	line_down, = plt.plot(kspectrumValues, label = "k-spectrum")
-	plt.legend([line_up, line_down], ['Dreme', 'k-spectrum'])
+	plt.legend([line_up, line_down], ['DREME', 'k-spectrum'])
 
 	plt.xticks(range(len(dremeValues)), list(uniqueLabels), rotation=90)
 	figureName = os.path.splitext(fileName)[0] + ".png"

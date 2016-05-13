@@ -208,8 +208,8 @@ class YamlFastaGenerator():
 				print __func__, ": Invalid Signal Type: ", self.signalType;
 
 											
-	def CreateConfFiles(self):
-		location = self.targetDir;
+	def CreateConfFiles(self, timestr):
+		location = self.targetDir + "/" + timestr;
 		numSeqList = self.GetNumSeqList();
 		seqLenList = self.GetNumSeqLenList();
 		alphaList = self.GetAlpha();

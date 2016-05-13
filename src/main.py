@@ -13,6 +13,10 @@ import sys;
 import glob;
 
 
+def GetCurrentDateTimeStr():
+	import time
+	timestr = time.strftime("%Y%m%d-%H%M%S")
+	return timestr;
 
 
 def GenerateFastaFiles(directory):
@@ -37,34 +41,10 @@ if __name__ == "__main__":
 	confFile = sys.argv[1];
 	generator = YamlFastaGenerator(confFile);
 	targetDir = generator.GetTargetDir();
-	generator.CreateConfFiles();
-	GenerateFastaFiles(targetDir);
-	RunComputationalTools(targetDir);
+	timestr = GetCurrentDateTimeStr();
 
+	newTargetDir = targetDir + "/" + timestr;
+	generator.CreateConfFiles(timestr);
+	GenerateFastaFiles(newTargetDir);
+	RunComputationalTools(newTargetDir);
 
-
-
-
-#	seqGen = SeqGen(conf);
-#	filename = os.path.splitext(os.path.basename(confFile))[0]
-#	posFastaFile = directory + "/" + filename + "_pos.fa";
-#	seqGen.SetPosFileName(posFastaFile);
-#
-#	negFastaFile = directory + "/" + filename + "_neg.fa";
-#
-#	seqGen.SetNegFileName(negFastaFile)
-#
-#	seqGen.GenerateRandomSequences("negative", 0);
-#	seqGen.GenerateRandomSequences("positive", 1);
-#	#seqGen.embedMotifInSequence();
-
-	# print "Positive Set: "
-	# for seq in seqGen.GetPositiveSet():
-	# 	print seq;
-
-	# print "Negative Set: "
-	# for seq in seqGen.GetNegativeSet():
-	# 	print seq;
-
-#	seqGen.writePositiveFile();
-#	seqGen.writeNegativeFile();

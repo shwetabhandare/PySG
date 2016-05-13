@@ -54,9 +54,9 @@ def Read_PWM(filename):
 	
 	f.close()
 	
-	#print "PWM:"
-	#for v in pwm:
-		#print "\t",v
+	# print "PWM:"
+	# for v in pwm:
+	# 	print "\t",v
 		
 	return name, pwm
 #end Read_PWM
@@ -71,12 +71,7 @@ def Make_PWM_Motif(filename, motifBackGround=""):
 	
 	m = MotifTools.toDict(pwm)
 	#print m
-	#print "Motif BackGround: ", motifBackGround
-	if motifBackGround != "":
-		motif = MotifTools.Motif_from_ll(m);
-	else:
-		motif = MotifTools.Motif_from_ll(m);
-
+	motif = MotifTools.Motif_from_ll(m);
 	motif.source = name
 	
 	#print "Motif:", motif.source
