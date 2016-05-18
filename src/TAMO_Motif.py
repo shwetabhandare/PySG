@@ -39,14 +39,19 @@ def Read_PWM(filename):
 	pwm = []
 	f = open(filename)
 	lines = f.readlines()
+	#print lines;
 	fields = lines[0].split()
 	#print "fields:", fields
 	name = fields[1]
 	
+	#print lines[1]
+
 	vals_A = lines[1].split('\t')
 	vals_C = lines[2].split('\t')
 	vals_G = lines[3].split('\t')
 	vals_T = lines[4].split('\t')
+
+	#print vals_A;
 
 	for i in range(1,len(vals_A)):
 		vals = [float(vals_A[i]), float(vals_C[i]), float(vals_G[i]), float(vals_T[i])]

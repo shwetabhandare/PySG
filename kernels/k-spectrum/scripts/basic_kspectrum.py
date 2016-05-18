@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
 	buildModel = False;
 
-	trainData = generate_model.get_spectrum_data(dataFile, k1, k2, posLen, negLen, normalize=True, repeatCount=True);
+	trainData = generate_model.get_spectrum_data(dataFile, k1, k2, posLen, negLen, normalize=True, repeatCount=False);
 	if buildModel:
 		results, m = BuildModel(trainData, modelFile, numFolds);
 		print_results(results, resultFile, k1, k2)

@@ -54,7 +54,7 @@ def GetNumPredictedKmersFoundInReal(predictedDict, realDict):
 
 if __name__ == "__main__":
 	import sys
-	kmerDict = FindKspectrumKmers(sys.argv[1]);
+	kmerDict = FindKspectrumKmers(sys.argv[1], 25);
 	#print kmerDict;
 	realDict = parseRealKmers.GetRealKmerDict(sys.argv[2]);
 	numPredictedKmersFound = GetNumPredictedKmersFoundInReal(kmerDict, realDict);

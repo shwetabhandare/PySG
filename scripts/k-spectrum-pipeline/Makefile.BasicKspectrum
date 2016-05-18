@@ -15,10 +15,6 @@ BASIC_KSPECTRUM_SCRIPT=/projects/bhandare/workspace/PySG/kernels/k-spectrum/scri
 CREATE_CONF_SCRIPT=/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline/CreateConfFile.py
 SEQ_COUNTER_SCRIPT=/projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline/seq_counter.py
 
-#RESULT_DIR=`date +'%d-%b-%Y'`/$(CONF_PREFIX)
-
-$(shell cd $(RESULT_DIR))
-
 #all: step0 step1 step2 step3 step4 step5
 all: step1 step2 step3
 

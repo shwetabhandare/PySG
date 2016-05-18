@@ -54,10 +54,10 @@ def EmbedMotif(SeqDict, kmerList, SignalSeqInfo):
 	numSeqsWithSignal = GetSequencesWithSignal(SignalSeqInfo);
 	locationFromStart = SignalSeqInfo['locationFromStart'];
 
-	print "Num Sequences with Signal", str(numSeqsWithSignal)
+	#print "Num Sequences with Signal", str(numSeqsWithSignal)
 	keysToReplace = random.sample(SeqDict, numSeqsWithSignal)
-	print len(keysToReplace)
-	print len(kmerList)
+	#print len(keysToReplace)
+	#print len(kmerList)
 
 	for idx, key in enumerate(keysToReplace):
 		kmerToEmbed = kmerList[idx];
@@ -87,7 +87,7 @@ def GetMotifType(confMap):
 	elif confMap['sequence']['signal'].get('pwmFile'):
 		motifFile = confMap['sequence']['signal'].get('pwmFile');
 		motifType = "pwm"
-		print "MOTIF FILE:", motifFile
+		#print "MOTIF FILE:", motifFile
 	elif confMap['sequence']['signal'].get('textMotif'):
 		textMotif = confMap['sequence']['signal'].get('textMotif');
 		motifType = "motif"

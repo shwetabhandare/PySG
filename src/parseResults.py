@@ -4,8 +4,10 @@ import csv
 import glob
 
 import numpy as np;
+from scipy import stats
 import math;
 import collections;
+from decimal import *
 
 writeTitleDreme = False;
 writeTitleKspectrum = False;
@@ -79,18 +81,21 @@ def createTitle(label):
 	
 	return title;
 
-def getToolArray(labels, value):
+def getToolArray(resultDict, index):
 	dremeDict = {}
 	kspectrumDict = {}
 
-	for idx, label in enumerate(labels):
-		if label.find("dreme") != -1:
-			newLabel = label.split("_")[1]
-			dremeDict[int(newLabel)] = value[idx]
-		elif label.find("kspectrum") != -1:
-			newLabel = label.split("_")[1]
+	print resultDict.keys();
+	for key, value in resultDict.iteritems(): 
+		if key.find("dreme") != -1:
+			label = key.split("_")[index]
+			print label;
+			dremeDict[int(label)] = value;
+		elif key.find("kspectrum") != -1:
+			label = key.split("_")[index]
+			print label;
 
-			kspectrumDict[int(newLabel)] = value[idx]
+			kspectrumDict[int(label)] = value;
 
 	#print "DREME values: ", dremeDict.values()
 	#print "kspectrum values: ", kspectrumDict.values()
@@ -99,7 +104,7 @@ def getToolArray(labels, value):
 
 	return dremeOd, kspectrumOd;
 
-def writeAndSavePlot(fileName, title, uniqueLabels, dremeValues, kspectrumValues):
+def writeAndSavePlot(fileName, title, index, labels, dremeMeanValues, kspectrumMeanValues, dremeErrorValues, kspectrumErrorValues):
 	import matplotlib
 	matplotlib.use('Agg')
 	
@@ -107,42 +112,63 @@ def writeAndSavePlot(fileName, title, uniqueLabels, dremeValues, kspectrumValues
 	matplotlib.rcParams.update({'font.size': 8})
 	
 	fig = plt.figure()
+	xTitle = title;
 
 	if fileName.find("sensitivity_graph") != -1:
-		title = "Effect of sequence length on Sensitivity"
+		title = "Effect of " + title + " on Sensitivity";
+		#title = "Effect of sequence length on Sensitivity"
 		plt.ylabel('Sensitivity');	
 	else:
-		title = "Effect of sequence length on PPV"
+		title = "Effect of " + title + " on PPV";
+		#title = "Effect of sequence length on PPV"
 		plt.ylabel('PPV');	
 
-	plt.xlabel("Sequence Length");
+	plt.xlabel(xTitle);
 	plt.title(title);
-	line_up, = plt.plot(dremeValues, label="Dreme")
-	line_down, = plt.plot(kspectrumValues, label = "k-spectrum")
-	plt.legend([line_up, line_down], ['DREME', 'k-spectrum'])
 
-	plt.xticks(range(len(dremeValues)), list(uniqueLabels), rotation=90)
-	figureName = os.path.splitext(fileName)[0] + ".png"
-	plt.savefig(figureName);
+	print labels, dremeMeanValues, dremeErrorValues
+	print labels, kspectrumMeanValues, kspectrumErrorValues
+	
+	#plt.xticks(range(len(labels)), list(labels), rotation=90)
+	eb1 = plt.errorbar(labels, dremeMeanValues, dremeErrorValues, fmt='', color='b')
+	eb2 = plt.errorbar(labels, kspectrumMeanValues, kspectrumErrorValues, fmt='', color='g')
+	plt.legend([eb1, eb2], ['DREME', 'k-spectrum'])
+	plt.savefig(fileName);
 	plt.close(fig)
 
-def graphResults(fileName):
+def ComputeMeanAndStdError(resultDict):
+	meanDict = {}
+	for key, value in resultDict.iteritems():
+		results = [round(float(i), 2) for i in resultDict[key]]
+		meanValue = np.mean(results);
+		errorValue = stats.sem(results);
+		meanDict[key] = [round(meanValue, 2), round(errorValue, 2)]
+	return meanDict;	
 
-	labels = getColumn(fileName, 0)
-	value = getColumn(fileName, 1)
+def GetStdDeviationDict(resultDict):
+	stdDict = {}
+	for key, value in resultDict.iteritems():
+		results = [float(i) for i in resultDict[key]]
+		stdValue = np.std(results);
+		stdDict[key] = stdValue;
+	return stdDict;
 
-	labels = labels[1:]
-	value = value[1:]
+def graphResults(fileName, resultDict, title, index):
 
-	dremeDict, kspectrumDict = getToolArray(labels, value);
-	uniqueLabels = createUniqueLabels(labels)
+	stdDict = GetStdDeviationDict(resultDict)
+	meanDict = ComputeMeanAndStdError(resultDict)
+	dremeDict, kspectrumDict = getToolArray(meanDict, index);
 
-	dremeKeys = sorted(dremeDict)
-	print "Type: ", type(dremeDict)
-	print dremeDict
-	title = createTitle(labels[0]);
+	labels = dremeDict.keys()
 
-	writeAndSavePlot(fileName, title, list(dremeKeys), list(dremeDict.values()), list(kspectrumDict.values()))
+	dremeMeanValues = [x[0] for x in dremeDict.values()]
+	dremeErrorValues = [x[1] for x in dremeDict.values()]
+
+	kspectrumMeanValues = [x[0] for x in kspectrumDict.values()]
+	kspectrumErrorValues = [x[1] for x in kspectrumDict.values()]	
+
+	writeAndSavePlot(fileName, title, index, labels, dremeMeanValues, kspectrumMeanValues, dremeErrorValues, kspectrumErrorValues)
+
 
 
 def splitall(path):
@@ -180,7 +206,7 @@ def createUniqueLabels(labels):
 		uniqueLabels.add(newLabel)
 	newLabels = [s.split("_")[1] for s in uniqueLabels]
 		
-	print newLabels;
+	#print newLabels;
 	return newLabels
 
 def getFileNameAndPrefixToGraph(filepath, subdir):
@@ -213,22 +239,50 @@ def parseDirectory(resultDir):
 		for file in files:
 			filepath = subdir + os.sep + file
 			if filepath.endswith(".results"):
-	 			fileNameToGraph, graphPrefix = getFileNameAndPrefixToGraph(filepath, subdir)
+	 			fileNameToGraph, graphPrefix = getFileNameAndPrefixToGraph(filepath, subdir);
 	 			appendResultsToGraphFile(filepath, fileNameToGraph, sensitivityResultFile, ppvResultFile)
 
 	sortResultFile(sensitivityResultFile)
 	sortResultFile(ppvResultFile)
 
-	searchStr = resultDir + "/*graph.csv"
+def ReadFileAndCreateDict(resultFile):
+	resultDict = {};
+	with open(resultFile, mode='r') as infile:
+		next(infile)
+		reader = csv.reader(infile)
+		for rows in reader:
+			label = rows[0];
+			value = rows[1];
+			if label in resultDict:
+				resultDict[label].append(value)
+			else:
+				resultDict[label] = [value];
+	return resultDict;
+
+def GetDictForResultFile(searchStr):
+
 	for resultFile in glob.glob(searchStr):
 		print "File to graph: ", resultFile;
-		graphResults(resultFile)
+		result_dict = ReadFileAndCreateDict(resultFile)
 
+	return result_dict;
 
+def createDataToGraph(resultDir):
+	searchStr = resultDir + "/ppv_graph.csv"
+	ppv_dict = GetDictForResultFile(searchStr)
+
+	searchStr = resultDir + "/sensitivity_graph.csv"
+	sensitivity_dict = GetDictForResultFile(searchStr)
+
+	return sensitivity_dict, ppv_dict;
 
 if __name__ == "__main__":
 	resultDir = sys.argv[1]
+	title = sys.argv[2]
+	index = int(sys.argv[3])
 	
 	parseDirectory(resultDir)
-	#graphResults(dremeResultsFile);
-	#graphResults(kspectrumResultsFile)
+	sensitivity_dict, ppv_dict = createDataToGraph(resultDir)
+
+	graphResults("sensitivity_graph.png",sensitivity_dict, title, index);
+	graphResults("ppv_graph.png", ppv_dict, title, index)
