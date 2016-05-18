@@ -2,8 +2,8 @@ targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLen
 numSeq: [512]
 seqLen: [128, 256, 512, 1024]
 signal:
-   type: "pwmFiles"
-   pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm"]
+   type: "pfmFiles"
+   pfmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/HuR1.pfm"]
    signalPercent: [100]
 nosignal:
    type: "shuffle"
