@@ -29,6 +29,10 @@ def GetKmersToEmbed(SignalSeqInfo, confMap):
 		motiffile = confMap["sequence"]['signal']["pwmFile"]
 		motif = TAMO_Motif.Make_PWM_Motif(motiffile, motifBackGround)
 		generateKmer = True;
+	elif type == 'pfm':
+		motiffile = confMap["sequence"]['signal']["pfmFile"]
+		motif = TAMO_Motif.Make_PFM_Motif(motiffile, motifBackGround)
+		generateKmer = True;
 	elif type == 'motif':
 		textMotif  = confMap["sequence"]['signal']["textMotif"]
 		motif = TAMO_Motif.Make_Text_Motif(textMotif)
@@ -87,6 +91,9 @@ def GetMotifType(confMap):
 	elif confMap['sequence']['signal'].get('pwmFile'):
 		motifFile = confMap['sequence']['signal'].get('pwmFile');
 		motifType = "pwm"
+	elif confMap['sequence']['signal'].get('pfmFile'):
+		motifFile = confMap['sequence']['signal'].get('pfmFile');
+		motifType = "pfm"		
 		#print "MOTIF FILE:", motifFile
 	elif confMap['sequence']['signal'].get('textMotif'):
 		textMotif = confMap['sequence']['signal'].get('textMotif');

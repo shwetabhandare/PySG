@@ -66,6 +66,26 @@ def Read_PWM(filename):
 	return name, pwm
 #end Read_PWM
 	
+
+def Make_PFM_Motif(filename, motifBackGround=""):
+
+	#print "# Reading PWM from: [%s]"%filename
+	name, pwm = Read_PWM(filename)
+	
+	m = MotifTools.toDict(pwm)
+	#print m
+	if motifBackGround != "":
+		motif = MotifTools.Motif_from_counts(m, bg=motifBackGround)
+	else:
+		motif = MotifTools.Motif_from_counts(m);
+	motif.source = name
+	
+	#print "Motif:", motif.source
+	#print "Max Motif Score:", motif.maxscore
+	#print "Motif Summary:", motif.summary()
+	#motif.printlogo(2.3,10)
+	
+	return motif
 	
 ##########################################################################################
 

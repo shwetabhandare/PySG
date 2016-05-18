@@ -82,14 +82,11 @@ class YamlFastaGenerator():
 	def SetupTargetDir(self, timestr):
 		#print self.confMap;
 		if self.confMap.get("targetDir"):
-			self.targetDir = self.confMap["targetDir"]
+			self.targetDir = self.confMap["targetDir"] + "/" + timestr;
 		else:
 			self.targetDir = os.os.getcwd() + "/" + "tmp";
 		
 		if not os.path.exists(self.targetDir):
-			self.targetDir = self.targetDir + "/" + timestr;
-
-
 			print "Creating directory: ", self.targetDir
 			os.makedirs(self.targetDir)
 		else:
