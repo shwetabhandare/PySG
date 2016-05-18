@@ -1,0 +1,90 @@
+The job has begun
+Reading positive sequences /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa ...
+Reading negative sequences /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/NoSignal_512_8192_100_512_HuR.pwm.fa ...
+Looking for motif 1...
+Counting positive sequences with each word...
+Counting negative sequences with each word...
+Applying Fisher Exact Test to 43848 words...
+Generalizing top 100 of 43848 REs to 1 ambiguous characters...
+Generalizing top 13 of 13 REs to 2 ambiguous characters...
+Computing exact p-values for 13 REs...
+Best RE was ATAWTAC GTAWTAT p-value= 5.6e-006 E-value= 2.5e-001 Unerased_E-value= 2.5e-001
+Stopping due to hitting the maximum evalue.
+0 motifs with E-value < 0.05 found in 188.0 seconds.
+Creating HTML file.
+Creating text file.
+/bin/sh: line 0: cd: /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa_kspectrum: No such file or directory
+Result Dir: /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa_kspectrum
+mkdir -p /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa_kspectrum 
+cd /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa_kspectrum && python /projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline/seq_counter.py ../Signal_512_8192_100_512_HuR.pwm.fa ../NoSignal_512_8192_100_512_HuR.pwm.fa; 
+../Signal_512_8192_100_512_HuR.pwm.fa ../NoSignal_512_8192_100_512_HuR.pwm.fa
+Combined Filename: Signal_512_8192_100_512_HuR.pwm_NoSignal_512_8192_100_512_HuR.pwm_512_512_CompleteSet.txt
+Signal_512_8192_100_512_HuR.pwm.yml, Signal_512_8192_100_512_HuR.pwm_NoSignal_512_8192_100_512_HuR.pwm_512_512_CompleteSet.txt
+cd /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa_kspectrum && python /projects/bhandare/workspace/PySG/scripts/k-spectrum-pipeline/CreateConfFile.py Signal_512_8192_100_512_HuR.pwm_NoSignal_512_8192_100_512_HuR.pwm_512_512_CompleteSet.txt Signal_512_8192_100_512_HuR.pwm Signal_512_8192_100_512_HuR.pwm.yml
+Combined File:  Signal_512_8192_100_512_HuR.pwm_NoSignal_512_8192_100_512_HuR.pwm_512_512_CompleteSet.txt
+FileName:  Signal_512_8192_100_512_HuR.pwm_NoSignal_512_8192_100_512_HuR.pwm_512_512_CompleteSet.txt
+['Signal', '512', '8192', '100', '512', 'HuR.pwm', 'NoSignal', '512', '8192', '100', '512', 'HuR.pwm', '512', '512', 'CompleteSet.txt']
+cd /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa_kspectrum && python /projects/bhandare/workspace/PySG/kernels/k-spectrum/scripts/basic_kspectrum.py Signal_512_8192_100_512_HuR.pwm.yml
+training ***********************************************************
+Cpos, Cneg:  5.0 5.0
+*/bin/sh: line 1: 16632 Killed                  python /projects/bhandare/workspace/PySG/kernels/k-spectrum/scripts/basic_kspectrum.py Signal_512_8192_100_512_HuR.pwm.yml
+make: *** [step3] Error 137
+{'targetDir': '/lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet', 'signal': {'signalPercent': [100], 'type': 'pwmFiles', 'pwmFiles': ['/projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm']}, 'numSeq': [512], 'seqLen': [128, 256, 512, 1024, 2048, 4096, 8192, 16384], 'nosignal': {'alpha': [512], 'type': 'dirichlet'}}
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/512_8192_100_512_HuR.pwm.yml
+MOTIF FILE: /projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm
+Num Sequences with Signal 512
+512
+512
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_2048_512_100/512_2048_100_512_HuR.pwm.yml
+MOTIF FILE: /projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm
+Num Sequences with Signal 512
+512
+512
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_512_512_100/512_512_100_512_HuR.pwm.yml
+MOTIF FILE: /projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm
+Num Sequences with Signal 512
+512
+512
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_1024_512_100/512_1024_100_512_HuR.pwm.yml
+MOTIF FILE: /projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm
+Num Sequences with Signal 512
+512
+512
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_16384_512_100/512_16384_100_512_HuR.pwm.yml
+MOTIF FILE: /projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm
+Num Sequences with Signal 512
+512
+512
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_128_512_100/512_128_100_512_HuR.pwm.yml
+MOTIF FILE: /projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm
+Num Sequences with Signal 512
+512
+512
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_4096_512_100/512_4096_100_512_HuR.pwm.yml
+MOTIF FILE: /projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm
+Num Sequences with Signal 512
+512
+512
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_256_512_100/512_256_100_512_HuR.pwm.yml
+MOTIF FILE: /projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm
+Num Sequences with Signal 512
+512
+512
+Calling DREME for  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa ,  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/NoSignal_512_8192_100_512_HuR.pwm.fa ,  /lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa_DremeOut
+DREME:  0 0.0
+Traceback (most recent call last):
+  File "main.py", line 49, in <module>
+    RunComputationalTools(newTargetDir);
+  File "main.py", line 35, in RunComputationalTools
+    kspectrumResultDir, realKmersCsvFile = RunComputationalMethods.RunKspectrumAndGetResults(signalFile, noSignalFile);
+  File "/projects/bhandare/workspace/PySG/src/RunComputationalMethods.py", line 101, in RunKspectrumAndGetResults
+    sensitivity, ppv = ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile);
+  File "/projects/bhandare/workspace/PySG/src/RunComputationalMethods.py", line 75, in ComputeKspectrumResults
+    signalFile, noSignalFile)
+  File "/projects/bhandare/workspace/PySG/src/compareKmers.py", line 53, in CompareKspectrumPredictedKmers
+    predictedKmerDict	= parseKspectrum.FindKspectrumKmers(predictedKspectrumFile, 20);
+  File "/projects/bhandare/workspace/PySG/src/parseKspectrum.py", line 31, in FindKspectrumKmers
+    fileContents = str(read_file(kspectrumFeatureFile))
+  File "/projects/bhandare/workspace/PySG/src/parseKspectrum.py", line 6, in read_file
+    with open (dreme_file, "r") as myfile:
+IOError: [Errno 2] No such file or directory: '/lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SeqLength_Dirichlet/20160513-064339/512_8192_512_100/Signal_512_8192_100_512_HuR.pwm.fa_kspectrum/Signal_512_8192_100_512_HuR.pwm_Features.dat'

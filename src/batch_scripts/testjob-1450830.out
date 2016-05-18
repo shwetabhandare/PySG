@@ -1,0 +1,86 @@
+The job has begun
+Running iteration: 1
+Creating directory:  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140855
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140855/1024_512_512_100/1024_512_100_512_TTP1.pwm.yml
+Traceback (most recent call last):
+  File "main.py", line 48, in <module>
+    GenerateFastaFiles(targetDir);
+  File "main.py", line 26, in GenerateFastaFiles
+    CreateFastaWithSignal(confFile)
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 142, in CreateFastaWithSignal
+    kmerList = GetKmersToEmbed(SignalSeqInfo, confMap);
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 30, in GetKmersToEmbed
+    motif = TAMO_Motif.Make_PWM_Motif(motiffile, motifBackGround)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 70, in Make_PWM_Motif
+    name, pwm = Read_PWM(filename)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 52, in Read_PWM
+    vals = [float(vals_A[i]), float(vals_C[i]), float(vals_G[i]), float(vals_T[i])]
+ValueError: could not convert string to float: 
+Running iteration: 2
+Creating directory:  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140859
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140859/1024_512_512_100/1024_512_100_512_TTP1.pwm.yml
+Traceback (most recent call last):
+  File "main.py", line 48, in <module>
+    GenerateFastaFiles(targetDir);
+  File "main.py", line 26, in GenerateFastaFiles
+    CreateFastaWithSignal(confFile)
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 142, in CreateFastaWithSignal
+    kmerList = GetKmersToEmbed(SignalSeqInfo, confMap);
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 30, in GetKmersToEmbed
+    motif = TAMO_Motif.Make_PWM_Motif(motiffile, motifBackGround)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 70, in Make_PWM_Motif
+    name, pwm = Read_PWM(filename)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 52, in Read_PWM
+    vals = [float(vals_A[i]), float(vals_C[i]), float(vals_G[i]), float(vals_T[i])]
+ValueError: could not convert string to float: 
+Running iteration: 3
+Creating directory:  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140903
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140903/1024_512_512_100/1024_512_100_512_TTP1.pwm.yml
+Traceback (most recent call last):
+  File "main.py", line 48, in <module>
+    GenerateFastaFiles(targetDir);
+  File "main.py", line 26, in GenerateFastaFiles
+    CreateFastaWithSignal(confFile)
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 142, in CreateFastaWithSignal
+    kmerList = GetKmersToEmbed(SignalSeqInfo, confMap);
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 30, in GetKmersToEmbed
+    motif = TAMO_Motif.Make_PWM_Motif(motiffile, motifBackGround)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 70, in Make_PWM_Motif
+    name, pwm = Read_PWM(filename)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 52, in Read_PWM
+    vals = [float(vals_A[i]), float(vals_C[i]), float(vals_G[i]), float(vals_T[i])]
+ValueError: could not convert string to float: 
+Running iteration: 4
+Creating directory:  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140907
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140907/1024_512_512_100/1024_512_100_512_TTP1.pwm.yml
+Traceback (most recent call last):
+  File "main.py", line 48, in <module>
+    GenerateFastaFiles(targetDir);
+  File "main.py", line 26, in GenerateFastaFiles
+    CreateFastaWithSignal(confFile)
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 142, in CreateFastaWithSignal
+    kmerList = GetKmersToEmbed(SignalSeqInfo, confMap);
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 30, in GetKmersToEmbed
+    motif = TAMO_Motif.Make_PWM_Motif(motiffile, motifBackGround)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 70, in Make_PWM_Motif
+    name, pwm = Read_PWM(filename)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 52, in Read_PWM
+    vals = [float(vals_A[i]), float(vals_C[i]), float(vals_G[i]), float(vals_T[i])]
+ValueError: could not convert string to float: 
+Running iteration: 5
+Creating directory:  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140912
+Generating sequences for :  /lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SeqLength_Dirichlet/20160515-140912/1024_512_512_100/1024_512_100_512_TTP1.pwm.yml
+Traceback (most recent call last):
+  File "main.py", line 48, in <module>
+    GenerateFastaFiles(targetDir);
+  File "main.py", line 26, in GenerateFastaFiles
+    CreateFastaWithSignal(confFile)
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 142, in CreateFastaWithSignal
+    kmerList = GetKmersToEmbed(SignalSeqInfo, confMap);
+  File "/projects/bhandare/workspace/PySG/src/Kmer.py", line 30, in GetKmersToEmbed
+    motif = TAMO_Motif.Make_PWM_Motif(motiffile, motifBackGround)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 70, in Make_PWM_Motif
+    name, pwm = Read_PWM(filename)
+  File "/projects/bhandare/workspace/PySG/src/TAMO_Motif.py", line 52, in Read_PWM
+    vals = [float(vals_A[i]), float(vals_C[i]), float(vals_G[i]), float(vals_T[i])]
+ValueError: could not convert string to float: 

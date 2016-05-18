@@ -1,0 +1,10 @@
+targetDir: "/projects/bhandare/workspace/PySG/src/resources/tmp"
+numSeq: [128]
+seqLen: [512, 1024]
+signal:
+   type: "pwmFiles"
+   pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/PWMDir/HuR.pwm"]
+   signalPercent: [100]
+nosignal:
+   type: "dirichlet"
+   alpha: [512]

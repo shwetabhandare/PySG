@@ -1,0 +1,10 @@
+targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP1_Test_SignalPercent_Shuffle"
+numSeq: [512]
+seqLen: [256]
+signal:
+   type: "pwmFiles"
+   pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/PWMDir/TTP1.pwm"]
+   signalPercent: [10, 25, 50, 75, 100]
+nosignal:
+   type: "shuffle"
+   fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
