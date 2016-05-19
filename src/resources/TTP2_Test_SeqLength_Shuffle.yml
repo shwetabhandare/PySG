@@ -1,6 +1,6 @@
 targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP2_Test_SeqLength_Shuffle"
 numSeq: [512]
-seqLen: [256, 512, 1024, 2048, 4096, 8192, 16384]
+seqLen: [128, 256, 512, 1024]
 signal:
    type: "pwmFiles"
    pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/PWMDir/TTP2.pwm"]

@@ -26,10 +26,10 @@ def CreateConf(filename, output_prefix, confFile):
 			negLen = int(negLen),
 			),
 			kspectrum = dict(
-				k1 = 8,
-				k2 = 14,
+				k1 = 6,
+				k2 = 15,
 				C = 10,
-				folds = 5,
+				folds = 10,
 			),
 			output = dict( 
 				featureFile = featureFileName,
