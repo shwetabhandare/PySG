@@ -272,8 +272,10 @@ if __name__ == "__main__":
 	parseDirectory(resultDir)
 	sensitivity_dict, ppv_dict = createDataToGraph(resultDir)
 
-	graphName = graphNamePrefix + "_" + "sensitivity_graph.png"
+	#dateStr = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+	dateStr = datetime.datetime.now().strftime('%Y-%m-%d')
+	graphName = dateStr + "_" + graphNamePrefix + "_" + "sensitivity_graph.png"
 	graphResults(graphName,sensitivity_dict, title, index);
 
-	graphName = graphNamePrefix + "_" + "ppv_graph.png"
+	graphName = dateStr + "_" + graphNamePrefix + "_" + "ppv_graph.png"
 	graphResults(graphName, ppv_dict, title, index)

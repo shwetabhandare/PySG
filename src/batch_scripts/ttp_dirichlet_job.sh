@@ -1,6 +1,6 @@
 #!/bin/sh
-#SBATCH -N 2
-#SBATCH --ntasks-per-node 4
+#SBATCH -N 3
+#SBATCH --ntasks-per-node 5
 #SBATCH --output ttp_dirichlet.out
-#SBATCH --qos janus
-mpiexec -np 5 lb run_ttp_alpha.sh
+#SBATCH --qos himem
+mpiexec -np 5 lb run_ttp_dirichlet.sh
