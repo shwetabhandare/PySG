@@ -8,6 +8,7 @@ from scipy import stats
 import math;
 import collections;
 from decimal import *
+import datetime;
 
 writeTitleDreme = False;
 writeTitleKspectrum = False;
@@ -87,7 +88,7 @@ def getToolArray(resultDict, index):
 
 	return dremeOd, kspectrumOd;
 
-def writeAndSavePlot(fileName, title, index, labels, dremeMeanValues, kspectrumMeanValues, dremeErrorValues, kspectrumErrorValues):
+def writeAndSavePlot(fileName, title, xAxisTitle, index, labels, dremeMeanValues, kspectrumMeanValues, dremeErrorValues, kspectrumErrorValues):
 	import matplotlib
 	matplotlib.use('Agg')
 	
@@ -95,16 +96,15 @@ def writeAndSavePlot(fileName, title, index, labels, dremeMeanValues, kspectrumM
 	matplotlib.rcParams.update({'font.size': 8})
 	
 	fig = plt.figure()
-	xTitle = title;
 
 	if fileName.find("sensitivity_graph") != -1:
-		title = "Effect of " + title + " on Sensitivity";
+		title = title + " on Sensitivity";
 		plt.ylabel('Sensitivity');	
 	else:
-		title = "Effect of " + title + " on PPV";
+		title = title + " on PPV";
 		plt.ylabel('PPV');	
 
-	plt.xlabel(xTitle);
+	plt.xlabel(xAxisTitle);
 	plt.title(title);
 
 	print "PLOTTING DREME: ", labels, dremeMeanValues, dremeErrorValues
@@ -136,7 +136,7 @@ def GetStdDeviationDict(resultDict):
 		stdDict[key] = stdValue;
 	return stdDict;
 
-def graphResults(fileName, resultDict, title, index):
+def graphResults(fileName, resultDict, title, xAxisTitle, index):
 
 	stdDict = GetStdDeviationDict(resultDict)
 	meanDict = ComputeMeanAndStdError(resultDict)
@@ -152,7 +152,7 @@ def graphResults(fileName, resultDict, title, index):
 	kspectrumErrorValues = [x[1] for x in kspectrumDict.values()]	
 	#print "kspectrum  VALUES: ", kspectrumMeanValues, kspectrumErrorValues;
 
-	writeAndSavePlot(fileName, title, index, labels, dremeMeanValues, kspectrumMeanValues, dremeErrorValues, kspectrumErrorValues)
+	writeAndSavePlot(fileName, title, xAxisTitle, index, labels, dremeMeanValues, kspectrumMeanValues, dremeErrorValues, kspectrumErrorValues)
 
 
 
@@ -261,21 +261,36 @@ def createDataToGraph(resultDir):
 
 	return sensitivity_dict, ppv_dict;
 
-if __name__ == "__main__":
-	resultDir = sys.argv[1]
-	title = sys.argv[2]
-	index = int(sys.argv[3])
-	
-	#print resultDir;
-
+def GraphResults(resultDir, title, xAxisTitle, index):
 	graphNamePrefix = os.path.basename(os.getcwd())
 	parseDirectory(resultDir)
 	sensitivity_dict, ppv_dict = createDataToGraph(resultDir)
 
-	#dateStr = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 	dateStr = datetime.datetime.now().strftime('%Y-%m-%d')
 	graphName = dateStr + "_" + graphNamePrefix + "_" + "sensitivity_graph.png"
-	graphResults(graphName,sensitivity_dict, title, index);
+	graphResults(graphName,sensitivity_dict, title, xAxisTitle, index);
 
 	graphName = dateStr + "_" + graphNamePrefix + "_" + "ppv_graph.png"
-	graphResults(graphName, ppv_dict, title, index)
+	graphResults(graphName, ppv_dict, title, xAxisTitle, index)
+
+if __name__ == "__main__":
+	resultDir = sys.argv[1]
+	title = sys.argv[2]
+	xAxisTitle = sys.argv[3]
+	index = int(sys.argv[4])
+	
+	GraphResults(resultDir, title, xAxisTitle, index);
+
+	#print resultDir;
+
+	# graphNamePrefix = os.path.basename(os.getcwd())
+	# parseDirectory(resultDir)
+	# sensitivity_dict, ppv_dict = createDataToGraph(resultDir)
+
+	# #dateStr = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+	# dateStr = datetime.datetime.now().strftime('%Y-%m-%d')
+	# graphName = dateStr + "_" + graphNamePrefix + "_" + "sensitivity_graph.png"
+	# graphResults(graphName,sensitivity_dict, title, index);
+
+	# graphName = dateStr + "_" + graphNamePrefix + "_" + "ppv_graph.png"
+	# graphResults(graphName, ppv_dict, title, index)

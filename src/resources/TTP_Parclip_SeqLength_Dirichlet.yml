@@ -1,0 +1,10 @@
+targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP_Parclip_SeqLength_Dirichlet"
+numSeq: [512]
+seqLen: [128, 256, 512, 1024]
+signal:
+   type: "pwmFiles"
+   pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/PWMDir/TTP_ParClip1.pwm"]
+   signalPercent: [100]
+nosignal:
+   type: "dirichlet"
+   alpha: [512]
