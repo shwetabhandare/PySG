@@ -1,9 +1,9 @@
-targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/TTP_Parclip_SignalPercent_Shuffle"
+targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/HuR_Test_SignalPercent_Shuffle"
 numSeq: [512]
 seqLen: [256]
 signal:
-   type: "pwmFiles"
-   pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/TTP_ParClip1.pwm"]
+   type: "pfmFiles"
+   pfmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/HuR1.pwm"]
    signalPercent: [10, 25, 50, 75, 100]
 nosignal:
    type: "shuffle"

@@ -1,0 +1,10 @@
+targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/Synthetic512_Test_SignalPercent_Dirichlet"
+numSeq: [512]
+seqLen: [256]
+signal:
+   type: "pfmFiles"
+   pfmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/test512.pwm"]
+   signalPercent: [10, 25, 50, 75, 100]
+nosignal:
+   type: "dirichlet"
+   alpha: [512]

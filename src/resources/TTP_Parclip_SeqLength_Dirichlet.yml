@@ -3,7 +3,7 @@ numSeq: [512]
 seqLen: [128, 256, 512, 1024]
 signal:
    type: "pwmFiles"
-   pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/PWMDir/TTP_ParClip1.pwm"]
+   pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/TTP_ParClip1.pwm"]
    signalPercent: [100]
 nosignal:
    type: "dirichlet"

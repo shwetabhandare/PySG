@@ -1,0 +1,10 @@
+targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/Synthetic256_Test_Alpha_Dirichlet"
+numSeq: [512]
+seqLen: [512]
+signal:
+   type: "pwmFiles"
+   pwmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/test256.pwm"]
+   signalPercent: [100]
+nosignal:
+   type: "dirichlet"
+   alpha: [128, 256, 512, 1024, 2048, 4096, 8192]

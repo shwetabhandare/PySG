@@ -13,6 +13,7 @@ def isDirResultDir(currentDir):
 	return False; 
 
 def createTitleFromDirName(dirName):
+	#example: HuR_Test_SignalPercent_Dirichlet
 	fileNameTokens = os.path.basename(dirName).split("_");
 	if fileNameTokens[2] == "SeqLength":
 		index = 1;
@@ -46,7 +47,7 @@ def ParseResultsAndGenerateGraph(path):
 	savedDir = os.getcwd();
 	mycwd = os.chdir(path)
 	
-	#parseResults.GraphResults(".", title, xAxisTitle, index);
+	parseResults.GraphResults(".", title, xAxisTitle, index);
 	CopyGraphToTargetDir();
 
 	os.chdir(savedDir);
@@ -62,18 +63,6 @@ def GetSubDirCount(path, map = {}):
 	map[path] = count
 	return count
 
-# def HelloWorld(resultDir):
-#  	some_dir = resultDir.rstrip(os.path.sep)
-#  	level = 1;
-#  	print some_dir;
-# 	#assert os.path.isdir(some_dir)
-# 	num_sep = some_dir.count(os.path.sep)
-# 	print num_sep;
-# 	for root, dirs, files in os.walk(some_dir):
-# 		num_sep_this = root.count(os.path.sep)
-# 		if num_sep + level > num_sep_this:
-# 	 		print dirs;
-
 def parseSubDirectories(resultDir, level=1):
 	num_sep = resultDir.count(os.path.sep)
 	for root, dirs, files in os.walk(resultDir):
@@ -86,23 +75,7 @@ def parseSubDirectories(resultDir, level=1):
 					if numSubDirs == 5:
 						ParseResultsAndGenerateGraph(root + "/" + dir)
 
-
-# def HelloWorld(some_dir):
-# 	level = 1;
-# 	print "Hello from: ", some_dir;
-# 	some_dir = some_dir.rstrip(os.path.sep)
-# 	print some_dir;
-# 	assert os.path.isdir(some_dir)
-# 	num_sep = some_dir.count(os.path.sep)
-# 	print num_sep;
-# 	for root, dirs, files in os.walk(some_dir):
-# 		yield root, dirs, files
-# 		num_sep_this = root.count(os.path.sep)
-# 		if num_sep + level <= num_sep_this:
-# 			print dirs
-
 if __name__ == "__main__":
 	resultDir = sys.argv[1]
 	print "calling walklevel"
-	#parseResultDir(resultDir)
 	parseSubDirectories(resultDir)
