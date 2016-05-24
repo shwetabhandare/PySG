@@ -15,7 +15,6 @@ class TestGenerateYaml(unittest.TestCase):
 		generator = generateYaml.YamlFastaGenerator(confFile, uuid_to_append);
 		targetDir = generator.GetTargetDir();
 
-		self.assertEqual(targetDir, "/projects/bhandare/workspace/PySG/src/resources/tmp")
 		self.assertTrue(os.path.isdir(targetDir))
 		self.assertEqual(generator.GetNumSeqList(), [100, 200])
 		self.assertEqual(generator.GetNumSeqLenList(), [50, 100])
@@ -24,6 +23,17 @@ class TestGenerateYaml(unittest.TestCase):
 		self.assertEqual(generator.GetAlpha(), [100, 1000]);
 		self.assertEqual(generator.GetSignalType(), "pwmFiles");
 		self.assertEqual(generator.GetSignalPercentList(), [75, 90]);
+
+	def test_ConstructObject_structure(self):
+		confFile = "/projects/bhandare/workspace/PySG/src/resources/test_structure.yml"
+		uuid_to_append = str(uuid.uuid4())
+
+		generator = generateYaml.YamlFastaGenerator(confFile, uuid_to_append);
+		targetDir = generator.GetTargetDir();
+
+		self.assertTrue(os.path.isdir(targetDir))
+		generator.CreateConfFiles();
+
 
 	# def test_ConstructObject_experiment1(self):
 	# 	confFile = "/projects/bhandare/workspace/PySG/src/resources/experiments1.yaml"

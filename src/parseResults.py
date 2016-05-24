@@ -107,8 +107,8 @@ def writeAndSavePlot(fileName, title, xAxisTitle, index, labels, dremeMeanValues
 	plt.xlabel(xAxisTitle);
 	plt.title(title);
 
-	print "PLOTTING DREME: ", labels, dremeMeanValues, dremeErrorValues
-	print "PLOTTING kspectrum: ", labels, kspectrumMeanValues, kspectrumErrorValues
+	#print "PLOTTING DREME: ", labels, dremeMeanValues, dremeErrorValues
+	#print "PLOTTING kspectrum: ", labels, kspectrumMeanValues, kspectrumErrorValues
 	
 	#plt.xticks(range(len(labels)), list(labels), rotation=90)
 	eb1 = plt.errorbar(labels, dremeMeanValues, dremeErrorValues, fmt='', color='b')
@@ -266,11 +266,10 @@ def GraphResults(resultDir, title, xAxisTitle, index):
 	parseDirectory(resultDir)
 	sensitivity_dict, ppv_dict = createDataToGraph(resultDir)
 
-	dateStr = datetime.datetime.now().strftime('%Y-%m-%d')
-	graphName = dateStr + "_" + graphNamePrefix + "_" + "sensitivity_graph.png"
+	graphName = graphNamePrefix + "_" + "sensitivity_graph.png"
 	graphResults(graphName,sensitivity_dict, title, xAxisTitle, index);
 
-	graphName = dateStr + "_" + graphNamePrefix + "_" + "ppv_graph.png"
+	graphName = graphNamePrefix + "_" + "ppv_graph.png"
 	graphResults(graphName, ppv_dict, title, xAxisTitle, index)
 
 if __name__ == "__main__":

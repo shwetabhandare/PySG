@@ -37,6 +37,7 @@ class YamlFastaGenerator():
 	signalType = ""
 	seqWithSignalPercent = list()
 	pwmFileDirectory = ""
+	structureFile = ""
 	utrDist = dict(
 		A = 0.27,
 		T = 0.22,
@@ -78,6 +79,8 @@ class YamlFastaGenerator():
 		return self.targetDir;
 	def GetNoSignalFastaFile(self):
 		return self.noSignalFastaFile;
+	def GetStructureFile(self):
+		return self.structureFile;
 
 	def SetupTargetDir(self, timestr):
 		#print self.confMap;
@@ -112,6 +115,7 @@ class YamlFastaGenerator():
 			if self.signalType == 'pwmFiles':
 				self.pwmFiles = self.confMap["signal"]["pwmFiles"]
 			elif self.signalType == 'pfmFiles':
+				print self.confMap["signal"]
 				self.pfmFiles = self.confMap["signal"]["pfmFiles"]
 			elif self.signalType == "pwmDir":
 				self.pwmFileDirectory =  self.confMap["signal"]["pwmDir"]
@@ -120,6 +124,8 @@ class YamlFastaGenerator():
 				self.textMotifs = self.confMap["signal"]["textMotif"]
 			elif self.signalType == "kmers":
 				self.kmers = self.confMap["signal"]["kmers"]
+			elif self.signalType == "structure":
+				self.structureFile = self.confMap["signal"]["structureFile"]
 			else:
 				print "Invalid signal Type:", self.signalType;
 
@@ -214,6 +220,10 @@ class YamlFastaGenerator():
 			elif self.signalType == "kmers":
 				for kmer in self.kmers:
 					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, kmer, folderCreated);
+			elif self.signalType == "structure":
+				structureFileToAdd = self.GetStructureFile();
+				print "Structure File:", structureFileToAdd;
+				folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, structureFileToAdd, folderCreated);
 			else:
 				print __func__, ": Invalid Signal Type: ", self.signalType;
 
@@ -266,12 +276,14 @@ class YamlFastaGenerator():
 			data["textMotif"] = signalValue;
 		elif self.signalType == "kmers":
 			data["kmer"] = signalValue;
+		elif self.signalType == "structure":
+			data["structureFile"] = signalValue;
 		else:
 			print "Invalid signal type: ", self.signalType;
 			
 			
 		yamlFileName = fileId + ".yml"
-		#print "YAML FILENAME: ", yamlFileName;
+		print "YAML FILENAME: ", yamlFileName;
 		return yamlFileName, data;
 
 	def getNoSignalDictWithAlpha(self, location, numberSeq, seqLength, alphaValue, fileId):

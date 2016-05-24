@@ -121,7 +121,11 @@ if __name__ == "__main__":
 if __name__ == "__main__":
 	import sys
 	pwmFile = sys.argv[1]
-	motif = Make_PWM_Motif(pwmFile)
+	type = sys.argv[2]
+	if type == "pwm":
+		motif = Make_PWM_Motif(pwmFile)
+	elif type == "pfm":
+		motif = Make_PFM_Motif(pwmFile)
 	print motif;
 
 

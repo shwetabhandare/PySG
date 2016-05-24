@@ -1,0 +1,11 @@
+targetDir: "/projects/output"
+numSeq: [100]
+seqLen: [64, 128, 256, 512]
+signal:
+   type: "pfmFiles"
+   pfmFiles: ["HuR.pfm"]
+   location: [25]
+   signalPercent: [10, 25, 50, 75, 100]
+nosignal:
+   type: "shuffle"
+   fastaFile: "SequencesToShuffle.fa"

@@ -74,6 +74,9 @@ def parseSubDirectories(resultDir, level=1):
 					print "Found Result Directory: ", dir, ", num sub-dir: ", str(numSubDirs)
 					if numSubDirs == 5:
 						ParseResultsAndGenerateGraph(root + "/" + dir)
+					else:
+						print "Look at directory: ", dir;
+						continue;
 
 if __name__ == "__main__":
 	resultDir = sys.argv[1]
