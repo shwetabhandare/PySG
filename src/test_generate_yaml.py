@@ -6,6 +6,7 @@ import yaml
 import SeqGenUtils
 import parseResults
 import uuid;
+import Kmer;
 
 class TestGenerateYaml(unittest.TestCase):
 	def test_ConstructObject_experiment(self):
@@ -33,6 +34,29 @@ class TestGenerateYaml(unittest.TestCase):
 
 		self.assertTrue(os.path.isdir(targetDir))
 		generator.CreateConfFiles();
+
+	def test_DictFromFasta(self):
+		structureAlignmentFile = "/projects/bhandare/workspace/PySG/src/resources/RF000037.fa"
+		structureDict = SeqGenUtils.fasta_read(structureAlignmentFile);
+		self.assertEqual(len(structureDict), 62);
+
+		for key, value in structureDict.iteritems():
+			condition = 'T' in value;
+			self.assertFalse(condition);
+
+		structureDict = SeqGenUtils.ChangeUsToTs(structureDict);
+		self.assertEqual(len(structureDict), 62);
+		for key, value in structureDict.iteritems():
+			condition = 'T' in value;
+			self.assertTrue(condition);
+
+	def test_KmersFromStructureFile(self):
+		structureAlignmentFile = "/projects/bhandare/workspace/PySG/src/resources/RF000037.fa"
+		kmers = Kmer.GetKmersFromStructureFile(structureAlignmentFile, 80);
+		self.assertEqual(len(kmers), 80);
+
+
+
 
 
 	# def test_ConstructObject_experiment1(self):

@@ -10,7 +10,11 @@ np.set_printoptions(precision=2)
 def weightedchoice(items): # this doesn't require the numbers to add up to 100
 	return choice("".join(x * y for x, y in items))
 
-
+def ChangeUsToTs(seq_dict):
+	for header, sequence in seq_dict.iteritems():
+		sequence = sequence.upper().replace('U', 'T');
+		seq_dict[header] = sequence;
+	return seq_dict;
 def fasta_read(file_name):
    """read the sequence from a file in fasta format"""
    seq_dict = dict()

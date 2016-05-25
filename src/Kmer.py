@@ -14,12 +14,32 @@ def GetSequencesWithSignal(SignalSeqInfo):
 
 	return numSeqsWithSignal;
 
+def CreateLengthMatchingKmers(kmers, numSeqsWithSignal):
+
+	while(len(kmers) < numSeqsWithSignal):
+		randomIndex = random.randint(0, len(kmers) - 1)
+		kmers.append(kmers[randomIndex])
+		#print "Appending Kmer: ", kmers[randomIndex], " from index: ", randomIndex;
+	return kmers;
+
+def GetKmersFromStructureFile(structureFile, numSeqsWithSignal):
+	structureDict = SeqGenUtils.fasta_read(structureFile);
+	structureDict = SeqGenUtils.ChangeUsToTs(structureDict);
+	originalKmers = structureDict.values();
+	
+	updatedKmers = CreateLengthMatchingKmers(originalKmers, numSeqsWithSignal)
+	return updatedKmers;
+
+
+
+
 def GetKmersToEmbed(SignalSeqInfo, confMap):
 	kmers = list();
 	generateKmer = False;
 	motifBackGround = ""
 
 	type = SignalSeqInfo['motifType'];
+	#print "Motif Type: ", type;
 
 	if type == "pwm" or type == "motif":
 		if confMap['sequence']['signal'].get('seqBackGround'):
@@ -37,17 +57,22 @@ def GetKmersToEmbed(SignalSeqInfo, confMap):
 		textMotif  = confMap["sequence"]['signal']["textMotif"]
 		motif = TAMO_Motif.Make_Text_Motif(textMotif)
 		generateKmer = True;
+	elif type == "structure":
+		structureFile = confMap["sequence"]['signal']['structureFile']
+		numSeqsWithSignal = GetSequencesWithSignal(SignalSeqInfo);
+		kmers = GetKmersFromStructureFile(structureFile, numSeqsWithSignal)
 	else:
 		kmerToEmbed = confMap["sequence"]['signal']["kmer"]
 
 	numSeqsWithSignal = GetSequencesWithSignal(SignalSeqInfo)
 
-	for i in range(numSeqsWithSignal):
-		if generateKmer:
-			kmerToEmbed = motif.emit();
+	if type != "structure":
+		for i in range(numSeqsWithSignal):
+			if generateKmer:
+				kmerToEmbed = motif.emit();
 
-		#print "Appending kmer: ", kmerToEmbed;
-		kmers.append(kmerToEmbed);
+			#print "Appending kmer: ", kmerToEmbed;
+			kmers.append(kmerToEmbed);
 	return kmers;
 
 def EmbedMotif(SeqDict, kmerList, SignalSeqInfo):
@@ -98,6 +123,9 @@ def GetMotifType(confMap):
 	elif confMap['sequence']['signal'].get('textMotif'):
 		textMotif = confMap['sequence']['signal'].get('textMotif');
 		motifType = "motif"
+	elif confMap['sequence']['signal'].get('structureFile'):
+		textMotif = confMap['sequence']['signal'].get('structureFile');
+		motifType = "structure"		
 	return motifType;
 
 def GetMotifLocation(confMap, SeqLength):

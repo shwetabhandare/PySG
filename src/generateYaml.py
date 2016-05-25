@@ -38,6 +38,7 @@ class YamlFastaGenerator():
 	seqWithSignalPercent = list()
 	pwmFileDirectory = ""
 	structureFiles = list()
+	structureFileDir = ""
 	utrDist = dict(
 		A = 0.27,
 		T = 0.22,
@@ -81,6 +82,8 @@ class YamlFastaGenerator():
 		return self.noSignalFastaFile;
 	def GetStructureFile(self):
 		return self.structureFiles;
+	def GetStructureFileDir(self):
+		return self.structureFileDir;
 
 	def SetupTargetDir(self, timestr):
 		#print self.confMap;
@@ -192,6 +195,13 @@ class YamlFastaGenerator():
 		self.writeYamlFile(folderPath, yamlFileName, noSignalDict, motifDict);
 		return folderCreated;
 
+	def GetStructFileToAdd(self, structureFile):
+		if os.path.isabs(structureFile):
+			self.structureFileDir = os.path.dirname(structureFile);
+
+		structureFile = os.path.basename(structureFile);
+		return structureFile;
+
 
 	def GetPwmFileToAdd(self, pwmFile):
 		if os.path.isabs(pwmFile):
@@ -222,7 +232,7 @@ class YamlFastaGenerator():
 					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, kmer, folderCreated);
 			elif self.signalType == "structure":
 				for structureFile in self.structureFiles:
-					structureFileToAdd = os.path.splitext(os.path.basename(structureFile))[0];
+					structureFileToAdd = self.GetStructFileToAdd(structureFile);
 					#print "Structure File:", structureFileToAdd;
 					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, structureFileToAdd, folderCreated);
 			else:
@@ -278,7 +288,7 @@ class YamlFastaGenerator():
 		elif self.signalType == "kmers":
 			data["kmer"] = signalValue;
 		elif self.signalType == "structure":
-			data["structureFile"] = signalValue;
+			data["structureFile"] = self.structureFileDir + "/" + signalValue;
 		else:
 			print "Invalid signal type: ", self.signalType;
 			
