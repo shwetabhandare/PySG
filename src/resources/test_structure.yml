@@ -3,7 +3,7 @@ numSeq: [100]
 seqLen: [100]
 signal:
    type: "structure"
-   structureFile: "/projects/bhandare/workspace/PySG/src/resources/RF000037.fa"
+   structureFiles: ["/projects/bhandare/workspace/PySG/src/resources/RF000037.fa"]
    location: [10]
    signalPercent: [100]
 nosignal:
