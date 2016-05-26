@@ -1,0 +1,10 @@
+targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/RF00624_Test_SeqLength_Shuffle"
+numSeq: [512]
+seqLen: [128, 256, 512, 1024]
+signal:
+   type: "structure"
+   structureFiles: ["/projects/bhandare/workspace/PySG/data/rfam/RF00624.fa"]
+   signalPercent: [100]
+nosignal:
+   type: "shuffle"
+   fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
