@@ -1,0 +1,10 @@
+targetDir: "/projects/bhandare/workspace/PySG/src/resources/tmp/HuR_Test_Alpha_Dirichlet"
+numSeq: [256, 512, 1024]
+seqLen: [128, 256, 512, 1024]
+signal:
+   type: "pfmFiles"
+   pfmFiles: ["/projects/bhandare/workspace/PySG/data/pwm/HuR1.pwm"]
+   signalPercent: [10, 25, 50, 75, 100]
+nosignal:
+   type: "dirichlet"
+   alpha: [128, 256, 512, 1024, 2048, 4096, 8192]
