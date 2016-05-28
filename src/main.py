@@ -27,8 +27,10 @@ def GetCurrentDateTimeStr():
 def GenerateFastaFiles(directory):
 	for confFile in findFiles(directory, '*.yml'):
 		print "Generating sequences for : ", confFile;
-		CreateNoSignalFastaFile(confFile);
-		CreateFastaWithSignal(confFile)
+		# Create positive set of sequences with signal embedded. 
+		PosSeqDict = CreateFastaWithSignal(confFile)
+		# Shuffle the sequences to generate negative set.
+		NegSeqDict = ShuffleToCreateNoSignalSequences(PosSeqDict, confFile);
 
 def RunComputationalTools(directory):
 	os.chdir(directory)

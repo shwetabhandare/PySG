@@ -170,6 +170,8 @@ def CreateFastaWithSignal(configFile):
 	confMap = SeqGenUtils.GetConf(configFile)
 	SeqLength = confMap["sequence"]["nosignal"]["seqLen"]
 	SignalSeqInfo = GetSignalSeqInfo(confMap, SeqLength);
+	SeqDict = dict();
+	
 	if len(SignalSeqInfo) == 0:
 		print "Did not find any signal data in the yaml file: ", configFile;
 	else:
@@ -190,6 +192,7 @@ def CreateFastaWithSignal(configFile):
 
 		# Write sequences to file.
 		SeqGenUtils.WriteSeqDictToFile(SeqDict, MotifOutFileName);
+	return SeqDict;
 
 if __name__ == "__main__":
 	import sys

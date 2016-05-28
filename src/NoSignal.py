@@ -9,6 +9,8 @@ import SeqGenUtils
 from random import choice
 from numpy import *
 import numpy as np
+from altschulEriksonDinuclShuffle import dinuclShuffle
+
 
 indexArr = []
 
@@ -59,10 +61,10 @@ def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate,
 			endPoint = startPoint + SeqLength;
 
 		selectedNucs = allNucs[startPoint:endPoint];
-		l = list(str(selectedNucs))
-		random.shuffle(l)
-		shuffledNucs = ''.join(l);
-		NegSeqDict[NegHeaders[index]] = shuffledNucs
+		#l = list(str(selectedNucs))
+		#random.shuffle(l)
+		#shuffledNucs = ''.join(l);
+		NegSeqDict[NegHeaders[index]] = selectedNucs;
 	return NegSeqDict;
 
 def GenerateNoSignalWithDirichlet(confMap, alpha, NumSeqsToGenerate, SeqLength, signalFlag):
@@ -76,6 +78,21 @@ def GenerateNoSignalWithDirichlet(confMap, alpha, NumSeqsToGenerate, SeqLength, 
 def GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, OutFileName):
 	NegSequences, NegHeaders = CreateNegDict(NegativeFileName);
 	return CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, SeqLength, OutFileName)
+
+
+def ShuffleToCreateNoSignalSequences(PosSeqDict, configFile):
+	NegSeqDict = dict();
+	for seq_id, sequence in PosSeqDict.iteritems():
+		shuffledSeq = dinuclShuffle(sequence);
+		print "Original : ", sequence;
+		print "Shuffled: ", shuffledSeq;
+		NegSeqDict[seq_id] = shuffledSeq;
+
+	confMap = SeqGenUtils.GetConf(configFile)
+	NoSignalFileName = confMap["sequence"]["nosignal"]["outNoSignalFastaFile"]
+	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, NoSignalFileName);
+
+	return NegSeqDict;
 
 def CreateNoSignalDict(confMap, signalFlag):
 	NegativeFileName = "";
@@ -101,7 +118,7 @@ def CreateNoSignalFastaFile(configFile):
 	confMap = SeqGenUtils.GetConf(configFile)
 	NegSeqDict = CreateNoSignalDict(confMap, False);
 	OutFileName = SeqGenUtils.GetNoSignalOutFileName(confMap);
-	SeqGenUtils.WriteSeqDictToFile(NegSeqDict, OutFileName);	
+
 
 if __name__ == "__main__":
 	import sys

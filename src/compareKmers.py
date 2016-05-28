@@ -11,10 +11,6 @@ import compareKmerCommon;
 
 #from itertools import imap
 
-
-
-
-
 def ComparePWMKmers(realKmerDict, predictedKspectrumFile, posFile, negFile, pssmList):
 	numFP = numTP = numFN = 0	
 
@@ -50,7 +46,7 @@ def CompareTextMotifKmers(realKmerDict, predictedKmers, posFile, negFile):
 
 def CompareKspectrumPredictedKmers(realCsvFile, predictedKspectrumFile, posFile, negFile):
 	realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);
-	predictedKmerDict	= parseKspectrum.FindKspectrumKmers(predictedKspectrumFile, 50);
+	predictedKmerDict	= parseKspectrum.FindKspectrumKmers(predictedKspectrumFile, 100);
 	numTP = 0
 	numFP = 0
 	numFN = 0
@@ -111,9 +107,9 @@ if __name__ == "__main__":
 	predictedDremeFile= sys.argv[2]
 	posFile = sys.argv[3]
 	negFile = sys.argv[4]
-	textMotif = int(sys.argv[5])
+	#textMotif = int(sys.argv[5])
 
-	numTP, numFP, numFN = CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMotif)
+	numTP, numFP, numFN = CompareKspectrumPredictedKmers(realCsvFile, predictedDremeFile, posFile, negFile)
 	print "Num TP: ", str(numTP), ", Num FP: ", str(numFP), ", Num FN: ", str(numFN)
 	sensitivity, ppv = GetSensitivityAndPPV(numTP, numFP, numFN);
 	print sensitivity, ppv

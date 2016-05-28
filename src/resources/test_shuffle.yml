@@ -1,0 +1,11 @@
+sequence:
+  nosignal:
+    fastaFile: /projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt
+    numSeq: 10
+    outNoSignalFastaFile: /projects/bhandare/workspace/PySG/src/resources/tmp/test_shuffle_nosignal.fa
+    seqLen: 50
+  signal:
+    locationFromStart: 5
+    outSignalFile: /projects/bhandare/workspace/PySG/src/resources/tmp/test_shuffle_signal.fa
+    seqWithSignal: 100
+    structureFile: /projects/bhandare/workspace/PySG/data/rfam/RF00037.fa

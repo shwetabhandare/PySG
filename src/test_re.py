@@ -1,0 +1,7 @@
+import re
+
+seq = "GGAACCGCGTTCGGGGGGGGGGGGGCCGAACCCTTCCAGCATTGAGCTCCTGCCGCTAGCTTATGCGGCCTCCCATCCAGTCGGCCGAGACGCACGACTT"
+kmerREString = "(TCGGGG|CTTATG)"
+for m in re.finditer(kmerREString, seq):
+	print m.start(), m.end(), m.group(1)
+

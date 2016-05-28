@@ -209,7 +209,7 @@ def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, pwm, predictedMot
 			kmerREString = getKmerFromPSSM(pssmList, seq)
 		elif pwm != None:
 			kmerREString = getKmerFromPWM(pwm, seq)
-		else:
+		elif predictedKmerDict != None:
 			kmerREString = getPredictedKmerRE(predictedKmerDict)
 
 		#print "SEQ ID: ", seqid, "REAL KMER: ", realKmer, ", KMER RE: ", kmerREString;
@@ -229,6 +229,7 @@ def GetTotalNumbers(realKmerDict, posFile, negFile, pssmList, pwm, predictedMoti
 	numPosTP = 	numPosFP = 	numPosFN = 0;	
 	numNegTP = 	numNegFP = 	numNegFP = 0;	
 
+	#print "Predicted KMER DICT: ", predictedKmers;
 	numPosTP, numPosFP, numPosFN = getTotalNumbersForSeqDict(PosSeqDict, realKmerDict, pssmList, pwm, predictedMotifs, predictedKmers);
 	numNegTP, numNegFP, numNegFN = getTotalNumbersForSeqDict(NegSeqDict, realKmerDict, pssmList, pwm, predictedMotifs, predictedKmers);
 

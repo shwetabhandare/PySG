@@ -15,6 +15,7 @@ def ChangeUsToTs(seq_dict):
 		sequence = sequence.upper().replace('U', 'T');
 		seq_dict[header] = sequence;
 	return seq_dict;
+	
 def fasta_read(file_name):
    """read the sequence from a file in fasta format"""
    seq_dict = dict()
