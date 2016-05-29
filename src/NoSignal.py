@@ -84,8 +84,8 @@ def ShuffleToCreateNoSignalSequences(PosSeqDict, configFile):
 	NegSeqDict = dict();
 	for seq_id, sequence in PosSeqDict.iteritems():
 		shuffledSeq = dinuclShuffle(sequence);
-		print "Original : ", sequence;
-		print "Shuffled: ", shuffledSeq;
+		#print "Original : ", sequence;
+		#print "Shuffled: ", shuffledSeq;
 		NegSeqDict[seq_id] = shuffledSeq;
 
 	confMap = SeqGenUtils.GetConf(configFile)

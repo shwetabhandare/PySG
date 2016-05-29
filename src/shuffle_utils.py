@@ -8,6 +8,7 @@ import fasta
 #import rpy
 
 
+
 def GC(seq):
  """Calculates G+C content, returns the percentage (float between 0 and 100).
  Copes mixed case sequences, and with the ambiguous nucleotide S (G or C)
@@ -92,6 +93,7 @@ def compute_dinuc_distrib(seqs, b=False):
         if key[0] == first:
           cpt += composition[key]
       distrib[k] = (composition[k] + 1.0) / cpt
+      distrib[k] = round(distrib[k], 4);
   else: # Dinucleotide distrib position by position
     distrib = init_compo(seq_length)
     for j in range(1, seq_length):
@@ -105,23 +107,23 @@ def compute_dinuc_distrib(seqs, b=False):
             if key[0] == first:
               cpt += compo[j-1][key]
           distrib[j-1][k] = (compo[j-1][k] + 1.0) / cpt
+          distrib[k] = round(distrib[k], 4);
   return distrib
 
 
 def print_dinuc_distrib(dinuc, output):
+
   stream = sys.stdout
   if output:
     stream = open(output, "w")
   for j in range(0, len(dinuc)):
-    stream.write("%f, %f, %f, %f, %f, %f, %f, %f, %f,"%(dinuc[j]["AA"],
-      dinuc[j]["AC"], dinuc[j]["AG"], dinuc[j]["AT"], dinuc[j]["AC"],
-      dinuc[j]["CA"], dinuc[j]["CC"], dinuc[j]["CG"], dinuc[j]["CT"]))
-    stream.write(" %f, %f, %f, %f, %f, %f, %f, %f, %f,"%(dinuc[j]["GA"],
-      dinuc[j]["GA"], dinuc[j]["GC"], dinuc[j]["GG"], dinuc[j]["GT"],
-      dinuc[j]["TA"], dinuc[j]["TA"], dinuc[j]["TC"], dinuc[j]["TG"]))
-    stream.write(" %f, %f, %f, %f, %f, %f, %f\n"%(dinuc[j]["TT"],
-      dinuc[j]["AC"], dinuc[j]["AG"], dinuc[j]["CG"], dinuc[j]["CT"],
-      dinuc[j]["GA"], dinuc[j]["CC"]))
+    stream.write("%f, %f, %f, %f, %f, %f, %f, %f,"%(dinuc[j]["AA"],
+      dinuc[j]["AC"], dinuc[j]["AG"], dinuc[j]["AT"], dinuc[j]["CA"],
+      dinuc[j]["CC"], dinuc[j]["CG"], dinuc[j]["CT"]))
+    stream.write(" %f, %f, %f, %f, %f, %f, %f,"%(dinuc[j]["GA"],
+      dinuc[j]["GC"], dinuc[j]["GG"], dinuc[j]["GT"], dinuc[j]["TA"],
+      dinuc[j]["TC"], dinuc[j]["TG"]))
+    stream.write(" %f,\n"%(dinuc[j]["TT"]))
   stream.close()
 
 
@@ -143,6 +145,14 @@ def compute_nt_distrib(seqs):
 def split_seq(seq):
   return re.split('(N+)', seq)
 
+if __name__ == "__main__":
+  import sys
+  seqFile = sys.argv[1]
+  seqs, gc_list, fg_lengths = get_seqs(seqFile)
+  dinuc_distrib = compute_dinuc_distrib(seqs, True)
+
+  print "Dinucleotide Distribution for: ", seqFile;
+  print dinuc_distrib;
 
 # def make_r_gc_plots(fg_gc, bg_gc, fg_label, bg_label, outpref="", msg=""):
 #   """ Compute the density GC composition plots for background and foreground
