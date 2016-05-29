@@ -163,7 +163,7 @@ def PlotGraphs(diNucDist, fileName):
 	plt.legend([eb1, eb2], ['Generated Files', "3'UTR"])
 
 	plt.savefig(fileName);
-	plt.show();
+	#plt.show();
 	plt.close(fig)
 
 
@@ -180,9 +180,14 @@ def GetDiNucleotideDistribution(resultDir):
 
 	return posDiNucDist, negDiNucDist
 
-def GenerateDiNucleotideGraphs(currDir, posDiNucDist, negDiNucDist):
-	posPngFile = currDir + "_pos.png"
-	negPngFile = currDir + "_neg.png"
+def GenerateDiNucleotideGraphs(resultDir, currDir, posDiNucDist, negDiNucDist):
+
+	targetDir = resultDir + "/" + "dinucleotide_distribution"
+	if not os.path.exists(targetDir):
+		os.makedirs(targetDir);
+
+	posPngFile = targetDir + "/" + currDir + "_pos.png"
+	negPngFile = targetDir + "/" + currDir + "_neg.png"
 
 	PlotGraphs(posDiNucDist, posPngFile)
 	PlotGraphs(negDiNucDist, negPngFile)
@@ -201,7 +206,7 @@ def computeDiNucleotideDistribution(resultDir, level=1):
 			for dir in dirs:
 				if isDirResultDir(dir) == False:
 					posDiNucDist, negDiNucDist = GetDiNucleotideDistribution(root + "/" + dir)
-					GenerateDiNucleotideGraphs(dir, posDiNucDist, negDiNucDist);
+					GenerateDiNucleotideGraphs(root, dir, posDiNucDist, negDiNucDist);
 						
 
 def parseSubDirectories(resultDir, level=1):
