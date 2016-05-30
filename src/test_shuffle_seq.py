@@ -64,5 +64,5 @@ class TestShuffleSeq(unittest.TestCase):
 		three_utr_file = "3UTR_transcripts_Human.txt"
 
 		threeUtrDist = generateGraphs.GetDistributionForFiles(three_utr_file_dir, three_utr_file);
-
-		print "3'UTR sequences : \n", threeUtrDist;
+		#graphFileName = "/projects/bhandare/workspace/PySG/src/tmp_results/3utr.png"
+		#generateGraphs.PlotGraphs(threeUtrDist, threeUtrDist, graphFileName);

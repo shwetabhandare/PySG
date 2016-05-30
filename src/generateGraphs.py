@@ -130,40 +130,46 @@ def Compute3UtrDistibution():
 
 	return threeUtrValues, threeUtrErrors;
 
-def PlotGraphs(diNucDist, fileName):
+def example_plot(ax, title, meanValues, errorValues, labels):
+	global threeUtrValues, threeUtrErrors;
+
+	ax.set_ylabel("Distribution")
+	ax.set_title(title);
+	xValues = np.arange(len(meanValues))
+
+	eb1 = ax.errorbar(xValues, meanValues, yerr=errorValues, fmt='', color='b')
+	eb2 = ax.errorbar(xValues, threeUtrValues, yerr=threeUtrErrors, xerr=None, fmt='', color='g')
+
+	ax.set_xticks(xValues)
+	ax.set_xticklabels(labels, fontdict=None, minor=False, size='small');
+
+	return eb1, eb2;
+
+def PlotGraphs(posDistList, negDiNucDist, graphFileName):
 	global threeUtrValues, threeUtrErrors;
 
 	import matplotlib
 	matplotlib.use('Agg')
 	
 	from matplotlib import pyplot as plt	
-
-	meanValues = [x[0] for x in diNucDist.values()]
-	errorValues = [x[1] for x in diNucDist.values()]	
+	matplotlib.rcParams.update({'font.size': 8})
 
 
+	posMeanValues = [x[0] for x in posDistList.values()]
+	posErrorValues = [x[1] for x in posDistList.values()]	
 
-	fig = plt.figure()
-	plt.title("Di-Nucleotide Distributions");
-	plt.ylabel("Distribution");
-	plt.xlabel("Di-nucleotides")
-	labels = diNucDist.keys();
-	xValues = np.arange(len(meanValues))
+	negMeanValues = [x[0] for x in negDiNucDist.values()]
+	negErrorValues = [x[1] for x in negDiNucDist.values()]	
 
-	#print labels;
-	#print meanValues
-	#print errorValues;
+	#Two subplots, the axes array is 1-d
+	fig, (ax1, ax2) = plt.subplots(nrows=2)
+	fig.suptitle("Di-nucleotide distribution: 3'UTR vs Generated Files", fontsize=8)
+	labels = posDistList.keys();
+	eb1, eb2 = example_plot(ax1, "Positive Set", posMeanValues, posErrorValues, labels);
+	eb1, eb2 = example_plot(ax2, "Negative Set", negMeanValues, negErrorValues, labels);
 
-
-	plt.xticks(range(len(labels)), list(labels));	
-
-	eb1 = plt.errorbar(xValues, meanValues, yerr=errorValues, xerr=None, fmt='', color='b')
-	eb2 = plt.errorbar(xValues, threeUtrValues, yerr=threeUtrErrors, xerr=None, fmt='', color='g')
-
-	plt.legend([eb1, eb2], ['Generated Files', "3'UTR"])
-
-	plt.savefig(fileName);
-	#plt.show();
+	plt.figlegend((eb1, eb2), ("Generated", "3'UTR"), loc = 'lower right');
+	plt.savefig(graphFileName);
 	plt.close(fig)
 
 
@@ -186,11 +192,10 @@ def GenerateDiNucleotideGraphs(resultDir, currDir, posDiNucDist, negDiNucDist):
 	if not os.path.exists(targetDir):
 		os.makedirs(targetDir);
 
-	posPngFile = targetDir + "/" + currDir + "_pos.png"
-	negPngFile = targetDir + "/" + currDir + "_neg.png"
-
-	PlotGraphs(posDiNucDist, posPngFile)
-	PlotGraphs(negDiNucDist, negPngFile)
+	# posPngFile = targetDir + "/" + currDir + "_pos.png"
+	# negPngFile = targetDir + "/" + currDir + "_neg.png"
+	graphFileName = targetDir + "/" + currDir + ".png"
+	PlotGraphs(posDiNucDist, negDiNucDist, graphFileName)
 	
 
 def computeDiNucleotideDistribution(resultDir, level=1):
