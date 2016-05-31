@@ -9,6 +9,7 @@ import math;
 import collections;
 from decimal import *
 import datetime;
+import generateGraphs;
 
 writeTitleDreme = False;
 writeTitleKspectrum = False;
@@ -138,6 +139,7 @@ def GetStdDeviationDict(resultDict):
 
 def graphResults(fileName, resultDict, title, xAxisTitle, index):
 
+
 	stdDict = GetStdDeviationDict(resultDict)
 	meanDict = ComputeMeanAndStdError(resultDict)
 	dremeDict, kspectrumDict = getToolArray(meanDict, index);
@@ -207,6 +209,8 @@ def getFileNameAndPrefixToGraph(filepath, subdir):
 
 	return fileNameToGraph, graphPrefix;
 
+
+
 def parseDirectory(resultDir):
 
 	global writeTitleDreme;
@@ -244,6 +248,23 @@ def ReadFileAndCreateDict(resultFile):
 				resultDict[label] = [value];
 	return resultDict;
 
+
+def GetMeanAndStdErrorValues(resultDict, index):
+	stdDict = GetStdDeviationDict(resultDict)
+	meanDict = ComputeMeanAndStdError(resultDict)
+	dremeDict, kspectrumDict = getToolArray(meanDict, index);
+
+	dremeMeanValues = [x[0] for x in dremeDict.values()]
+	dremeErrorValues = [x[1] for x in dremeDict.values()]
+
+	#print "DREME  VALUES: ", dremeMeanValues, dremeErrorValues;
+	kspectrumMeanValues = [x[0] for x in kspectrumDict.values()]
+	kspectrumErrorValues = [x[1] for x in kspectrumDict.values()]		
+
+	labels = dremeDict.keys();
+
+	return dremeMeanValues, dremeErrorValues, kspectrumMeanValues, kspectrumErrorValues, labels;
+
 def GetDictForResultFile(searchStr):
 
 	for resultFile in glob.glob(searchStr):
@@ -261,16 +282,30 @@ def createDataToGraph(resultDir):
 
 	return sensitivity_dict, ppv_dict;
 
-def GraphResults(resultDir, title, xAxisTitle, index):
-	graphNamePrefix = os.path.basename(os.getcwd())
-	parseDirectory(resultDir)
-	sensitivity_dict, ppv_dict = createDataToGraph(resultDir)
+def PlotSingleGraph(sensitivity_dict, ppv_dict, title, xAxisTitle, index, graphNamePrefix):
+	graphName = graphNamePrefix + ".png";
+	generateGraphs.PlotSensitivityAndPPVGraphs(sensitivity_dict, ppv_dict, title, xAxisTitle, index, graphName);
 
+
+def PlotSeparateGraphs(sensitivity_dict, ppv_dict, title, xAxisTitle, index, graphNamePrefix):
 	graphName = graphNamePrefix + "_" + "sensitivity_graph.png"
 	graphResults(graphName,sensitivity_dict, title, xAxisTitle, index);
 
 	graphName = graphNamePrefix + "_" + "ppv_graph.png"
 	graphResults(graphName, ppv_dict, title, xAxisTitle, index)
+
+
+def GraphResults(resultDir, title, xAxisTitle, index):
+	graphNamePrefix = os.path.basename(os.getcwd())
+	parseDirectory(resultDir)
+	sensitivity_dict, ppv_dict = createDataToGraph(resultDir)
+
+	PlotSingleGraph(sensitivity_dict, ppv_dict, title, xAxisTitle, index, graphNamePrefix)
+
+	#PlotSeparateGraphs(sensitivity_dict, ppv_dict, title, xAxisTitle, index, graphNamePrefix)
+
+
+
 
 if __name__ == "__main__":
 	resultDir = sys.argv[1]

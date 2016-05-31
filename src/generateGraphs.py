@@ -130,10 +130,10 @@ def Compute3UtrDistibution():
 
 	return threeUtrValues, threeUtrErrors;
 
-def example_plot(ax, title, meanValues, errorValues, labels):
+def distribution_plot(ax, title, meanValues, errorValues, labels):
 	global threeUtrValues, threeUtrErrors;
 
-	ax.set_ylabel("Distribution")
+	ax.set_ylabel(yLabel)
 	ax.set_title(title);
 	xValues = np.arange(len(meanValues))
 
@@ -144,6 +144,45 @@ def example_plot(ax, title, meanValues, errorValues, labels):
 	ax.set_xticklabels(labels, fontdict=None, minor=False, size='small');
 
 	return eb1, eb2;
+
+def sensitivity_ppv_plot(ax, title, dremeMeanValues, dremeErrorValues, kspectrumMeanValues, kspectrumErrorValues, labels, xLabel, yLabel):
+
+	ax.set_ylabel(yLabel)
+	#ax.set_xlabel(xLabel)
+	ax.set_title(title);
+	xValues = np.arange(len(dremeMeanValues))
+
+	eb1 = ax.errorbar(labels, dremeMeanValues, dremeErrorValues, fmt='', color='b')
+	eb2 = ax.errorbar(labels, kspectrumMeanValues, kspectrumErrorValues, fmt='', color='g')
+
+	ax.set_xticks(labels)
+	ax.set_xticklabels(labels, fontdict=None, minor=False, size='small');
+
+	return eb1, eb2;
+
+
+
+def PlotSensitivityAndPPVGraphs(sensitivityDict, ppvDict, graphTitle, xAxisTitle, index, graphFileName):
+	
+	sensDremeMeanValues, sensDremeErrorValues, sensKspectrumMeanValues, sensKspectrumErrorValues, labels = parseResults.GetMeanAndStdErrorValues(sensitivityDict, index);
+	ppvDremeMeanValues, ppvDremeErrorValues, ppvKspectrumMeanValues, ppvKspectrumErrorValues, labels = parseResults.GetMeanAndStdErrorValues(ppvDict, index);
+
+	import matplotlib
+	matplotlib.use('Agg')
+	
+	from matplotlib import pyplot as plt	
+	matplotlib.rcParams.update({'font.size': 8})
+
+	#Two subplots, the axes array is 1-d
+	fig, (ax1, ax2) = plt.subplots(nrows=2)
+	eb1, eb2 = sensitivity_ppv_plot(ax1, graphTitle + " on Sensitivity", sensDremeMeanValues, sensDremeErrorValues, sensKspectrumMeanValues, sensKspectrumErrorValues, labels, xAxisTitle, "Sensitivity");
+	eb1, eb2 = sensitivity_ppv_plot(ax2, graphTitle + " on PPV", ppvDremeMeanValues, ppvDremeErrorValues, ppvKspectrumMeanValues, ppvKspectrumErrorValues, labels, xAxisTitle, "PPV");	
+
+	ax2.set_xlabel(xAxisTitle)
+
+	plt.figlegend((eb1, eb2), ("DREME", "k-spectrum"), loc = 'lower right');
+	plt.savefig(graphFileName);
+	plt.close(fig)
 
 def PlotGraphs(posDistList, negDiNucDist, graphFileName):
 	global threeUtrValues, threeUtrErrors;
@@ -165,8 +204,8 @@ def PlotGraphs(posDistList, negDiNucDist, graphFileName):
 	fig, (ax1, ax2) = plt.subplots(nrows=2)
 	fig.suptitle("Di-nucleotide distribution: 3'UTR vs Generated Files", fontsize=8)
 	labels = posDistList.keys();
-	eb1, eb2 = example_plot(ax1, "Positive Set", posMeanValues, posErrorValues, labels);
-	eb1, eb2 = example_plot(ax2, "Negative Set", negMeanValues, negErrorValues, labels);
+	eb1, eb2 = distribution_plot(ax1, "Positive Set", posMeanValues, posErrorValues, labels);
+	eb1, eb2 = distribution_plot(ax2, "Negative Set", negMeanValues, negErrorValues, labels);
 
 	plt.figlegend((eb1, eb2), ("Generated", "3'UTR"), loc = 'lower right');
 	plt.savefig(graphFileName);
@@ -231,4 +270,5 @@ def parseSubDirectories(resultDir, level=1):
 
 if __name__ == "__main__":
 	resultDir = sys.argv[1]
-	computeDiNucleotideDistribution(resultDir)
+	parseSubDirectories(resultDir)
+	#computeDiNucleotideDistribution(resultDir)
