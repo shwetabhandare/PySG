@@ -2,6 +2,8 @@ import unittest
 import NoSignal
 import Kmer
 import os, fnmatch
+import subprocess
+
 import yaml
 import SeqGenUtils
 import parseResults
@@ -19,6 +21,12 @@ class TestShuffleSeq(unittest.TestCase):
 		self.confFile = "/projects/bhandare/workspace/PySG/src/resources/test_shuffle.yml"
 		self.posSeqFile = "/projects/bhandare/workspace/PySG/src/resources/tmp/test_shuffle_signal.fa"
 		self.negSeqFile = "/projects/bhandare/workspace/PySG/src/resources/tmp/test_shuffle_nosignal.fa"
+
+	def test_ushuffle(self):
+		seq = "GCGGTTCTTGCTTCAACAGTGTTTGAACGGAGCCAC"
+		shuffled_seq = NoSignal.GetShuffledSequence(seq);
+		print shuffled_seq;
+
 
 	def test_create_negative_seq_dict(self):
 		#print self.confFile;

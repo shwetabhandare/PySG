@@ -9,10 +9,13 @@ import SeqGenUtils
 from random import choice
 from numpy import *
 import numpy as np
+import subprocess
+
 from altschulEriksonDinuclShuffle import dinuclShuffle
 
 
 indexArr = []
+uShuffle = "/projects/bhandare/workspace/PySG/src/ushuffle/ushuffle"
 
 def CreateNegDict(NegativeFileName):
 	NegSequences = []
@@ -79,11 +82,18 @@ def GenerateNoSignalSequences(NegativeFileName, NumSeqsToGenerate, SeqLength, Ou
 	NegSequences, NegHeaders = CreateNegDict(NegativeFileName);
 	return CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate, SeqLength, OutFileName)
 
+def GetShuffledSequence(sequence):
+	k = 3;
+	shuffled_seq = subprocess.check_output([uShuffle, "-s", sequence, "-k", str(k)])
+	shuffled_seq= shuffled_seq[:-1]
+	return shuffled_seq;
+
 
 def ShuffleToCreateNoSignalSequences(PosSeqDict, configFile):
 	NegSeqDict = dict();
 	for seq_id, sequence in PosSeqDict.iteritems():
-		shuffledSeq = dinuclShuffle(sequence);
+		shuffledSeq = GetShuffledSequence(sequence)
+		#shuffledSeq = dinuclShuffle(sequence);
 		#print "Original : ", sequence;
 		#print "Shuffled: ", shuffledSeq;
 		NegSeqDict[seq_id] = shuffledSeq;
