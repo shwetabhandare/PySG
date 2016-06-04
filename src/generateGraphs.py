@@ -99,7 +99,7 @@ def sensitivity_ppv_plot(ax, title, dremeMeanValues, dremeErrorValues, kspectrum
 
 	return eb1, eb2;
 
-def ngram_plot(title, ngramFreqValues, threeUtrNgramValues, labels, xLabel, yLabel, graphFileName):
+def ngram_plot(title, posMeanValues, posErrorValues, negMeanValues, negErrorValues, threeUtrValues, labels, xLabel, yLabel, graphFileName):
 
 	import matplotlib
 	matplotlib.use('Agg')
@@ -107,38 +107,46 @@ def ngram_plot(title, ngramFreqValues, threeUtrNgramValues, labels, xLabel, yLab
 	from matplotlib import pyplot as plt	
 	matplotlib.rcParams.update({'font.size': 8})
 
+	threeUtrErrorValues = np.zeros(len(posErrorValues))	
 	fig = plt.figure()
-
 	plt.ylabel(yLabel)
 	plt.xlabel(xLabel)
 	plt.title(title);
-	xValues = np.arange(len(ngramFreqValues))
 
-	eb1,  = plt.plot(xValues, ngramFreqValues, 'r--');
+	xValues = np.arange(len(posMeanValues))
+	print "X-Values: ", xValues, len(xValues);
 
-	eb2, = plt.plot(xValues, threeUtrNgramValues, color='b')
+	fig, (ax) = plt.subplots(nrows=1, ncols=1)
+	eb1 = ax.errorbar(xValues, posMeanValues, yerr=posErrorValues, fmt='', color='b', label="Positive File")
+	eb2 = ax.errorbar(xValues, negMeanValues, yerr=negErrorValues, fmt='o', color='r', label="Negative File")
+	eb3  = ax.errorbar(xValues, threeUtrValues, yerr=threeUtrErrorValues, fmt='', color='g', label="3'UTR")
 
+	ax.legend()
 	plt.xticks(xValues, labels, rotation='vertical')
 
-	plt.figlegend((eb1, eb2), ("FASTA FILE", "3'UTR FILE"), loc = 'lower right');
+	#plt.figlegend((eb1, eb2, eb3), ("Positive File", "Negative File", "3'UTR FILE"), loc = 'lower right');
 	plt.savefig(graphFileName);
 	plt.close(fig)
 
 	return eb1, eb2;
 
-def PlotNGrams(faDict, threeUtrDict, graphTitle, graphFileName):
+def PlotNGrams(posDict, negDict, threeUtrDict, graphTitle, graphFileName):
 	
+	import matplotlib
+	matplotlib.use('Agg')
 
+	from matplotlib import pyplot as plt	
 
-	print "FA TYPE:", faDict;
-	print "3UTR TYPE:",threeUtrDict;
-
-	faFileFreq = faDict.values();
-	threeUtrFreq = threeUtrDict.values();
+	three_utr_values = threeUtrDict.values();
 	labels = threeUtrDict.keys();
-	
 
-	ngram_plot(graphTitle, faFileFreq, threeUtrFreq, labels, "N-Grams", "Frequency", graphFileName)	
+	posMeanValues = [x[0] for x in posDict.values()]
+	posErrorValues = [x[1] for x in posDict.values()]	
+
+	negMeanValues = [x[0] for x in negDict.values()]
+	negErrorValues = [x[1] for x in negDict.values()]	
+
+	ngram_plot(graphTitle, posMeanValues, posErrorValues, negMeanValues, negErrorValues, three_utr_values, labels, "N-Grams", "Frequency", graphFileName)	
 
 
 
