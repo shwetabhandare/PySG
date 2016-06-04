@@ -3,13 +3,13 @@ import os, glob;
 import parseResults;
 import shutil;
 import datetime;
-import SeqGenUtils;
 import numpy as np;
 import shuffle_utils;
-from scipy import stats;
+import Distribution_Utils;
 
 threeUtrValues = list();
 threeUtrErrors = list();
+threeUtrNGrams = dict();
 
 def isDirResultDir(currentDir):
 	validSubStrings = ["Percent", "Length", "Alpha", "Dirichlet", "Shuffle"]
@@ -45,7 +45,6 @@ def CopyGraphToTargetDir():
 			os.makedirs(targetDir)
 		shutil.copy2(file, targetDir)
 
-
 def ParseResultsAndGenerateGraph(path):
 	#print "Path to Graph: ", path;
 	xAxisTitle, title, index = createTitleFromDirName(path)
@@ -69,71 +68,11 @@ def GetSubDirCount(path, map = {}):
 	map[path] = count
 	return count
 
-def GetDistribListForDirectory(directory, filesToFind):
-	distribList = list();
-	for seqFile in SeqGenUtils.findFiles(directory, filesToFind):
-		seqs, gc_list, fg_lengths = shuffle_utils.get_seqs(seqFile)
-		dinuc_distrib = shuffle_utils.compute_dinuc_distrib(seqs, True)			
-		distribList.append(dinuc_distrib)		
-	return distribList;
-
-def ComputeIndividualDistributions(posDistList):
-
-	aa_values = [x['AA'] for x in posDistList]
-	ac_values = [x['AC'] for x in posDistList]
-	gt_values = [x['GT'] for x in posDistList]
-	ag_values = [x['AG'] for x in posDistList]
-	cc_values = [x['CC'] for x in posDistList]
-	ca_values = [x['CA'] for x in posDistList]
-	cg_values = [x['CG'] for x in posDistList]
-	tt_values = [x['TT'] for x in posDistList]
-	gg_values = [x['GG'] for x in posDistList]
-	gc_values = [x['GC'] for x in posDistList]
-	at_values = [x['AT'] for x in posDistList]
-	ga_values = [x['GA'] for x in posDistList]
-	gt_values = [x['GT'] for x in posDistList]
-	ta_values = [x['TA'] for x in posDistList]
-	tc_values = [x['TC'] for x in posDistList]
-	ct_values = [x['CT'] for x in posDistList]
-
-	diNucDist = dict();
-
-	diNucDist['AA'] = [round(np.mean(aa_values), 4), round(stats.sem(aa_values), 4)]
-	diNucDist['AC'] = [round(np.mean(ac_values), 4),  round(stats.sem(ac_values), 4)]
-	diNucDist['GT'] = [round(np.mean(gt_values), 4),  round(stats.sem(gt_values), 4)]
-	diNucDist['AG'] = [round(np.mean(ag_values), 4), round(stats.sem(ag_values), 4)]
-	diNucDist['CC'] = [round(np.mean(cc_values), 4),  round(stats.sem(cc_values), 4)]
-	diNucDist['CA'] = [round(np.mean(ca_values), 4),  round(stats.sem(ca_values), 4)]
-	diNucDist['CG'] = [round(np.mean(cg_values), 4),  round(stats.sem(cg_values), 4)]
-	diNucDist['TT'] = [round(np.mean(tt_values), 4),  round(stats.sem(tt_values), 4)]
-	diNucDist['GG'] = [round(np.mean(gg_values), 4),  round(stats.sem(gg_values), 4)]
-	diNucDist['GC'] = [round(np.mean(gc_values), 4),  round(stats.sem(gc_values), 4)]
-	diNucDist['AT'] = [round(np.mean(at_values), 4),  round(stats.sem(at_values), 4)]
-	diNucDist['GA'] = [round(np.mean(ga_values), 4),  round(stats.sem(ga_values), 4)]
-	diNucDist['GT'] = [round(np.mean(gt_values), 4),  round(stats.sem(gt_values), 4)]
-	diNucDist['TA'] = [round(np.mean(ta_values), 4),  round(stats.sem(ta_values), 4)]
-	diNucDist['TC'] = [round(np.mean(tc_values), 4),  round(stats.sem(tc_values), 4)]
-	diNucDist['CT'] = [round(np.mean(ct_values), 4),  round(stats.sem(ct_values), 4)]
-
-
-	return diNucDist;
-
-def Compute3UtrDistibution():
-	global threeUtrValues, threeUtrErrors;
-
-	three_utr_file_dir = "/projects/bhandare/workspace/scripts/NegFileCreator/";
-	three_utr_file = "3UTR_transcripts_Human.txt"
-
-	threeUtrDist = GetDistributionForFiles(three_utr_file_dir, three_utr_file);
-	threeUtrValues = [x[0] for x in threeUtrDist.values()]
-	threeUtrErrors = [x[1] for x in threeUtrDist.values()]	
-
-	return threeUtrValues, threeUtrErrors;
 
 def distribution_plot(ax, title, meanValues, errorValues, labels):
 	global threeUtrValues, threeUtrErrors;
 
-	ax.set_ylabel(yLabel)
+	#ax.set_ylabel(yLabel)
 	ax.set_title(title);
 	xValues = np.arange(len(meanValues))
 
@@ -159,6 +98,48 @@ def sensitivity_ppv_plot(ax, title, dremeMeanValues, dremeErrorValues, kspectrum
 	ax.set_xticklabels(labels, fontdict=None, minor=False, size='small');
 
 	return eb1, eb2;
+
+def ngram_plot(title, ngramFreqValues, threeUtrNgramValues, labels, xLabel, yLabel, graphFileName):
+
+	import matplotlib
+	matplotlib.use('Agg')
+	
+	from matplotlib import pyplot as plt	
+	matplotlib.rcParams.update({'font.size': 8})
+
+	fig = plt.figure()
+
+	plt.ylabel(yLabel)
+	plt.xlabel(xLabel)
+	plt.title(title);
+	xValues = np.arange(len(ngramFreqValues))
+
+	eb1,  = plt.plot(xValues, ngramFreqValues, 'r--');
+
+	eb2, = plt.plot(xValues, threeUtrNgramValues, color='b')
+
+	plt.xticks(xValues, labels, rotation='vertical')
+
+	plt.figlegend((eb1, eb2), ("FASTA FILE", "3'UTR FILE"), loc = 'lower right');
+	plt.savefig(graphFileName);
+	plt.close(fig)
+
+	return eb1, eb2;
+
+def PlotNGrams(faDict, threeUtrDict, graphTitle, graphFileName):
+	
+
+
+	print "FA TYPE:", faDict;
+	print "3UTR TYPE:",threeUtrDict;
+
+	faFileFreq = faDict.values();
+	threeUtrFreq = threeUtrDict.values();
+	labels = threeUtrDict.keys();
+	
+
+	ngram_plot(graphTitle, faFileFreq, threeUtrFreq, labels, "N-Grams", "Frequency", graphFileName)	
+
 
 
 
@@ -193,7 +174,6 @@ def PlotGraphs(posDistList, negDiNucDist, graphFileName):
 	from matplotlib import pyplot as plt	
 	matplotlib.rcParams.update({'font.size': 8})
 
-
 	posMeanValues = [x[0] for x in posDistList.values()]
 	posErrorValues = [x[1] for x in posDistList.values()]	
 
@@ -212,18 +192,6 @@ def PlotGraphs(posDistList, negDiNucDist, graphFileName):
 	plt.close(fig)
 
 
-def GetDistributionForFiles(resultDir, searchRe):
-
-	posDistList = GetDistribListForDirectory(resultDir, searchRe)
-	posDiNucDist = ComputeIndividualDistributions(posDistList)
-	return posDiNucDist;
-
-def GetDiNucleotideDistribution(resultDir):
-
-	posDiNucDist = GetDistributionForFiles(resultDir, "Signal*.fa")
-	negDiNucDist = GetDistributionForFiles(resultDir, "NoSignal*.fa")
-
-	return posDiNucDist, negDiNucDist
 
 def GenerateDiNucleotideGraphs(resultDir, currDir, posDiNucDist, negDiNucDist):
 
@@ -231,17 +199,17 @@ def GenerateDiNucleotideGraphs(resultDir, currDir, posDiNucDist, negDiNucDist):
 	if not os.path.exists(targetDir):
 		os.makedirs(targetDir);
 
-	# posPngFile = targetDir + "/" + currDir + "_pos.png"
-	# negPngFile = targetDir + "/" + currDir + "_neg.png"
 	graphFileName = targetDir + "/" + currDir + ".png"
 	PlotGraphs(posDiNucDist, negDiNucDist, graphFileName)
 	
 
+
 def computeDiNucleotideDistribution(resultDir, level=1):
 	posDistList = list()
 	negDistList = list();
+	global threeUtrValues, threeUtrErrors;
 
-	Compute3UtrDistibution();
+	threeUtrValues, threeUtrErrors = Distribution_Utils.Compute3UtrDistibution();
 
 	num_sep = resultDir.count(os.path.sep)
 	for root, dirs, files in os.walk(resultDir):
@@ -249,7 +217,7 @@ def computeDiNucleotideDistribution(resultDir, level=1):
 		if num_sep + level > num_sep_this:
 			for dir in dirs:
 				if isDirResultDir(dir) == False:
-					posDiNucDist, negDiNucDist = GetDiNucleotideDistribution(root + "/" + dir)
+					posDiNucDist, negDiNucDist = Distribution_Utils.GetDiNucleotideDistribution(root + "/" + dir)
 					GenerateDiNucleotideGraphs(root, dir, posDiNucDist, negDiNucDist);
 						
 

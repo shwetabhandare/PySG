@@ -95,14 +95,10 @@ def GetDiNucleotideDistribution(resultDir):
 
 def GetNGramDistribution(fastaFile, N=2):
 
-	threeUtrFreq, threeUtrProb = Compute3UtrNgramDistibution();
-	print "Three UTR Freq: ", threeUtrFreq;
+	threeUtrFreq, threeUtrProb = Compute3UtrNgramDistibution(N);
 
 	faFileFreq, faFileProb = GetNgramDistributionForFile(fastaFile, N);
-	print "Fasta File Freq: ", faFileFreq;
 
-	print "Three UTR FReq (2): ", threeUtrFreq;
-
-	generateGraphs.PlotNGrams(faFileFreq, threeUtrFreq, "N-Gram Frequency", "ngram.png")
+	generateGraphs.PlotNGrams(threeUtrProb, faFileProb, "N-Gram Probability", "ngram.png")
 
 
