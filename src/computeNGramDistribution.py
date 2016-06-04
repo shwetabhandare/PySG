@@ -44,18 +44,12 @@ def ComputeMeanAndStdError(SignalNGramList):
 	return SignalNGramList;
 
 
-if __name__ == "__main__":
-	import sys;
-	dirName = sys.argv[1]
-	nLen = int(sys.argv[2])
+def ComputeNgramDistribution(dirName, nLen, graphName):
+	#three_utr_freq, three_utr_prob = Distribution_Utils.Compute3UtrNgramDistibution(nLen);
 
-	three_utr_freq, three_utr_prob = Distribution_Utils.Compute3UtrNgramDistibution(nLen);
-
-	#three_utr_prob = {'AA': 0.0878, 'AC': 0.0478, 'GT': 0.0542, 'AG': 0.0674, 'CC': 0.0604, 'TT': 0.1023, 'CG': 0.0121, 'GG': 0.0567, 'GC': 0.0468, 'AT': 0.0693, 'GA': 0.0568, 'TG': 0.0781, 'CT': 0.073, 'CA': 0.0678, 'TC': 0.0583, 'TA': 0.0602}
-
-
+	three_utr_prob = {'AA': 0.0878, 'AC': 0.0478, 'GT': 0.0542, 'AG': 0.0674, 'CC': 0.0604, 'TT': 0.1023, 'CG': 0.0121, 'GG': 0.0567, 'GC': 0.0468, 'AT': 0.0693, 'GA': 0.0568, 'TG': 0.0781, 'CT': 0.073, 'CA': 0.0678, 'TC': 0.0583, 'TA': 0.0602}
 	SignalFiles = GetFastaFiles(dirName, "Signal*.fa")
-	NoSignalFiles = GetFastaFiles(dirName, "Signal*.fa")
+	NoSignalFiles = GetFastaFiles(dirName, "NoSignal*.fa")
 
 	SignalFreqList, SignalProbList = GetNGramDistributionForFiles(SignalFiles, nLen)
 	NoSignalFreqList, NoSignalProbList = GetNGramDistributionForFiles(NoSignalFiles, nLen)
@@ -67,4 +61,15 @@ if __name__ == "__main__":
 	NoSignalNGramDict = ComputeMeanAndStdError(NoSignalNGramList);
 
 	graphTitle = str(nLen) + "-gram Distribution for 3'UTR and Generated Fasta files"
-	generateGraphs.PlotNGrams(SignalNGramDict, NoSignalNGramDict, three_utr_prob, graphTitle, "ngram.png");
+	graphName = dirName + "/" + graphName;
+	generateGraphs.PlotNGrams(SignalNGramDict, NoSignalNGramDict, three_utr_prob, graphTitle, graphName);
+
+
+if __name__ == "__main__":
+	import sys;
+	dirName = sys.argv[1]
+	nLen = int(sys.argv[2])
+	graphName = sys.argv[3]
+
+	ComputeNgramDistribution(dirName, nLen, graphName)
+

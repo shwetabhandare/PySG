@@ -48,10 +48,8 @@ def CopyGraphToTargetDir():
 def ParseResultsAndGenerateGraph(path):
 	#print "Path to Graph: ", path;
 	xAxisTitle, title, index = createTitleFromDirName(path)
-	print "Title: ", title;
 	savedDir = os.getcwd();
 	mycwd = os.chdir(path)
-	
 	parseResults.GraphResults(".", title, xAxisTitle, index);
 	CopyGraphToTargetDir();
 
@@ -109,8 +107,7 @@ def ngram_plot(title, posMeanValues, posErrorValues, negMeanValues, negErrorValu
 
 	threeUtrErrorValues = np.zeros(len(posErrorValues))	
 	fig = plt.figure()
-	plt.ylabel(yLabel)
-	plt.xlabel(xLabel)
+
 	plt.title(title);
 
 	xValues = np.arange(len(posMeanValues))
@@ -122,9 +119,13 @@ def ngram_plot(title, posMeanValues, posErrorValues, negMeanValues, negErrorValu
 	eb3  = ax.errorbar(xValues, threeUtrValues, yerr=threeUtrErrorValues, fmt='', color='g', label="3'UTR")
 
 	ax.legend()
+	ax.set_ylabel(yLabel)
+	ax.set_xlabel(xLabel)
+	fig.suptitle("Comparison of N-gram distribution: 3'UTR vs Generated Files")
+
+
 	plt.xticks(xValues, labels, rotation='vertical')
 
-	#plt.figlegend((eb1, eb2, eb3), ("Positive File", "Negative File", "3'UTR FILE"), loc = 'lower right');
 	plt.savefig(graphFileName);
 	plt.close(fig)
 

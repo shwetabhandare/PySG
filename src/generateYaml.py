@@ -232,7 +232,7 @@ class YamlFastaGenerator():
 					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, kmer, folderCreated);
 			elif self.signalType == "structure":
 				for structureFile in self.structureFiles:
-					structureFileToAdd = seGetStructFileToAdd(structureFile);
+					structureFileToAdd = self.GetStructFileToAdd(structureFile);
 					#print "Structure File:", structureFileToAdd;
 					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, structureFileToAdd, folderCreated);
 			else:
