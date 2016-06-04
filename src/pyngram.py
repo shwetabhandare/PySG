@@ -76,7 +76,7 @@ def ComputeNgramFrequencyAndProbability(seqFile, nLen):
         ngram_prob[ngram] = round(frequency/total_seq_length, 4);
 
     # print str(nLen) + "-" + "gram frequences: \n", ngram_freq;
-    print str(nLen) + "-" + "gram probabilities: \n", ngram_prob;
+    #print str(nLen) + "-" + "gram probabilities: \n", ngram_prob;
     #print "Total Nucleotides: ", str(total_seq_length) 
 
     return ngram_freq, ngram_prob;

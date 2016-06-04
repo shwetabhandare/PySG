@@ -216,7 +216,7 @@ def computeDiNucleotideDistribution(resultDir, level=1):
 		num_sep_this = root.count(os.path.sep)
 		if num_sep + level > num_sep_this:
 			for dir in dirs:
-				if isDirResultDir(dir) == False:
+				if isDirResultDir(dir):
 					posDiNucDist, negDiNucDist = Distribution_Utils.GetDiNucleotideDistribution(root + "/" + dir)
 					GenerateDiNucleotideGraphs(root, dir, posDiNucDist, negDiNucDist);
 						

@@ -55,6 +55,10 @@ def GetDistribListForDirectory(directory, filesToFind):
 		distribList.append(dinuc_distrib)		
 	return distribList;
 
+def GetNgramDistributionForFile(fastaFile, nLen):
+	freq, prob = pyngram.ComputeNgramFrequencyAndProbability(fastaFile, nLen)
+	return freq, prob;
+
 def Compute3UtrNgramDistibution(nLen=2):
 
 	three_utr_file_dir = "/projects/bhandare/workspace/scripts/NegFileCreator/";
@@ -75,11 +79,6 @@ def Compute3UtrDistibution():
 
 	return threeUtrValues, threeUtrErrors;
 
-def GetNgramDistributionForFile(fastaFile, nLen):
-
-	freq, prob = pyngram.ComputeNgramFrequencyAndProbability(fastaFile, nLen)
-	return freq, prob;
-
 def GetDistributionForFiles(resultDir, searchRe):
 
 	posDistList = GetDistribListForDirectory(resultDir, searchRe)
@@ -88,7 +87,7 @@ def GetDistributionForFiles(resultDir, searchRe):
 
 def GetDiNucleotideDistribution(resultDir):
 
-	posDiNucDist = GetDistributionForFiles(resultDir, "Signal*.fa")
+	posDiNucDist = GetDistributionForFiles(resultDir, "Signal*\.fa")
 	negDiNucDist = GetDistributionForFiles(resultDir, "NoSignal*.fa")
 
 	return posDiNucDist, negDiNucDist
