@@ -41,7 +41,7 @@ def RunDreme(signalFile, noSignalFile):
 	signalDirName, signalFileName, dremeDir =  GetResultDirName(signalFile, "_DremeOut");
 	print "Calling DREME for ", signalFile, ", ", noSignalFile, ", ", dremeDir;
 	
-	subprocess.call(["dreme", "-p", signalFile, "-n", noSignalFile, "-oc", dremeDir])
+	subprocess.call(["dreme", "-norc", "-p", signalFile, "-n", noSignalFile, "-oc", dremeDir])
 
 	predictedDremeFile = dremeDir + "/" + "dreme.txt";
 	realKmersCsvFile = signalDirName + "/" + os.path.splitext(signalFileName)[0] + ".kmers"

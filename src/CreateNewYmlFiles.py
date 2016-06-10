@@ -12,7 +12,7 @@ def CreateNewYmlFiles(directory, copyPrefix, createPrefix, extension):
 		m = re.search(reStr, ymlFile);
 		newFile = createPrefix + "_" + m.group(1) + "." + extension;
 		print "copying file : ", ymlFile, " to ", newFile;
-		subprocess.call(["mv", ymlFile, newFile])
+		subprocess.call(["cp", ymlFile, newFile])
 
 if __name__ == "__main__":
 	import sys
