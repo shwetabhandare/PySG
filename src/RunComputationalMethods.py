@@ -41,7 +41,7 @@ def RunDreme(signalFile, noSignalFile):
 	signalDirName, signalFileName, dremeDir =  GetResultDirName(signalFile, "_DremeOut");
 	print "Calling DREME for ", signalFile, ", ", noSignalFile, ", ", dremeDir;
 	
-	subprocess.call(["dreme", "-norc", "-p", signalFile, "-n", noSignalFile, "-oc", dremeDir])
+	subprocess.call(["dreme", "-p", signalFile, "-n", noSignalFile, "-oc", dremeDir])
 
 	predictedDremeFile = dremeDir + "/" + "dreme.txt";
 	realKmersCsvFile = signalDirName + "/" + os.path.splitext(signalFileName)[0] + ".kmers"
@@ -70,11 +70,11 @@ def ComputeDremeResults(predictedDremeFile, realKmersCsvFile, signalFile, noSign
 
 	return sensitivity, ppv;
 
-def ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile):
+def ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile, numKmers):
 	#numTP, numFP, numFN = compareKmers.CompareKspectrumKmers(realKmersCsvFile, predictedKspectrumFile,
 		#signalFile, noSignalFile)
 	numTP, numFP, numFN = compareKmers.CompareKspectrumPredictedKmers(realKmersCsvFile, predictedKspectrumFile, 
-	signalFile, noSignalFile)
+	signalFile, noSignalFile, numKmers)
 
 	sensitivity, ppv = GetSensitivityAndPPV(numTP, numFP, numFN);
 
@@ -97,13 +97,26 @@ def RunDremeAndGetResults(signalFile, noSignalFile):
 
 	return dremeResultDir, realKmersCsvFile;
 
+def ComputeKspectrumResultForNumKmers(predictedKspectrumFile, realKmersCsvFile, kspectrumResultDir, signalFile, noSignalFile, numKmers):
+	sensitivity, ppv = ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile, numKmers);
+	kSpectrumResultFile = kspectrumResultDir + "/" + os.path.basename(signalFile) + "_kspectrum_" + str(numKmers) + ".results"
+	WriteResults(sensitivity, ppv, signalFile, kSpectrumResultFile)
+	print "K_SPECTRUM: ", str(sensitivity), str(ppv);
+	return kspectrumResultDir, realKmersCsvFile;
+
 def RunKspectrumAndGetResults(signalFile, noSignalFile):
 
 	predictedKspectrumFile, realKmersCsvFile, kspectrumResultDir = RunKspectrumKernel(signalFile, noSignalFile)
-	sensitivity, ppv = ComputeKspectrumResults(predictedKspectrumFile, realKmersCsvFile, signalFile, noSignalFile);
-	kSpectrumResultFile = kspectrumResultDir + "/" + os.path.basename(signalFile) + "_kspectrum.results"
-	WriteResults(sensitivity, ppv, signalFile, kSpectrumResultFile)
-	print "K_SPECTRUM: ", str(sensitivity), str(ppv);
+
+	numKmers = 25;
+	kspectrumResultDir, realKmersCsvFile = ComputeKspectrumResultForNumKmers(predictedKspectrumFile, realKmersCsvFile, kspectrumResultDir, signalFile, noSignalFile, numKmers);
+
+	numKmers = 50;
+	kspectrumResultDir, realKmersCsvFile = ComputeKspectrumResultForNumKmers(predictedKspectrumFile, realKmersCsvFile, kspectrumResultDir, signalFile, noSignalFile, numKmers);
+
+	numKmers = 100;
+	kspectrumResultDir, realKmersCsvFile = ComputeKspectrumResultForNumKmers(predictedKspectrumFile, realKmersCsvFile, kspectrumResultDir, signalFile, noSignalFile, numKmers);
+
 
 	return kspectrumResultDir, realKmersCsvFile;
 

@@ -44,6 +44,7 @@ def RunComputationalTools(directory):
 		kspectrumResultDir, realKmersCsvFile = RunComputationalMethods.RunKspectrumAndGetResults(signalFile, noSignalFile);
 		#RunComputationalMethods.CopyResults(signalFile, noSignalFile, realKmersCsvFile, dremeResultDir, kspectrumResultDir)
 
+
 if __name__ == "__main__":
 	import sys
 

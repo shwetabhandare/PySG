@@ -52,7 +52,6 @@ def ParseResultsAndGenerateGraph(path):
 	mycwd = os.chdir(path)
 	parseResults.GraphResults(".", title, xAxisTitle, index);
 	CopyGraphToTargetDir();
-
 	os.chdir(savedDir);
 
 def GetSubDirCount(path, map = {}):
@@ -90,12 +89,15 @@ def sensitivity_ppv_plot(ax, title, dremeMeanValues, dremeErrorValues, kspectrum
 	xValues = np.arange(len(dremeMeanValues))
 
 	eb1 = ax.errorbar(labels, dremeMeanValues, dremeErrorValues, fmt='', color='b')
-	eb2 = ax.errorbar(labels, kspectrumMeanValues, kspectrumErrorValues, fmt='', color='g')
-
+	#print kspectrumMeanValues[0], kspectrumErrorValues[0]
+	eb2 = ax.errorbar(labels, kspectrumMeanValues[0], kspectrumErrorValues[0], fmt='go', color='g')
+	#print kspectrumMeanValues[1], kspectrumErrorValues[1]
+	eb3 = ax.errorbar(labels, kspectrumMeanValues[1], kspectrumErrorValues[1], fmt='k^', color='r')
+	eb4 = ax.errorbar(labels, kspectrumMeanValues[2], kspectrumErrorValues[2], fmt='r--', color='y')
 	ax.set_xticks(labels)
 	ax.set_xticklabels(labels, fontdict=None, minor=False, size='small');
 
-	return eb1, eb2;
+	return eb1, eb2, eb3, eb4;
 
 def ngram_plot(title, posMeanValues, posErrorValues, negMeanValues, negErrorValues, threeUtrValues, labels, xLabel, yLabel, graphFileName):
 
@@ -165,12 +167,12 @@ def PlotSensitivityAndPPVGraphs(sensitivityDict, ppvDict, graphTitle, xAxisTitle
 
 	#Two subplots, the axes array is 1-d
 	fig, (ax1, ax2) = plt.subplots(nrows=2)
-	eb1, eb2 = sensitivity_ppv_plot(ax1, graphTitle + " on Sensitivity", sensDremeMeanValues, sensDremeErrorValues, sensKspectrumMeanValues, sensKspectrumErrorValues, labels, xAxisTitle, "Sensitivity");
-	eb1, eb2 = sensitivity_ppv_plot(ax2, graphTitle + " on PPV", ppvDremeMeanValues, ppvDremeErrorValues, ppvKspectrumMeanValues, ppvKspectrumErrorValues, labels, xAxisTitle, "PPV");	
+	eb1, eb2, eb3, eb4 = sensitivity_ppv_plot(ax1, graphTitle + " on Sensitivity", sensDremeMeanValues, sensDremeErrorValues, sensKspectrumMeanValues, sensKspectrumErrorValues, labels, xAxisTitle, "Sensitivity");
+	eb1, eb2, eb3, eb4= sensitivity_ppv_plot(ax2, graphTitle + " on PPV", ppvDremeMeanValues, ppvDremeErrorValues, ppvKspectrumMeanValues, ppvKspectrumErrorValues, labels, xAxisTitle, "PPV");	
 
 	ax2.set_xlabel(xAxisTitle)
 
-	plt.figlegend((eb1, eb2), ("DREME", "k-spectrum"), loc = 'lower right');
+	plt.figlegend((eb1, eb2, eb3, eb4), ("DREME", "k-spectrum-25", "k-spectrum-50", "k-spectrum-100"), loc = 'lower right');
 	plt.savefig(graphFileName);
 	plt.close(fig)
 

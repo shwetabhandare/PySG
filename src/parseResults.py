@@ -50,7 +50,9 @@ def appendResultsToGraphFile(filepath, label, sensitivityResultFile, ppvResultFi
 	if filepath.find("dreme") != -1:
 		suffix = "dreme";
 	elif filepath.find("kspectrum") != -1:
-		suffix = "kspectrum";
+		justFileName = os.path.basename(filepath)
+		#split of the file name returns ['Signal_100_256_100_HuR_ParClip1', 'pwm', 'fa_kspectrum_25', 'results']
+		suffix = justFileName.split(".")[2][3:];
 	else:
 		suffix = "";
 
@@ -66,7 +68,9 @@ def appendResultsToGraphFile(filepath, label, sensitivityResultFile, ppvResultFi
 
 def getToolArray(resultDict, index):
 	dremeDict = {}
-	kspectrumDict = {}
+	kspectrumDict_25 = {}
+	kspectrumDict_50 = {}
+	kspectrumDict_100 = {}
 
 	for key, value in resultDict.iteritems(): 
 		if key.find("dreme") != -1:
@@ -76,18 +80,32 @@ def getToolArray(resultDict, index):
 
 		elif key.find("kspectrum") != -1:
 			label = key.split("_")[index]
-			kspectrumDict[int(label)] = value;
+			if key.rfind("kspectrum_25") != -1:
+				kspectrumDict_25[int(label)] = value;
+			elif key.rfind("kspectrum_50") != -1:
+				kspectrumDict_50[int(label)] = value;
+				#print kspectrumDict_50
+			elif key.rfind("kspectrum_100") != -1:
+				kspectrumDict_100[int(label)] = value;
+
+	#print "100 dict: ", kspectrumDict_100
+	#print "50 dict: ", kspectrumDict_50
+	#print "25 dict: ", kspectrumDict_25
+
+			
+		
 			#print label, value;
 
 	#print "DREME values: ", dremeDict.values()
 	#print "kspectrum values: ", kspectrumDict.values()
 	dremeOd = collections.OrderedDict(sorted(dremeDict.items()))
-	kspectrumOd = collections.OrderedDict(sorted(kspectrumDict.items()))
-
+	kspectrum25Od = collections.OrderedDict(sorted(kspectrumDict_25.items()))
+	kspectrum50Od = collections.OrderedDict(sorted(kspectrumDict_50.items()))
+	kspectrum100Od = collections.OrderedDict(sorted(kspectrumDict_100.items()))
 	#print "DREME OD: ", dremeOd.values()
 	#print "kspectrum OD: ", kspectrumOd.values()
-
-	return dremeOd, kspectrumOd;
+	kspectrumOd_list = [kspectrum25Od, kspectrum50Od, kspectrum100Od]
+	return dremeOd, kspectrumOd_list;
 
 def writeAndSavePlot(fileName, title, xAxisTitle, index, labels, dremeMeanValues, kspectrumMeanValues, dremeErrorValues, kspectrumErrorValues):
 	import matplotlib
@@ -113,8 +131,11 @@ def writeAndSavePlot(fileName, title, xAxisTitle, index, labels, dremeMeanValues
 	
 	#plt.xticks(range(len(labels)), list(labels), rotation=90)
 	eb1 = plt.errorbar(labels, dremeMeanValues, dremeErrorValues, fmt='', color='b')
-	eb2 = plt.errorbar(labels, kspectrumMeanValues, kspectrumErrorValues, fmt='', color='g')
-	plt.legend([eb1, eb2], ['DREME', 'k-spectrum'])
+	eb2 = plt.errorbar(labels, kspectrumMeanValues[0], kspectrumErrorValues[0], fmt='', color='g')
+	eb3 = plt.errorbar(labels, kspectrumMeanValues[1], kspectrumErrorValues[1], fmt='', color='r')
+	eb4 = plt.errorbar(labels, kspectrumMeanValues[2], kspectrumErrorValues[2], fmt='', color='y')
+
+	plt.legend([eb1, eb2, eb3, eb4, eb5], ['DREME', 'k-spectrum-25', 'k-spectrum-50', 'k-spectrum-100'])
 	plt.savefig(fileName);
 	plt.close(fig)
 
@@ -142,7 +163,9 @@ def graphResults(fileName, resultDict, title, xAxisTitle, index):
 
 	stdDict = GetStdDeviationDict(resultDict)
 	meanDict = ComputeMeanAndStdError(resultDict)
-	dremeDict, kspectrumDict = getToolArray(meanDict, index);
+	dremeDict, kspectrumDictList = getToolArray(meanDict, index);
+
+	#print kspectrumDict;
 
 	labels = dremeDict.keys()
 
@@ -150,8 +173,18 @@ def graphResults(fileName, resultDict, title, xAxisTitle, index):
 	dremeErrorValues = [x[1] for x in dremeDict.values()]
 
 	#print "DREME  VALUES: ", dremeMeanValues, dremeErrorValues;
-	kspectrumMeanValues = [x[0] for x in kspectrumDict.values()]
-	kspectrumErrorValues = [x[1] for x in kspectrumDict.values()]	
+	kspectrum25MeanValues = [x[0] for x in kspectrumDictList[0].values()]
+	kspectrum25ErrorValues = [x[1] for x in kspectrumDictList[0].values()]	
+
+	kspectrum50MeanValues = [x[0] for x in kspectrumDictList[1].values()]
+	kspectrum50ErrorValues = [x[1] for x in kspectrumDictList[1].values()]	
+
+	kspectrum100MeanValues = [x[0] for x in kspectrumDictList[1].values()]
+	kspectrum100ErrorValues = [x[1] for x in kspectrumDictList[1].values()]	
+
+
+	kspectrumMeanValues = [kspectrum25MeanValues, kspectrum50MeanValues, kspectrum100ErrorValues]
+	kspectrumErrorValues = [kspectrum25ErrorValues, kspectrum50ErrorValues, kspectrum100ErrorValues]
 	#print "kspectrum  VALUES: ", kspectrumMeanValues, kspectrumErrorValues;
 
 	writeAndSavePlot(fileName, title, xAxisTitle, index, labels, dremeMeanValues, kspectrumMeanValues, dremeErrorValues, kspectrumErrorValues)
@@ -200,8 +233,8 @@ def getFileNameAndPrefixToGraph(filepath, subdir):
 
 	fileNameToGraph =  os.path.splitext(os.path.basename(filepath))[0]
 
-
 	fileNameToGraph = fileNameToGraph[7:]; # remove Signal_
+
 	fileNameToGraph = os.path.splitext(fileNameToGraph)[0]
 
 	allparts = splitall(subdir)
@@ -242,6 +275,7 @@ def ReadFileAndCreateDict(resultFile):
 		for rows in reader:
 			label = rows[0];
 			value = rows[1];
+			#print label, value;	
 			if label in resultDict:
 				resultDict[label].append(value)
 			else:
@@ -258,11 +292,21 @@ def GetMeanAndStdErrorValues(resultDict, index):
 	dremeErrorValues = [x[1] for x in dremeDict.values()]
 
 	#print "DREME  VALUES: ", dremeMeanValues, dremeErrorValues;
-	kspectrumMeanValues = [x[0] for x in kspectrumDict.values()]
-	kspectrumErrorValues = [x[1] for x in kspectrumDict.values()]		
+	kspectrum25MeanValues = [x[0] for x in kspectrumDict[0].values()]
+	kspectrum25ErrorValues = [x[1] for x in kspectrumDict[0].values()]		
+
+	kspectrum50MeanValues = [x[0] for x in kspectrumDict[1].values()]
+	kspectrum50ErrorValues = [x[1] for x in kspectrumDict[1].values()]		
+
+	kspectrum100MeanValues = [x[0] for x in kspectrumDict[2].values()]
+	kspectrum100ErrorValues = [x[1] for x in kspectrumDict[2].values()]		
 
 	labels = dremeDict.keys();
 
+	kspectrumMeanValues = [kspectrum25MeanValues, kspectrum50MeanValues, kspectrum100MeanValues]
+	kspectrumErrorValues = [kspectrum25ErrorValues, kspectrum50ErrorValues, kspectrum100ErrorValues]
+
+	#print kspectrumMeanValues, kspectrumErrorValues
 	return dremeMeanValues, dremeErrorValues, kspectrumMeanValues, kspectrumErrorValues, labels;
 
 def GetDictForResultFile(searchStr):
@@ -270,6 +314,7 @@ def GetDictForResultFile(searchStr):
 	for resultFile in glob.glob(searchStr):
 		#print "File to graph: ", resultFile;
 		result_dict = ReadFileAndCreateDict(resultFile)
+		#print "Result Dict: ", result_dict
 
 	return result_dict;
 

@@ -44,9 +44,9 @@ def CompareTextMotifKmers(realKmerDict, predictedKmers, posFile, negFile):
 		numTP, numFP, numFN = compareKmerCommon.GetTotalNumbers(realKmerDict,  posFile, negFile, None, None, predictedKmers)
 	return numTP, numFP, numFN;
 
-def CompareKspectrumPredictedKmers(realCsvFile, predictedKspectrumFile, posFile, negFile):
+def CompareKspectrumPredictedKmers(realCsvFile, predictedKspectrumFile, posFile, negFile, numKmers):
 	realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);
-	predictedKmerDict	= parseKspectrum.FindKspectrumKmers(predictedKspectrumFile, 100);
+	predictedKmerDict	= parseKspectrum.FindKspectrumKmers(predictedKspectrumFile, numKmers);
 	numTP = 0
 	numFP = 0
 	numFN = 0
