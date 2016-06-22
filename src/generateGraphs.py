@@ -88,12 +88,12 @@ def sensitivity_ppv_plot(ax, title, dremeMeanValues, dremeErrorValues, kspectrum
 	ax.set_title(title);
 	xValues = np.arange(len(dremeMeanValues))
 
-	eb1 = ax.errorbar(labels, dremeMeanValues, dremeErrorValues, fmt='', color='b')
+	eb1 = ax.errorbar(labels, dremeMeanValues, dremeErrorValues, fmt='', color='b', label="DREME")
 	#print kspectrumMeanValues[0], kspectrumErrorValues[0]
-	eb2 = ax.errorbar(labels, kspectrumMeanValues[0], kspectrumErrorValues[0], fmt='go', color='g')
+	eb2 = ax.errorbar(labels, kspectrumMeanValues[0], kspectrumErrorValues[0], fmt='', color='g', label="k-spectrum-25")
 	#print kspectrumMeanValues[1], kspectrumErrorValues[1]
-	eb3 = ax.errorbar(labels, kspectrumMeanValues[1], kspectrumErrorValues[1], fmt='k^', color='r')
-	eb4 = ax.errorbar(labels, kspectrumMeanValues[2], kspectrumErrorValues[2], fmt='r--', color='y')
+	eb3 = ax.errorbar(labels, kspectrumMeanValues[1], kspectrumErrorValues[1], fmt='', color='r', label="k-spectrum-50")
+	eb4 = ax.errorbar(labels, kspectrumMeanValues[2], kspectrumErrorValues[2], fmt='', color='y', label="k-spectrum-100")
 	ax.set_xticks(labels)
 	ax.set_xticklabels(labels, fontdict=None, minor=False, size='small');
 
@@ -172,7 +172,17 @@ def PlotSensitivityAndPPVGraphs(sensitivityDict, ppvDict, graphTitle, xAxisTitle
 
 	ax2.set_xlabel(xAxisTitle)
 
-	plt.figlegend((eb1, eb2, eb3, eb4), ("DREME", "k-spectrum-25", "k-spectrum-50", "k-spectrum-100"), loc = 'lower right');
+	handles_ax1, labels_ax1 = ax1.get_legend_handles_labels();
+	handles_ax1 = [h[0] for h in handles_ax1];
+
+	from matplotlib.font_manager import FontProperties
+
+	#plt.figlegend((eb1, eb2, eb3, eb4), ("DREME", "k-spectrum-25", "k-spectrum-50", "k-spectrum-100"), loc = 'lower right');
+	#ax1.legend([eb1, eb2, eb3, eb4], ["DREME", "k-spectrum-25", "k-spectrum-50", "k-spectrum-100"], loc = 'upper right')
+	fontP = FontProperties();
+	fontP.set_size('small');
+	#fig.legend([eb1, eb2, eb3, eb4], ["DREME", "k-spectrum-25", "k-spectrum-50", "k-spectrum-100"], prop = fontP)
+	fig.legend(handles_ax1, labels_ax1, loc = 'upper right')
 	plt.savefig(graphFileName);
 	plt.close(fig)
 

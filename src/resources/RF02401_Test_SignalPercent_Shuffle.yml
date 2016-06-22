@@ -7,4 +7,4 @@ signal:
    signalPercent: [10, 25, 50, 75, 100]
 nosignal:
    type: "shuffle"
-   fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_transcripts_Human.txt"
+   fastaFile: "/projects/bhandare/workspace/scripts/NegFileCreator/3UTR_5UTR_Transcripts_Human.fa"
