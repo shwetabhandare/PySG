@@ -84,8 +84,8 @@ def distribution_plot(ax, title, meanValues, errorValues, labels):
 def sensitivity_ppv_plot(ax, title, dremeMeanValues, dremeErrorValues, kspectrumMeanValues, kspectrumErrorValues, labels, xLabel, yLabel):
 
 	ax.set_ylabel(yLabel)
-	#ax.set_xlabel(xLabel)
-	ax.set_title(title);
+	ax.set_xlabel(xLabel)
+	#ax.set_title(title);
 	xValues = np.arange(len(dremeMeanValues))
 
 	eb1 = ax.errorbar(labels, dremeMeanValues, dremeErrorValues, fmt='', color='b', label="DREME")
@@ -123,7 +123,7 @@ def ngram_plot(title, posMeanValues, posErrorValues, negMeanValues, negErrorValu
 	ax.legend()
 	ax.set_ylabel(yLabel)
 	ax.set_xlabel(xLabel)
-	fig.suptitle("Comparison of N-gram distribution: 3'UTR vs Generated Files")
+	#fig.suptitle("Comparison of N-gram distribution: 3'UTR vs Generated Files")
 
 
 	plt.xticks(xValues, labels, rotation='vertical')
@@ -170,15 +170,12 @@ def PlotSensitivityAndPPVGraphs(sensitivityDict, ppvDict, graphTitle, xAxisTitle
 	eb1, eb2, eb3, eb4 = sensitivity_ppv_plot(ax1, graphTitle + " on Sensitivity", sensDremeMeanValues, sensDremeErrorValues, sensKspectrumMeanValues, sensKspectrumErrorValues, labels, xAxisTitle, "Sensitivity");
 	eb1, eb2, eb3, eb4= sensitivity_ppv_plot(ax2, graphTitle + " on PPV", ppvDremeMeanValues, ppvDremeErrorValues, ppvKspectrumMeanValues, ppvKspectrumErrorValues, labels, xAxisTitle, "PPV");	
 
-	ax2.set_xlabel(xAxisTitle)
+	#ax2.set_xlabel(xAxisTitle)
 
 	handles_ax1, labels_ax1 = ax1.get_legend_handles_labels();
 	handles_ax1 = [h[0] for h in handles_ax1];
 
 	from matplotlib.font_manager import FontProperties
-
-	#plt.figlegend((eb1, eb2, eb3, eb4), ("DREME", "k-spectrum-25", "k-spectrum-50", "k-spectrum-100"), loc = 'lower right');
-	#ax1.legend([eb1, eb2, eb3, eb4], ["DREME", "k-spectrum-25", "k-spectrum-50", "k-spectrum-100"], loc = 'upper right')
 	fontP = FontProperties();
 	fontP.set_size('small');
 	#fig.legend([eb1, eb2, eb3, eb4], ["DREME", "k-spectrum-25", "k-spectrum-50", "k-spectrum-100"], prop = fontP)

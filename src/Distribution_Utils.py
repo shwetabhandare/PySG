@@ -62,7 +62,7 @@ def GetNgramDistributionForFile(fastaFile, nLen):
 def Compute3UtrNgramDistibution(nLen=2):
 
 	three_utr_file_dir = "/projects/bhandare/workspace/scripts/NegFileCreator/";
-	three_utr_file = three_utr_file_dir + "/" + "3UTR_transcripts_Human.txt"
+	three_utr_file = three_utr_file_dir + "/" + "3UTR_5UTR_Transcripts_Human.fa"
 
 	threeUtrFreq, threeUtrProb = GetNgramDistributionForFile(three_utr_file, nLen);
 

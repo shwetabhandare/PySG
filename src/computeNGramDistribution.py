@@ -45,9 +45,9 @@ def ComputeMeanAndStdError(SignalNGramList):
 
 
 def ComputeNgramDistribution(dirName, nLen, graphName):
-	#three_utr_freq, three_utr_prob = Distribution_Utils.Compute3UtrNgramDistibution(nLen);
+	three_utr_freq, three_utr_prob = Distribution_Utils.Compute3UtrNgramDistibution(nLen);
 
-	three_utr_prob = {'AA': 0.0878, 'AC': 0.0478, 'GT': 0.0542, 'AG': 0.0674, 'CC': 0.0604, 'TT': 0.1023, 'CG': 0.0121, 'GG': 0.0567, 'GC': 0.0468, 'AT': 0.0693, 'GA': 0.0568, 'TG': 0.0781, 'CT': 0.073, 'CA': 0.0678, 'TC': 0.0583, 'TA': 0.0602}
+	#three_utr_prob = {'AA': 0.0878, 'AC': 0.0478, 'GT': 0.0542, 'AG': 0.0674, 'CC': 0.0604, 'TT': 0.1023, 'CG': 0.0121, 'GG': 0.0567, 'GC': 0.0468, 'AT': 0.0693, 'GA': 0.0568, 'TG': 0.0781, 'CT': 0.073, 'CA': 0.0678, 'TC': 0.0583, 'TA': 0.0602}
 	SignalFiles = GetFastaFiles(dirName, "Signal*.fa")
 	NoSignalFiles = GetFastaFiles(dirName, "NoSignal*.fa")
 
