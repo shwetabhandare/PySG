@@ -23,10 +23,16 @@ def getPSSMListFromDremeFile(dremeFile):
 	fileContents = str(read_file(dremeFile))
 	fileOffset = 0;
 	pssmLinesList = [];
+	numPSSMs = 0;
 	for match in pattern.finditer(fileContents[fileOffset:]):
+
+		#if numPSSMs > 5:
+		#	break;
 
 		lengthOfPSSM = match.group(2)
 		fileOffset = match.end();
+		numPSSMs = numPSSMs + 1;
+
 
 		pssmRe = "(\d.\d+\s+\d.\d+\s+\d.\d+\s+\d.\d+)"
 		pattern2 = re.compile(pssmRe);
@@ -45,7 +51,7 @@ def getPSSMListFromDremeFile(dremeFile):
 				pssmLinesList.append(pssmLines);
 				break;
 
-
+	print "Total PSSMs: ", numPSSMs;
 	return pssmLinesList;
 
 def getPredictedDremeMotifs(dremeFile):
