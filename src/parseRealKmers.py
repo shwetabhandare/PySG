@@ -5,16 +5,21 @@ def GetRealKmerDict(realKmersCsvFile):
 	with open(realKmersCsvFile, 'rb') as csvfile:
 		reader = csv.reader(csvfile)
 		for row in reader:
-			seq_id = row[0]
-			kmer = row[1]
-			location = row[2]
-			realKmersDict[seq_id] = [kmer, location];
+			if len(row) < 3:
+				print "Found invalid row:", row;
+			else:
+				seq_id = row[0]
+				kmer = row[1]
+				location = row[2]
+				realKmersDict[seq_id] = [kmer, location];
 	return realKmersDict;
 
 if __name__ == "__main__":
 	import sys
 	realKmersDict = GetRealKmerDict(sys.argv[1])
+	embeddedKmers = list();
 	for key, value in realKmersDict.iteritems():
-		print key;
-		for seqid, location in zip(value[0], value[1]):
-			print seqid, location;
+		#print key, value;
+		kmer = value[0]
+		embeddedKmers.append(kmer);
+	print "Unique Kmers embedded: ", set(embeddedKmers)

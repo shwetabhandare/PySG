@@ -106,19 +106,33 @@ def ngram_plot(title, posMeanValues, posErrorValues, negMeanValues, negErrorValu
 	
 	from matplotlib import pyplot as plt	
 	matplotlib.rcParams.update({'font.size': 8})
+	from matplotlib.ticker import FuncFormatter, MaxNLocator
 
-	threeUtrErrorValues = np.zeros(len(posErrorValues))	
+
+	threeUtrErrorValues = np.zeros(len(posErrorValues) + 1)	
 	fig = plt.figure()
 
 	plt.title(title);
 
+	posMeanValues.insert(0, 0)
+
 	xValues = np.arange(len(posMeanValues))
+	
 	print "X-Values: ", xValues, len(xValues);
 
+	posErrorValues.insert(0, 0)
+	negMeanValues.insert(0, 0)
+	negErrorValues.insert(0, 0)
+	threeUtrValues.insert(0, 0)
+
+
 	fig, (ax) = plt.subplots(nrows=1, ncols=1)
+	#ax.xaxis.set_major_formatter(FuncFormatter(format_fn))
+	ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+
 	eb1 = ax.errorbar(xValues, posMeanValues, yerr=posErrorValues, fmt='', color='b', label="Positive File")
 	eb2 = ax.errorbar(xValues, negMeanValues, yerr=negErrorValues, fmt='o', color='r', label="Negative File")
-	eb3  = ax.errorbar(xValues, threeUtrValues, yerr=threeUtrErrorValues, fmt='', color='g', label="3'UTR")
+	eb3  = ax.errorbar(xValues, threeUtrValues, yerr=threeUtrErrorValues, fmt='', color='g', label="3'UTR + 5'UTR")
 
 	ax.legend()
 	ax.set_ylabel(yLabel)

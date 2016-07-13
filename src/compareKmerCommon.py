@@ -24,15 +24,15 @@ def getNumbersAfterKmerComparison(startIndex, endIndex, predictedStart, seq, pre
 		predKmerIndex = predictedStart - startIndex;
 	else:
 		predKmerIndex = startIndex - predictedStart;
-	#print "Start Index: ", str(startIndex), ", End Index: ", str(endIndex)
+	print "Start Index: ", str(startIndex), ", End Index: ", str(endIndex)
 	for index in range(startIndex, endIndex):
-		#print seq[index], predKmer[predKmerIndex]
+		print seq[index], predKmer[predKmerIndex]
 		if seq[index] == predKmer[predKmerIndex]:
 			numTP = numTP + 1;
 		else:
 			numFP = numFP + 1;
 		predKmerIndex = predKmerIndex + 1;
-	#print "After KMER: TP: ", str(numTP), ", FP: " , str(numFP)
+	print "After KMER: TP: ", str(numTP), ", FP: " , str(numFP)
 
 	return numTP, numFP;
 
@@ -90,13 +90,13 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 
 		predictedStart, predictedEnd, predKmer  = getPredictedInfo(m);
 
-		#print "Predicted Kmer: ", predKmer, ", Predicted Start: ", str(predictedStart), ", End: ", str(predictedEnd), ", Real Start: ", str(realStart), ", Real End:", str(realEnd)
+		print "Predicted Kmer: ", predKmer, ", Predicted Start: ", str(predictedStart), ", End: ", str(predictedEnd), ", Real Start: ", str(realStart), ", Real End:", str(realEnd)
 		startIndex, startFP, startFN = getStartIndexAndUpdateNumbers(predictedStart, predictedEnd, realStart, realEnd, predKmer);
 
 		numFN = numFN + startFN;
 		numFP = numFP + startFP;
 
-		#print "Based on Start Location: FP: " , str(startFP), ", FN: ", str(startFN)
+		print "Based on Start Location: FP: " , str(startFP), ", FN: ", str(startFN)
 		endIndex = getEndIndex(predictedEnd, realEnd)	
 
 		# This can happen if the predicted kmer ends before the real kmer starts.
@@ -104,7 +104,7 @@ def getNumbersForSeq(kmerREString, realStart, realEnd, seq):
 			endIndex = startIndex;
 	
 		kmerTP, kmerFP = getNumbersAfterKmerComparison(startIndex, endIndex, predictedStart, seq, predKmer)
-		#print "After KMER TP: ", str(kmerTP), str(kmerFP)
+		print "After KMER TP: ", str(kmerTP), str(kmerFP)
 		
 		numTP = numTP + kmerTP
 		numFP = numFP + kmerFP
@@ -212,9 +212,9 @@ def getTotalNumbersForSeqDict(SeqDict, realKmerDict, pssmList, pwm, predictedMot
 		elif predictedKmerDict != None:
 			kmerREString = getPredictedKmerRE(predictedKmerDict)
 
-		#print "SEQ ID: ", seqid, "REAL KMER: ", realKmer, ", KMER RE: ", kmerREString;
+		print "SEQ ID: ", seqid, "REAL KMER: ", realKmer, ", KMER RE: ", kmerREString;
 		numTP, numFP, numFN = getTotalsForSeq(realKmer, realStart, realEnd, kmerREString, seq);
-		#print seqid, ": TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
+		print seqid, ": TP: ", str(numTP), ", FP: ", str(numFP), ", FN: ", str(numFN)
 
 		numTotalTP = numTotalTP + numTP;
 		numTotalFP = numTotalFP + numFP;

@@ -107,9 +107,10 @@ if __name__ == "__main__":
 	predictedDremeFile= sys.argv[2]
 	posFile = sys.argv[3]
 	negFile = sys.argv[4]
+	numKmers = int(sys.argv[5])
 	#textMotif = int(sys.argv[5])
 
-	numTP, numFP, numFN = CompareKspectrumPredictedKmers(realCsvFile, predictedDremeFile, posFile, negFile)
+	numTP, numFP, numFN = CompareKspectrumPredictedKmers(realCsvFile, predictedDremeFile, posFile, negFile, numKmers)
 	print "Num TP: ", str(numTP), ", Num FP: ", str(numFP), ", Num FN: ", str(numFN)
 	sensitivity, ppv = GetSensitivityAndPPV(numTP, numFP, numFN);
 	print sensitivity, ppv
