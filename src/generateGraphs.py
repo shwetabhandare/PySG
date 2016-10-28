@@ -27,11 +27,15 @@ def createTitleFromDirName(dirName):
 	elif fileNameTokens[2] == "SignalPercent":
 		index = 2;
 		xAxisTitle = "Signal Percent";
+	elif fileNameTokens[2] == "NumSeq":
+		index = 2;
+		xAxisTitle = "Number of Sequences";
 	else:
 		xAxisTitle = fileNameTokens[2];
 		index = 3;
 
 	title = fileNameTokens[0] + ": Effect of " + xAxisTitle;
+	print "Title: ", title, " Index: ", index;
 	return xAxisTitle, title, index;
 
 def CopyGraphToTargetDir():

@@ -6,7 +6,9 @@ import subprocess;
 def CreateNewYmlFiles(directory, copyPrefix, createPrefix, extension):
 	os.chdir(directory)
 	searchStr = copyPrefix + "*." + extension;
+	print searchStr
 	reStr = copyPrefix + "_" + "(.*)\." + extension;
+	print reStr;
 
 	for ymlFile in glob.glob(searchStr):
 		m = re.search(reStr, ymlFile);

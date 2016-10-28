@@ -55,5 +55,5 @@ if __name__ == "__main__":
 	generator.CreateConfFiles();
 	GenerateFastaFiles(targetDir);
 	RunComputationalTools(targetDir);
-	#ParseResultsAndGenerateGraphs(targetDir)
+	ParseResultsAndGenerateGraphs(targetDir)
 

@@ -2,13 +2,14 @@ import re
 import string
 import sys
  
-def main():
-	file = open(sys.argv[1], "r")
+
+def getNucleotideComposition(file):
+	seqFile = open(file, "r")
 	gcCount = 0
 	atCount = 0
 	aCount = gCount = cCount = uCount = 0;
 	totalBaseCount = 0
-	for line in file:
+	for line in seqFile:
 		line = line.strip("\n")
 		if not line.startswith(">"):
 			gcCount += len(re.findall("[GC]", line))
@@ -19,6 +20,7 @@ def main():
 			gCount += len(re.findall("[G]", line))
 			totalBaseCount += len(re.findall("[GCTA]", line))
 
+	#print "Total Base count: ", totalBaseCount;
 	gcFraction = float(gcCount) / totalBaseCount
 	atFraction = float(atCount) / totalBaseCount
 
@@ -30,10 +32,16 @@ def main():
 	print "AT Content: " + str(atFraction * 100);
 	print "GC Content: " + str(gcFraction * 100);
 
-	print "A Content: " + str(aFraction * 100);
-	print "U Content: " + str(uFraction * 100);
-	print "G Content: " + str(gFraction * 100);
-	print "C Content: " + str(cFraction * 100);
+	#print "A Content: " + str(aFraction * 100);
+	#print "U Content: " + str(uFraction * 100);
+	#print "G Content: " + str(gFraction * 100);
+	#print "C Content: " + str(cFraction * 100);
+
+	return gcFraction * 100, atFraction * 100;
+	
+def main():
+	gcContent, atContent = getNucleotideComposition(file);
+	#print gcContent, atContent;
 
 
 if __name__ == '__main__':

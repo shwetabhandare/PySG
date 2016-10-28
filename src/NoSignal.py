@@ -64,9 +64,11 @@ def CreateNoSignalSequences(NegSequences, NegHeaders, NumSeqsToGenerate,
 			endPoint = startPoint + SeqLength;
 
 		selectedNucs = allNucs[startPoint:endPoint];
-		#l = list(str(selectedNucs))
-		#random.shuffle(l)
-		#shuffledNucs = ''.join(l);
+
+		l = list(str(selectedNucs))
+		random.shuffle(l)
+		shuffledNucs = ''.join(l);
+
 		NegSeqDict[NegHeaders[index]] = selectedNucs;
 	return NegSeqDict;
 

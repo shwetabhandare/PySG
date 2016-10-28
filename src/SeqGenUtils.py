@@ -10,6 +10,23 @@ np.set_printoptions(precision=2)
 def weightedchoice(items): # this doesn't require the numbers to add up to 100
 	return choice("".join(x * y for x, y in items))
 
+def createFastaFileFromKmers(kmerList, faPrefix):
+   counter = 0;
+   new_lines = "";
+
+   for kmer in kmerList:
+      add_line = ">" + faPrefix + str(counter) + "\n"
+      new_lines = new_lines + add_line
+      new_lines = new_lines + kmer  + "\n";
+      counter = counter + 1
+
+   return new_lines;
+
+def writeFastaLinesToFile(kmerFastaLines, outFile):
+	f1 = open(outFile, "w")
+	for line in kmerFastaLines:
+		f1.write(line)
+	f1.close();
 def ChangeUsToTs(seq_dict):
 	for header, sequence in seq_dict.iteritems():
 		sequence = sequence.upper().replace('U', 'T');

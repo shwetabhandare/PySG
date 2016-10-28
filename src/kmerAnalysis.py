@@ -68,11 +68,6 @@ def addFastaHeaderToKmers(kmerDict, faPrefix):
 
    return new_lines;
 
-def writeFastaLinesToFile(kmerFastaLines, outFile):
-	f1 = open(outFile, "w")
-	for line in kmerFastaLines:
-		f1.write(line)
-	f1.close();
 
 if __name__ == "__main__":
 	import sys
@@ -85,8 +80,8 @@ if __name__ == "__main__":
 	HuR_ReString = '[^-](\d+\.\d+)\,HuR_([ATGC]+)'
 	TTP_ReString = '[^-](\d+\.\d+)\,TTP_([ATGC]+)'
 
-	HuRKmerDict = parseKspectrum.FindRBPSpecificKmers(featureFile, HuR_ReString, 200);
-	TTPKmerDict = parseKspectrum.FindRBPSpecificKmers(featureFile, TTP_ReString, 200);
+	HuRKmerDict = parseKspectrum.FindRBPSpecificKmers(featureFile, HuR_ReString, numKmers);
+	TTPKmerDict = parseKspectrum.FindRBPSpecificKmers(featureFile, TTP_ReString, numKmers);
 
 
 	kmerFastaLines = addFastaHeaderToKmers(kmerDict, "FeatureKmer")
@@ -98,9 +93,9 @@ if __name__ == "__main__":
 	HuR_Filename = filename_prefix + "_HuR" + filename_ext;
 	TTP_Filename = filename_prefix + "_TTP" + filename_ext;
 
-	writeFastaLinesToFile(kmerFastaLines, sequenceFile)
-	writeFastaLinesToFile(HuRFastaLines, HuR_Filename)
-	writeFastaLinesToFile(TTPFastaLines, TTP_Filename)
+	SeqGenUtils.writeFastaLinesToFile(kmerFastaLines, sequenceFile)
+	SeqGenUtils.writeFastaLinesToFile(HuRFastaLines, HuR_Filename)
+	SeqGenUtils.writeFastaLinesToFile(TTPFastaLines, TTP_Filename)
 	# topKmerFile = sys.argv[1]
 	# signalType = sys.argv[2] ## PWM or PFM
 	# signalFile = sys.argv[3]

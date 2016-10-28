@@ -10,7 +10,7 @@ def read_file(dreme_file):
 
 def findKmers(file_contents, maxKmers=None):
 	kmerDict = dict();
-	pattern2 = re.compile('[^-](\d+\.\d+)\,([ATGC]+)');
+	pattern2 = re.compile('[^-](\d+\.\d+)\,([HuR_|TTP_|ATGC]+)');
 	kmerCount = 0;
 	for match2 in pattern2.finditer(file_contents):
 		kmer_score = match2.group(1);
