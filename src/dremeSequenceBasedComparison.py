@@ -36,12 +36,14 @@ def compareRealAndPredicted(realKmerDict, seqDict, pssmList):
 
 if __name__ == "__main__":
 	import sys
-	seqFile = sys.argv[1]
-	dremeFile = sys.argv[2]
-	realCsvFile = sys.argv[3]
+	seqFile = sys.argv[2]
+	dremeFile = sys.argv[1]
+	#realCsvFile = sys.argv[3]
 
-	realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);
+	#realKmerDict = parseRealKmers.GetRealKmerDict(realCsvFile);
 	seqDict  = SeqGenUtils.fasta_read(seqFile);
 	pssmList = parseDreme.getPSSMListFromDremeFile(dremeFile)
+	for seqid, seq in seqDict.iteritems():
+		bestKmer = compareKmerCommon.getKmerFromPSSM(pssmList, seq)
 
-	numTP, numFP, numFN = compareRealAndPredicted(realKmerDict, seqDict, pssmList)
+	#numTP, numFP, numFN = compareRealAndPredicted(realKmerDict, seqDict, pssmList)

@@ -26,8 +26,8 @@ def getPSSMListFromDremeFile(dremeFile):
 	numPSSMs = 0;
 	for match in pattern.finditer(fileContents[fileOffset:]):
 
-		if numPSSMs > 5:
-			break;
+		#if numPSSMs > 5:
+		#	break;
 
 		lengthOfPSSM = match.group(2)
 		fileOffset = match.end();
