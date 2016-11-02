@@ -28,7 +28,7 @@ def compareRealAndPredicted(realKmerDict, seqDict, pssmList):
 			numFN = numFN + 1;
 			numFP = numFP + numPredictedKmers;
 		else:
-			numTP = numTP + numMatchingKmers;
+			numTP = numTP + 1; # should this be incremented by numMatchingKmers?
 			numFP = numFP + (numPredictedKmers - numMatchingKmers);
 		print "TP: ", numTP, ", FP: ", numFP, ", FN: ", numFN
 	return numTP, numFP, numFN;
