@@ -87,6 +87,13 @@ def CompareDremeKmers(realCsvFile, predictedDremeFile, posFile, negFile, textMot
 	
 	return numTP, numFP, numFN;
 
+def GetAccuracy(numTP, numTN, total):
+	if ((numTP + numTN) == 0):
+		accuracy = 0;
+	else:
+		accuracy = (numTP + numTN) / total;
+
+	return accuracy;
 
 def GetSensitivityAndPPV(numTP, numFP, numFN):
 	if ((numTP + numFN) == 0):

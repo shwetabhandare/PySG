@@ -30,8 +30,14 @@ def GetKmerFromMotifFromPWM(pwm, seq):
 	motif = MotifTools.Motif_from_counts(m)
 	return motif.bestscanseq(seq);
 
+
+def GetMaxMotifScore(lines):
+	motif = Read_Dreme_PSSM(lines);
+	return motif.maxscore;
+
 def GetKmerFromMotifFromPSSM(lines, seq):
 	motif = Read_Dreme_PSSM(lines);
+	#print "Max score: ", str(motif.maxscore);
 	return motif.bestscanseq(seq);
 
 def Read_PWM(filename):

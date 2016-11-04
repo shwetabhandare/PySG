@@ -148,13 +148,14 @@ def getKmerFromPWM(pwm, seq):
 def getKmerAndScoreFromPSSM(pssmList, seq):
 	outStr = ""
 	for pssmLines in pssmList:
+		maxMotifScore = TAMO_Motif.GetMaxMotifScore(pssmLines);
 		bestSeqKmerTuple = TAMO_Motif.GetKmerFromMotifFromPSSM(pssmLines, seq);
 		kmer = bestSeqKmerTuple[1]
 		kmerScore = bestSeqKmerTuple[0]
-		outStr = outStr + kmer + "," + str(kmerScore)
+		outStr = outStr + kmer + "," + str(kmerScore) + "," + str(maxMotifScore)
 		outStr = outStr + '|'
 	outStr = outStr[:-1]
-	print "KMER SCORE STRING: ", outStr
+	#print "KMER SCORE STRING: ", outStr
 	return outStr;
 
 def getKmerFromPSSM(pssmList, seq):
