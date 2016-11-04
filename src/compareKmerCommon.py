@@ -164,7 +164,7 @@ def getKmerFromPSSM(pssmList, seq):
 		bestSeqKmerTuple = TAMO_Motif.GetKmerFromMotifFromPSSM(pssmLines, seq);
 		kmer = bestSeqKmerTuple[1]
 		kmerScore = bestSeqKmerTuple[0]
-		print "Kmer: ", kmer, ", best score: ", kmerScore
+		#print "Kmer: ", kmer, ", best score: ", kmerScore
 		kmerReToSearchFor = kmerReToSearchFor + kmer
 		kmerReToSearchFor = kmerReToSearchFor + '|'
 	kmerReToSearchFor = kmerReToSearchFor[:-1]

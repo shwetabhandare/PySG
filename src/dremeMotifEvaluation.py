@@ -88,8 +88,9 @@ if __name__ == "__main__":
 	totalNeg, numNegTP, numNegFP, numNegFN, numNegTN = computeNumbersForSequence(dremeFile, negSeqFile, thresholdPercent, False)
 	sensitivity, ppv = compareKmers.GetSensitivityAndPPV((numPosTP + numNegTP) , (numPosFP + numNegFP), (numPosFN + numNegFN))
 	accuracy = compareKmers.GetAccuracy( (numPosTP + numNegTP), (numPosTN + numNegTN),  (totalPos + totalNeg) )
+	specificity = compareKmers.GetSpecificity( (numPosFP + numNegFP), totalNeg);
 
-	print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy;
+	print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy, ", Specificity: ", specificity;
 
 
 

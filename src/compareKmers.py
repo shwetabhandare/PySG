@@ -95,6 +95,14 @@ def GetAccuracy(numTP, numTN, total):
 
 	return accuracy;
 
+def GetSpecificity(numFP, totalNeg):
+	if numFP == 0:
+		specificity = 0;
+	else:
+		specificity = numFP / totalNeg;
+
+	return specificity;
+
 def GetSensitivityAndPPV(numTP, numFP, numFN):
 	if ((numTP + numFN) == 0):
 		sensitivity = 0;
