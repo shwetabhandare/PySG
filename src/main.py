@@ -32,7 +32,7 @@ def GenerateFastaFiles(directory):
 		# Shuffle the sequences to generate negative set.
 		NegSeqDict = ShuffleToCreateNoSignalSequences(PosSeqDict, confFile);
 
-def RunComputationalTools(directory):
+def RunComputationalTools(directory, ntBased=True):
 	os.chdir(directory)
 	for signalFile in findFiles(directory, "Signal*.fa"):
 		dirName = os.path.dirname(signalFile);
@@ -40,8 +40,8 @@ def RunComputationalTools(directory):
 		noSignalFile = dirName + "/No" + signalFileName;
 		
 		print "Signal File: ", signalFileName
-		dremeResultDir, realKmersCsvFile = RunComputationalMethods.RunDremeAndGetResults(signalFile, noSignalFile);
-		kspectrumResultDir, realKmersCsvFile = RunComputationalMethods.RunKspectrumAndGetResults(signalFile, noSignalFile);
+		dremeResultDir, realKmersCsvFile = RunComputationalMethods.RunDremeAndGetResults(signalFile, noSignalFile, ntBased);
+		kspectrumResultDir, realKmersCsvFile = RunComputationalMethods.RunKspectrumAndGetResults(signalFile, noSignalFile, ntBased);
 		#RunComputationalMethods.CopyResults(signalFile, noSignalFile, realKmersCsvFile, dremeResultDir, kspectrumResultDir)
 
 
@@ -49,11 +49,15 @@ if __name__ == "__main__":
 	import sys
 
 	confFile = sys.argv[1];
+	if len(sys.argv) == 1
+		ntBased = True
+	else:
+		ntBased = False
 	uuid_to_append = str(uuid.uuid4())
 	generator = YamlFastaGenerator(confFile, uuid_to_append);
 	targetDir = generator.GetTargetDir();
 	generator.CreateConfFiles();
 	GenerateFastaFiles(targetDir);
-	RunComputationalTools(targetDir);
-	ParseResultsAndGenerateGraphs(targetDir)
+	RunComputationalTools(targetDir, ntBased);
+	#ParseResultsAndGenerateGraphs(targetDir)
 
