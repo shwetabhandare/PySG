@@ -4,4 +4,5 @@
 #SBATCH --output lin28_test_shuffle.out
 #SBATCH --qos crestone
 #SBATCH --time 48:00:00
-srun lb lin28_run_shuffle.sh
+#srun lb lin28_run_shuffle.sh
+srun lb lin28_run_shuffle_seqbased.sh

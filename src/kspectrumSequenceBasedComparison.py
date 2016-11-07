@@ -50,8 +50,8 @@ def computeSequenceBasedKspectrumResults(predictedFile, realCsvFile, posSeqFile,
 	numPosTP, numPosFP, numPosFN, numPosTN = compareRealAndPredicted(realKmerDict, posSeqDict, predictedKmerList, positive=True)
 	numNegTP, numNegFP, numNegFN, numNegTN = compareRealAndPredicted(realKmerDict, negSeqDict, predictedKmerList, False)
 
-	print "Positive: TP: ", numPosTP, ", FP: ", numPosFP, ", FN: ", numPosFN, ", TN: ", numPosTN
-	print "Negative: TP: ", numNegTP, ", FP: ", numNegFP, ", FN: ", numNegFN, ", TN: ", numNegTN
+	#print "Positive: TP: ", numPosTP, ", FP: ", numPosFP, ", FN: ", numPosFN, ", TN: ", numPosTN
+	#print "Negative: TP: ", numNegTP, ", FP: ", numNegFP, ", FN: ", numNegFN, ", TN: ", numNegTN
 
 	totalPos = len(posSeqDict)
 	totalNeg = len(negSeqDict)
@@ -60,7 +60,7 @@ def computeSequenceBasedKspectrumResults(predictedFile, realCsvFile, posSeqFile,
 	accuracy = compareKmers.GetAccuracy( (numPosTP + numNegTP), (numPosTN + numNegTN),  (totalPos + totalNeg) )
 	specificity = compareKmers.GetSpecificity( (numPosFP + numNegFP), totalNeg);
 
-	print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy, ", Specificity: ", specificity;
+	#print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy, ", Specificity: ", specificity;
 	return sensitivity, ppv;	
 
 if __name__ == "__main__":

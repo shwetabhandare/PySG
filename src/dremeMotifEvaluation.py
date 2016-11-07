@@ -73,7 +73,7 @@ def computeNumbersForSequence(dremeFile, seqFile, thresholdPercent, positive=Tru
 		totalFP = totalFP + numFP
 		totalTN = totalTN + numTN
 
-	print "Total TP: ", totalTP, ", Total FP: ", totalFP, ", Total FN: ", totalFN, ", Total TN:", totalTN
+	#print "Total TP: ", totalTP, ", Total FP: ", totalFP, ", Total FN: ", totalFN, ", Total TN:", totalTN
 	return totalExamples, totalTP, totalFP, totalFN, totalTN;
 
 if __name__ == "__main__":
@@ -90,7 +90,7 @@ if __name__ == "__main__":
 	accuracy = compareKmers.GetAccuracy( (numPosTP + numNegTP), (numPosTN + numNegTN),  (totalPos + totalNeg) )
 	specificity = compareKmers.GetSpecificity( (numPosFP + numNegFP), totalNeg);
 
-	print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy, ", Specificity: ", specificity;
+	#print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy, ", Specificity: ", specificity;
 
 
 

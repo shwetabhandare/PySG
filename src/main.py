@@ -49,7 +49,7 @@ if __name__ == "__main__":
 	import sys
 
 	confFile = sys.argv[1];
-	if len(sys.argv) == 1
+	if len(sys.argv) == 1:
 		ntBased = True
 	else:
 		ntBased = False
