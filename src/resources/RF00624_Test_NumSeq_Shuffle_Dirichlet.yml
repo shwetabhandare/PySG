@@ -1,0 +1,10 @@
+targetDir: "/lustre/janus_scratch/bhandare/PySG/benchmark_output/Lin28_Test_NumSeq_Dirichlet"
+numSeq: [512]
+seqLen: [128, 256, 512, 1024]
+signal:
+   type: "structure"
+   structureFiles: ["/projects/bhandare/workspace/PySG/data/rfam/RF00037.fa"]
+   signalPercent: [100]
+nosignal:
+   type: "dirichlet"
+   alpha: [512]
