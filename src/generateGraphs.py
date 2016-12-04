@@ -93,9 +93,10 @@ def sensitivity_ppv_plot(ax, title, dremeMeanValues, dremeErrorValues, kspectrum
 	xValues = np.arange(len(dremeMeanValues))
 
 	eb1 = ax.errorbar(labels, dremeMeanValues, dremeErrorValues, fmt='', color='b', label="DREME")
-	#print kspectrumMeanValues[0], kspectrumErrorValues[0]
+	print kspectrumMeanValues[0], kspectrumErrorValues[0]
 	eb2 = ax.errorbar(labels, kspectrumMeanValues[0], kspectrumErrorValues[0], fmt='', color='g', label="k-spectrum-25")
-	#print kspectrumMeanValues[1], kspectrumErrorValues[1]
+	print kspectrumMeanValues[1], kspectrumErrorValues[1]
+	print kspectrumMeanValues[2], kspectrumErrorValues[2]
 	eb3 = ax.errorbar(labels, kspectrumMeanValues[1], kspectrumErrorValues[1], fmt='', color='r', label="k-spectrum-50")
 	eb4 = ax.errorbar(labels, kspectrumMeanValues[2], kspectrumErrorValues[2], fmt='', color='y', label="k-spectrum-100")
 	ax.set_xticks(labels)

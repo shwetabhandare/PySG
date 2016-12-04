@@ -228,7 +228,9 @@ class YamlFastaGenerator():
 					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, motif, folderCreated);
 
 			elif self.signalType == "kmers":
+				print "Found k-mers"
 				for kmer in self.kmers:
+					print "Found Kmer: ", kmer
 					folderCreated = self.UseParamsAndWriteYamlFile(location, numSeq, seqLen, alpha, signalPercent, kmer, folderCreated);
 			elif self.signalType == "structure":
 				for structureFile in self.structureFiles:
@@ -286,7 +288,8 @@ class YamlFastaGenerator():
 		elif self.signalType == "textMotif":
 			data["textMotif"] = signalValue;
 		elif self.signalType == "kmers":
-			data["kmer"] = signalValue;
+			if signalValue != "":
+				data["kmer"] = signalValue;
 		elif self.signalType == "structure":
 			data["structureFile"] = self.structureFileDir + "/" + signalValue;
 		else:

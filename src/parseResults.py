@@ -80,12 +80,12 @@ def getToolArray(resultDict, index):
 
 		elif key.find("kspectrum") != -1:
 			label = key.split("_")[index]
-			if key.rfind("kspectrum_25") != -1:
+			if key.rfind("kspectrum_10") != -1:
 				kspectrumDict_25[int(label)] = value;
-			elif key.rfind("kspectrum_50") != -1:
+			elif key.rfind("kspectrum_15") != -1:
 				kspectrumDict_50[int(label)] = value;
 				#print kspectrumDict_50
-			elif key.rfind("kspectrum_100") != -1:
+			elif key.rfind("kspectrum_25") != -1:
 				kspectrumDict_100[int(label)] = value;
 
 	#print "100 dict: ", kspectrumDict_100
@@ -161,18 +161,19 @@ def GetStdDeviationDict(resultDict):
 def graphResults(fileName, resultDict, title, xAxisTitle, index):
 
 
+	print resultDict
 	stdDict = GetStdDeviationDict(resultDict)
 	meanDict = ComputeMeanAndStdError(resultDict)
 	dremeDict, kspectrumDictList = getToolArray(meanDict, index);
 
-	#print kspectrumDict;
+	#print dremeDict
 
 	labels = dremeDict.keys()
 
 	dremeMeanValues = [x[0] for x in dremeDict.values()]
 	dremeErrorValues = [x[1] for x in dremeDict.values()]
 
-	#print "DREME  VALUES: ", dremeMeanValues, dremeErrorValues;
+	print "DREME  VALUES: ", dremeMeanValues, dremeErrorValues;
 	kspectrum25MeanValues = [x[0] for x in kspectrumDictList[0].values()]
 	kspectrum25ErrorValues = [x[1] for x in kspectrumDictList[0].values()]	
 
@@ -185,7 +186,7 @@ def graphResults(fileName, resultDict, title, xAxisTitle, index):
 
 	kspectrumMeanValues = [kspectrum25MeanValues, kspectrum50MeanValues, kspectrum100ErrorValues]
 	kspectrumErrorValues = [kspectrum25ErrorValues, kspectrum50ErrorValues, kspectrum100ErrorValues]
-	#print "kspectrum  VALUES: ", kspectrumMeanValues, kspectrumErrorValues;
+	print "kspectrum  VALUES: ", kspectrumMeanValues, kspectrumErrorValues;
 
 	writeAndSavePlot(fileName, title, xAxisTitle, index, labels, dremeMeanValues, kspectrumMeanValues, dremeErrorValues, kspectrumErrorValues)
 
@@ -324,6 +325,8 @@ def createDataToGraph(resultDir):
 
 	searchStr = resultDir + "/sensitivity_graph.csv"
 	sensitivity_dict = GetDictForResultFile(searchStr)
+
+	#print sensitivity_dict, ppv_dict
 
 	return sensitivity_dict, ppv_dict;
 

@@ -6,35 +6,29 @@ import compareKmerCommon
 import compareKmers
 
 
-def isRealKmerInPredictedKmerList(realKmer, predictedKmerList):
-	matching = [s for s in predictedKmerList if realKmer in s]
-	#print "Predicted K-mers: ", predictedKmerList, ", Matching Kmer: ", matching
-
-	return matching, len(predictedKmerList)
 
 def compareRealAndPredicted(realKmerDict, seqDict, predictedKmerList, positive=True):
-	numFN = numTP = numFP = numTN = 0;
+	totalFN = totalTP = totalFP = totalTN = 0;
+	kmerEmbedded = True;
 
 	for seqid, seq in seqDict.iteritems():
 		realKmer, realStart, realEnd = compareKmerCommon.getRealKmerDetails(realKmerDict, seqid);
 
 		#print "===== Seq ID: ", seqid, ": EMBEDDED K-MER: ", realKmer, ", PREDICTED LIST: ", predictedKmerList
-		matchingKmers, numPredictedKmers = isRealKmerInPredictedKmerList(realKmer, predictedKmerList)
-		numMatchingKmers = len(matchingKmers)
+		if realKmer == "" and realStart == 0 and realEnd == 0:
+			#print "Sequence ID: ", seqid , " should be treated like a negative."
+			kmerEmbedded = False;
 
-		if positive:
-			if numMatchingKmers == 0: #no predicted k-mers matched real kmer.
-				numFN = numFN + 1;
-			else:
-				numTP = numTP + 1; # should this be incremented by numMatchingKmers?
-		else:
-			if numMatchingKmers == 0: #no predicted k-mers matched real kmer.
-				numTN = numTN + 1;
-			else:
-				numFP = numFP + 1; # should this be incremented by numMatchingKmers?
-		#print "TP: ", numTP, ", FP: ", numFP, ", FN: ", numFN, ", numTN: ", numTN
+		kmerFoundInSeq = compareKmerCommon.isRealKmerInPredictedKmerList(realKmer, predictedKmerList)
+		numTP, numFP, numFN, numTN = compareKmerCommon.getNumbers(kmerFoundInSeq, kmerEmbedded, positive);
+		totalTP = totalTP + numTP;
+		totalFP = totalFP + numFP;
+		totalFN = totalFN + numFN;
+		totalTN = totalTN + numTN;
 
-	return numTP, numFP, numFN, numTN;
+		print "TP: ", numTP, ", FP: ", numFP, ", FN: ", numFN, ", numTN: ", numTN
+
+	return totalTP, totalFP, totalFN, totalTN;
 
 
 def computeSequenceBasedKspectrumResults(predictedFile, realCsvFile, posSeqFile, negSeqFile, numKmers):
@@ -47,11 +41,11 @@ def computeSequenceBasedKspectrumResults(predictedFile, realCsvFile, posSeqFile,
 	predictedKmerDict	= parseKspectrum.FindKspectrumKmers(predictedFile, numKmers);
 	predictedKmerList = predictedKmerDict.keys();
 
-	numPosTP, numPosFP, numPosFN, numPosTN = compareRealAndPredicted(realKmerDict, posSeqDict, predictedKmerList, positive=True)
+	numPosTP, numPosFP, numPosFN, numPosTN = compareRealAndPredicted(realKmerDict, posSeqDict, predictedKmerList, True)
 	numNegTP, numNegFP, numNegFN, numNegTN = compareRealAndPredicted(realKmerDict, negSeqDict, predictedKmerList, False)
 
-	#print "Positive: TP: ", numPosTP, ", FP: ", numPosFP, ", FN: ", numPosFN, ", TN: ", numPosTN
-	#print "Negative: TP: ", numNegTP, ", FP: ", numNegFP, ", FN: ", numNegFN, ", TN: ", numNegTN
+	print "Positive: TP: ", numPosTP, ", FP: ", numPosFP, ", FN: ", numPosFN, ", TN: ", numPosTN
+	print "Negative: TP: ", numNegTP, ", FP: ", numNegFP, ", FN: ", numNegFN, ", TN: ", numNegTN
 
 	totalPos = len(posSeqDict)
 	totalNeg = len(negSeqDict)
@@ -60,7 +54,7 @@ def computeSequenceBasedKspectrumResults(predictedFile, realCsvFile, posSeqFile,
 	accuracy = compareKmers.GetAccuracy( (numPosTP + numNegTP), (numPosTN + numNegTN),  (totalPos + totalNeg) )
 	specificity = compareKmers.GetSpecificity( (numPosFP + numNegFP), totalNeg);
 
-	#print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy, ", Specificity: ", specificity;
+	print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy, ", Specificity: ", specificity;
 	return sensitivity, ppv;	
 
 if __name__ == "__main__":

@@ -9,6 +9,37 @@ def getPredictedKmerDict(dremeResultFile):
 def getReadKmerDict(realKmersCsvFile):
 	return GetRealKmerDict(realKmersCsvFile)
 
+def getNumbers(kmerFoundInSeq, kmerEmbedded, positive):
+	numFN = numTP = numFP = numTN = 0;
+	if positive:
+		if kmerEmbedded == False: #no k-mer is embedded in the sequence.
+			if kmerFoundInSeq == False:  #no predicted k-mers matched real kmer.
+				numTP = numTP + 1;
+			else:
+				numFP = numFP + 1; 
+		else:
+			#Positive sequence, but we embedded a k-mer
+			if kmerFoundInSeq == True:  #Found k-mer(s) in the embedded sequence
+				numTP = numTP + 1;
+			else:
+				numFN = numFN + 1; # should this be incremented by numMatchingKmers?
+	else:
+		if kmerFoundInSeq == False:  #no predicted k-mers matched real kmer.
+			numTN = numTN + 1;
+		else:
+			numFP = numFP + 1; # should this be incremented by numMatchingKmers?
+
+	return numTP, numFP, numFN, numTN;
+
+def isRealKmerInPredictedKmerList(realKmer, predictedKmerList):
+	for predKmer in predictedKmerList:
+		if len(predKmer) > len(realKmer):
+			if realKmer in predKmer:
+				return True;
+		else:
+			if predKmer in realKmer:
+				return True;
+	return False
 
 def getKmerLengthFromREString(kmerREString):
 	kmers = kmerREString.split('|')

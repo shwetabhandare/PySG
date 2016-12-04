@@ -58,6 +58,6 @@ if __name__ == "__main__":
 	targetDir = generator.GetTargetDir();
 	generator.CreateConfFiles();
 	GenerateFastaFiles(targetDir);
-	RunComputationalTools(targetDir, ntBased);
+	#RunComputationalTools(targetDir, ntBased);
 	#ParseResultsAndGenerateGraphs(targetDir)
 

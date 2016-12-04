@@ -6,38 +6,34 @@ import compareKmerCommon
 import compareKmers
 
 
-def isRealKmerInREString(realKmer, kmerREString):
+def getPredictedKmerList(pssmList, seq):
+	kmerREString = compareKmerCommon.getKmerFromPSSM(pssmList, seq);
 	kmerREString = kmerREString[1:-1]
-	predictedKmers = kmerREString.split("|")
-	matching = [s for s in predictedKmers if realKmer in s]
-	#print "Predicted K-mers: ", predictedKmers, ", Matching Kmer: ", matching
+	predictedKmerList = kmerREString.split("|")
 
-	return matching, len(predictedKmers)
+	return predictedKmerList;
 
 def compareRealAndPredicted(realKmerDict, seqDict, pssmList, positive=True):
-	numFN = numTP = numFP = numTN = 0;
+	totalFN = totalTP = totalFP = totalTN = 0;
+	kmerEmbedded = True;
 
 	for seqid, seq in seqDict.iteritems():
 		realKmer, realStart, realEnd = compareKmerCommon.getRealKmerDetails(realKmerDict, seqid);
-		kmerREString = compareKmerCommon.getKmerFromPSSM(pssmList, seq);
+		if realKmer == "" and realStart == 0 and realEnd == 0:
+			#print "Sequence ID: ", seqid , " should be treated like a negative."
+			kmerEmbedded = False;
 
 		#print "===== Seq ID: ", seqid, ": EMBEDDED K-MER: ", realKmer, ", PREDICTED: ", kmerREString
-		matchingKmers, numPredictedKmers = isRealKmerInREString(realKmer, kmerREString)
-		numMatchingKmers = len(matchingKmers)
+		predictedKmerList = getPredictedKmerList(pssmList, seq);
+		kmerFoundInSeq = compareKmerCommon.isRealKmerInPredictedKmerList(realKmer, predictedKmerList)
+		numTP, numFP, numFN, numTN = compareKmerCommon.getNumbers(kmerFoundInSeq, kmerEmbedded, positive);
+		totalTP = totalTP + numTP;
+		totalFP = totalFP + numFP;
+		totalFN = totalFN + numFN;
+		totalTN = totalTN + numTN;
 
-		if positive:
-			if numMatchingKmers == 0: #no predicted k-mers matched real kmer.
-				numFN = numFN + 1;
-			else:
-				numTP = numTP + 1; # should this be incremented by numMatchingKmers?
-		else:
-			if numMatchingKmers == 0: #no predicted k-mers matched real kmer.
-				numTN = numTN + 1;
-			else:
-				numFP = numFP + 1; # should this be incremented by numMatchingKmers?
-		#print "TP: ", numTP, ", FP: ", numFP, ", FN: ", numFN, ", numTN: ", numTN
 
-	return numTP, numFP, numFN, numTN;
+	return totalTP, totalFP, totalFN, numTN;
 
 
 def computeSequenceBasedDREMEResults(dremeFile, realCsvFile, posSeqFile, negSeqFile):
@@ -52,8 +48,8 @@ def computeSequenceBasedDREMEResults(dremeFile, realCsvFile, posSeqFile, negSeqF
 	numPosTP, numPosFP, numPosFN, numPosTN = compareRealAndPredicted(realKmerDict, posSeqDict, pssmList, positive=True)
 	numNegTP, numNegFP, numNegFN, numNegTN = compareRealAndPredicted(realKmerDict, negSeqDict, pssmList, False)
 
-	#print "Positive: TP: ", numPosTP, ", FP: ", numPosFP, ", FN: ", numPosFN, ", TN: ", numPosTN
-	#print "Negative: TP: ", numNegTP, ", FP: ", numNegFP, ", FN: ", numNegFN, ", TN: ", numNegTN
+	print "Positive: TP: ", numPosTP, ", FP: ", numPosFP, ", FN: ", numPosFN, ", TN: ", numPosTN
+	print "Negative: TP: ", numNegTP, ", FP: ", numNegFP, ", FN: ", numNegFN, ", TN: ", numNegTN
 
 	totalPos = len(posSeqDict)
 	totalNeg = len(negSeqDict)
@@ -62,7 +58,7 @@ def computeSequenceBasedDREMEResults(dremeFile, realCsvFile, posSeqFile, negSeqF
 	accuracy = compareKmers.GetAccuracy( (numPosTP + numNegTP), (numPosTN + numNegTN),  (totalPos + totalNeg) )
 	specificity = compareKmers.GetSpecificity( (numPosFP + numNegFP), totalNeg);
 
-	#print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy, ", Specificity: ", specificity;
+	print "Senitivity: ", sensitivity, ", PPV: ", ppv, ", Accuracy: ", accuracy, ", Specificity: ", specificity;
 	return sensitivity, ppv;	
 
 if __name__ == "__main__":
@@ -72,5 +68,5 @@ if __name__ == "__main__":
 	dremeFile = sys.argv[3]
 	realCsvFile = sys.argv[4]
 
-	computeSequenceBasedDREMEResults(predictedFile, realCsvFile, posSeqFile, negSeqFile)
+	computeSequenceBasedDREMEResults(dremeFile, realCsvFile, posSeqFile, negSeqFile)
 

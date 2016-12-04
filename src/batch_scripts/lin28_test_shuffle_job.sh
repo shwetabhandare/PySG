@@ -1,8 +1,7 @@
 #!/bin/sh
-#SBATCH -N 3
-#SBATCH --ntasks-per-node 5
 #SBATCH --output lin28_test_shuffle.out
-#SBATCH --qos crestone
+#SBATCH --qos himem
+#SBATCH --mem=250G
 #SBATCH --time 48:00:00
 #srun lb lin28_run_shuffle.sh
-srun lb lin28_run_shuffle_seqbased.sh
+srun -n 3 lb lin28_run_shuffle_seqbased.sh

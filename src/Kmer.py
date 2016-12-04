@@ -62,7 +62,10 @@ def GetKmersToEmbed(SignalSeqInfo, confMap):
 		numSeqsWithSignal = GetSequencesWithSignal(SignalSeqInfo);
 		kmers = GetKmersFromStructureFile(structureFile, numSeqsWithSignal)
 	else:
-		kmerToEmbed = confMap["sequence"]['signal']["kmer"]
+		if confMap['sequence']['signal'].get('kmer'):
+			kmerToEmbed = confMap["sequence"]['signal']["kmer"]
+		else:
+			kmerToEmbed = ""
 
 	numSeqsWithSignal = GetSequencesWithSignal(SignalSeqInfo)
 
@@ -111,7 +114,7 @@ def PrintConfMap(confMap):
 def GetMotifType(confMap):
 	kmerToEmbed = ""
 	if confMap['sequence']['signal'].get('kmer'):
-		kmerToEmbed = confMap["sequence"]['signal']["kmer"]
+		kmerToEmbed = confMap["sequence"]['signal']['kmer']
 		motifType = "kmer"
 	elif confMap['sequence']['signal'].get('pwmFile'):
 		motifFile = confMap['sequence']['signal'].get('pwmFile');
@@ -126,6 +129,8 @@ def GetMotifType(confMap):
 	elif confMap['sequence']['signal'].get('structureFile'):
 		textMotif = confMap['sequence']['signal'].get('structureFile');
 		motifType = "structure"		
+	else:
+		motifType = "kmer"
 	return motifType;
 
 def GetMotifLocation(confMap, SeqLength):
